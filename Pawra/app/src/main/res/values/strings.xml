@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Pawra</string>
+    <string name="pawra_icon">Pawra Icon</string>
+    <string name="welcome_back">Welcome back!</string>
+    <string name="sign_you_in">Let’s sign you in</string>
+    <string name="how_are_you">Hi, how are you?</string>
+    <string name="sign_you_up">Let\'s sign you up</string>
 </resources>
