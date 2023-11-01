@@ -8,13 +8,15 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import id.pawra.ui.components.SignUpFooter
-import id.pawra.ui.components.SignUpForm
-import id.pawra.ui.components.SignUpHeader
+import androidx.navigation.NavController
+import id.pawra.ui.components.signup.SignUpFooter
+import id.pawra.ui.components.signup.SignUpForm
+import id.pawra.ui.components.signup.SignUpHeader
 
 @Composable
 fun SignUpScreen(
     modifier: Modifier = Modifier,
+    navController: NavController
 ) {
     Column(
         modifier = modifier
@@ -25,6 +27,8 @@ fun SignUpScreen(
     ) {
         SignUpHeader()
         SignUpForm()
-        SignUpFooter()
+        SignUpFooter(
+            navController = navController
+        )
     }
 }

@@ -1,4 +1,4 @@
-package id.pawra.ui.components
+package id.pawra.ui.components.signup
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,7 +9,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -24,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -42,7 +42,6 @@ import id.pawra.R
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpForm(
     modifier: Modifier = Modifier
@@ -60,7 +59,7 @@ fun SignUpForm(
         val confirmPassword = remember { mutableStateOf(TextFieldValue()) }
 
         Text(
-            text = "Name",
+            text = stringResource(R.string.name),
             color = colorResource(id = R.color.gray),
             fontSize = 14.sp,
             modifier = modifier
@@ -81,7 +80,7 @@ fun SignUpForm(
         )
 
         Text(
-            text = "Email",
+            text = stringResource(R.string.email),
             color = colorResource(id = R.color.gray),
             fontSize = 14.sp,
             modifier = modifier
@@ -101,7 +100,7 @@ fun SignUpForm(
             )
         )
         Text(
-            text = "Password",
+            text = stringResource(R.string.password),
             color = colorResource(id = R.color.gray),
             fontSize = 14.sp,
             modifier = modifier
@@ -117,11 +116,11 @@ fun SignUpForm(
             }, trailingIcon = {
                 if (showPassword) {
                     IconButton(onClick = { showPassword = false }) {
-                        Icon(painterResource(id = R.drawable.baseline_visibility_24), "Show Password")
+                        Icon(painterResource(id = R.drawable.baseline_visibility_24), stringResource(R.string.show_password))
                     }
                 } else {
                     IconButton(onClick = { showPassword = true }) {
-                        Icon(painterResource(id = R.drawable.baseline_visibility_off_24), "Hide Password")
+                        Icon(painterResource(id = R.drawable.baseline_visibility_off_24), stringResource(R.string.hide_password))
                     }
                 }
             },
@@ -139,7 +138,7 @@ fun SignUpForm(
         )
 
         Text(
-            text = "Confirm Password",
+            text = stringResource(R.string.confirm_password),
             color = colorResource(id = R.color.gray),
             fontSize = 14.sp,
             modifier = modifier
@@ -155,11 +154,11 @@ fun SignUpForm(
             }, trailingIcon = {
                 if (showConfirmPassword) {
                     IconButton(onClick = { showConfirmPassword = false }) {
-                        Icon(painterResource(id = R.drawable.baseline_visibility_24), "Show Password")
+                        Icon(painterResource(id = R.drawable.baseline_visibility_24), stringResource(R.string.show_password))
                     }
                 } else {
                     IconButton(onClick = { showConfirmPassword = true }) {
-                        Icon(painterResource(id = R.drawable.baseline_visibility_off_24), "Hide Password")
+                        Icon(painterResource(id = R.drawable.baseline_visibility_off_24), stringResource(R.string.hide_password))
                     }
                 }
             },
@@ -185,7 +184,7 @@ fun SignUpForm(
 fun TermAndServiceText(
     modifier: Modifier = Modifier
 ) {
-    val str = "Accept terms & services"
+    val str = stringResource(R.string.accept_terms_services)
     val startAcceptIndex = str.indexOf("Accept")
     val endAcceptIndex = startAcceptIndex + 6
     val startIndex = str.indexOf("&")
@@ -245,7 +244,7 @@ fun TermAndServiceText(
             onCheckedChange = { isChecked.value = it })
 
         val uriHandler = LocalUriHandler.current
-        ClickableText(text = annotatedString, onClick = { offset ->
+        ClickableText(text = annotatedString, style = TextStyle(fontFamily = Poppins), onClick = { offset ->
             annotatedString.getUrlAnnotations(offset, offset)
                 .firstOrNull()?.let { annotation ->
                     uriHandler.openUri(annotation.item.url)

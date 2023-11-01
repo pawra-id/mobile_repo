@@ -1,4 +1,4 @@
-package id.pawra.ui.components
+package id.pawra.ui.components.signup
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column

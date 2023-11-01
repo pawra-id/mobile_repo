@@ -1,4 +1,4 @@
-package id.pawra.ui.components
+package id.pawra.ui.components.signup
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,20 +12,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import id.pawra.R
+import id.pawra.ui.navigation.Screen
 import id.pawra.ui.theme.PawraTheme
+import id.pawra.ui.theme.Poppins
 
 @Composable
 fun SignUpFooter(
     modifier: Modifier = Modifier,
+    navController: NavController
 ) {
     Column(
         modifier = modifier
@@ -40,18 +46,20 @@ fun SignUpFooter(
                 .fillMaxWidth()
                 .height(50.dp)
         ) {
-            Text(text = "Sign Up", fontSize = 14.sp)
+            Text(text = stringResource(R.string.sign_up), fontSize = 14.sp)
         }
-        HaveAccountText()
+        HaveAccountText(
+            navController = navController
+        )
     }
 }
 
-@OptIn(ExperimentalTextApi::class)
 @Composable
 fun HaveAccountText(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavController
 ) {
-    val str = "Have an account? Sign In"
+    val str = stringResource(R.string.have_account)
     val startSignInIndex = str.indexOf("Sign In")
     val endSignInIndex = startSignInIndex + 7
 
@@ -70,15 +78,20 @@ fun HaveAccountText(
         )
     }
 
-    ClickableText(text = annotatedString, onClick = { offset ->
-
-    }, modifier = modifier.padding(vertical = 20.dp))
+    ClickableText(
+        text = annotatedString,
+        style = TextStyle(fontFamily = Poppins),
+        onClick = {
+            navController.navigate(Screen.SignIn.route)
+        },
+        modifier = modifier.padding(vertical = 20.dp)
+    )
 }
 
 @Composable
 @Preview(showBackground = true)
 fun SignUpFooterPreview() {
     PawraTheme {
-        SignUpFooter()
+        SignUpFooter(navController = rememberNavController())
     }
 }
