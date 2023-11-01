@@ -1,31 +1,44 @@
 package id.pawra
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import id.pawra.ui.navigation.Screen
+import id.pawra.ui.screen.auth.SignInScreen
+import id.pawra.ui.screen.auth.SignUpScreen
 import id.pawra.ui.theme.PawraTheme
 
 @Composable
 fun Pawra(
     modifier: Modifier = Modifier,
+    navController: NavHostController = rememberNavController()
 ) {
-    Column(
-        modifier = modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
+    NavHost(
+        navController = navController,
+        startDestination = Screen.SignUp.route,
+        modifier = modifier
     ) {
-        Text(text = "Pawra")
+        composable(Screen.SignUp.route) {
+            SignUpScreen(
+                navController = navController
+            )
+        }
+        composable(Screen.SignIn.route) {
+           SignInScreen(
+               navController = navController
+           )
+        }
     }
+
 }
 
 @Preview(showBackground = true)
 @Composable
-fun JetHeroesAppPreview() {
+fun PawraAppPreview() {
     PawraTheme {
         Pawra()
     }

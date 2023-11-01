@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">Pawra</string>
+    <string name="pawra_icon">Pawra Icon</string>
+    <string name="welcome_back">Welcome back!</string>
+    <string name="sign_you_in">Let\'s sign you in</string>
+    <string name="how_are_you">Hi, how are you?</string>
+    <string name="sign_you_up">Let\'s sign you up</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="show_password">Show Password</string>
+    <string name="hide_password">Hide Password</string>
+    <string name="name">Name</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="accept_terms_services"><![CDATA[Accept terms & services]]></string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="have_account">Have an account? Sign In</string>
+    <string name="dont_have_account">Don\'t have account? Sign Up</string>
+    <string name="google_icon">Google Icon</string>
 </resources>
