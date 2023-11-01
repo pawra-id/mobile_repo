@@ -45,7 +45,7 @@ fun SignInFooter(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Button(
-            onClick = { },
+            onClick = { navController.navigate(Screen.Home.route) },
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
                 .fillMaxWidth()
