@@ -19,6 +19,7 @@ import id.pawra.ui.screen.explore.ExploreScreen
 import id.pawra.ui.screen.home.HomeScreen
 import id.pawra.ui.screen.pet.PetScreen
 import id.pawra.ui.screen.profile.ProfileScreen
+import id.pawra.ui.screen.splashscreen.SplashScreen
 import id.pawra.ui.theme.PawraTheme
 
 @Composable
@@ -28,9 +29,14 @@ fun Pawra(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screen.SignUp.route,
+        startDestination = Screen.SplashScreen.route,
         modifier = modifier
     ) {
+        composable(Screen.SplashScreen.route) {
+            SplashScreen(
+                navController = navController
+            )
+        }
         composable(Screen.SignUp.route) {
             SignUpScreen(
                 navController = navController
