@@ -29,7 +29,7 @@ fun Pawra(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screen.Home.route,
+        startDestination = Screen.SplashScreen.route,
         modifier = modifier
     ) {
         composable(Screen.SplashScreen.route) {
