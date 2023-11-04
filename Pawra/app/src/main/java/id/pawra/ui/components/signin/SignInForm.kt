@@ -2,10 +2,12 @@ package id.pawra.ui.components.signin
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -17,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -31,13 +34,22 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import id.pawra.R
+import id.pawra.data.ViewModelFactory
+import id.pawra.di.Injection
+import id.pawra.ui.screen.auth.AuthViewModel
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
 
 @Composable
 fun SignInForm(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: AuthViewModel,
+    showDialog: (Boolean) -> Unit,
+    navController: NavController
 ) {
     Column(
         modifier = modifier
@@ -46,8 +58,8 @@ fun SignInForm(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        val email = remember { mutableStateOf(TextFieldValue()) }
-        val password = remember { mutableStateOf(TextFieldValue()) }
+        var email by remember { mutableStateOf(TextFieldValue()) }
+        var password by remember { mutableStateOf(TextFieldValue()) }
 
         Text(
             text = stringResource(R.string.email),
@@ -56,9 +68,10 @@ fun SignInForm(
             modifier = modifier
                 .fillMaxWidth())
         OutlinedTextField(
-            value = email.value,
+            value = email,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-            onValueChange = { email.value = it },
+            onValueChange = { email = it },
+            singleLine = true,
             shape = RoundedCornerShape(10.dp),
             modifier = modifier
                 .fillMaxWidth()
@@ -78,7 +91,7 @@ fun SignInForm(
 
         var showPassword by remember { mutableStateOf(false) }
         OutlinedTextField(
-            value = password.value,
+            value = password,
             visualTransformation = if (showPassword) {
                 VisualTransformation.None
             } else {
@@ -103,7 +116,8 @@ fun SignInForm(
                 }
             },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            onValueChange = { password.value = it },
+            onValueChange = { password = it },
+            singleLine = true,
             shape = RoundedCornerShape(10.dp),
             modifier = modifier
                 .fillMaxWidth()
@@ -124,10 +138,27 @@ fun SignInForm(
                 textDecoration = TextDecoration.Underline
             ),
             onClick = {
-
+//                TODO: set route to forgot password screen
+                navController.navigate("")
             },
             modifier = modifier.align(Alignment.End)
         )
+
+        Button(
+            onClick = {
+                viewModel.signIn(
+                    email.text,
+                    password.text
+                )
+                showDialog(true)},
+            shape = RoundedCornerShape(10.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 15.dp)
+                .height(50.dp)
+        ) {
+            Text(text = stringResource(R.string.sign_in), fontSize = 14.sp)
+        }
     }
 }
 
@@ -135,6 +166,10 @@ fun SignInForm(
 @Preview(showBackground = true)
 fun SignInFormPreview() {
     PawraTheme {
-        SignInForm()
+        SignInForm(viewModel = viewModel(
+            factory = ViewModelFactory(Injection.provideAuthRepository(LocalContext.current))
+        ),
+            showDialog = {  }
+            ,navController = rememberNavController())
     }
 }
