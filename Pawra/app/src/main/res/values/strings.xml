@@ -22,4 +22,12 @@
     <string name="menu_pet">Menu Pet</string>
     <string name="menu_explore">Menu Explore</string>
     <string name="menu_profile">Menu Profile</string>
+    <string name="create_account">Create Account</string>
+    <string name="onboarding_title">Let\'s Get Started</string>
+    <string name="onboarding1_subtitle">Know More Your Dog Mental Health</string>
+    <string name="onboarding1_desc">Just like humans, dogs can experience a range of emotions and cognitive states, and their mental health can be influenced by various factors.</string>
+    <string name="onboarding2_subtitle">Connect with Other Dog Owners</string>
+    <string name="onboarding2_desc">Connecting with other dog owners through apps can be a great way to share experiences, tips, and even arrange playdates for your dogs.</string>
+    <string name="onboarding3_subtitle">Share Your Dog Health Status to Others</string>
+    <string name="onboarding3_desc">Sharing your dog\'s health status with others is an important step to ensure the well-being of your pet, seek support, or inform others about any changes in your dog\'s condition.</string>
 </resources>
