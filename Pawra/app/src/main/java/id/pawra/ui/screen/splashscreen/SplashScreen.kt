@@ -50,7 +50,7 @@ fun SplashScreen(navController: NavController) {
             )
         )
         delay(3000L)
-        navController.navigate(Screen.SignUp.route)
+        navController.navigate(Screen.OnBoarding.route)
     }
 
     Column(

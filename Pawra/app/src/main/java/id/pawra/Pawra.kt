@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import id.pawra.ui.components.onboarding.Onboarding
 import id.pawra.ui.navigation.BottomNavigation
 import id.pawra.ui.navigation.Screen
 import id.pawra.ui.screen.auth.SignInScreen
@@ -34,6 +35,11 @@ fun Pawra(
     ) {
         composable(Screen.SplashScreen.route) {
             SplashScreen(
+                navController = navController
+            )
+        }
+        composable(Screen.OnBoarding.route) {
+            Onboarding(
                 navController = navController
             )
         }
