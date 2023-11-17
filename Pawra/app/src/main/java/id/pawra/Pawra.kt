@@ -72,7 +72,7 @@ fun Pawra(
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-private fun HomeNav(
+fun HomeNav(
     modifier: Modifier = Modifier,
     navHomeController: NavHostController = rememberNavController(),
     navController: NavHostController
