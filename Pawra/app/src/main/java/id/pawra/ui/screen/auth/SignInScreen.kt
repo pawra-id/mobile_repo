@@ -73,7 +73,11 @@ fun SignInScreen(
                         isLoading = true
                     }
                     is UiState.Success -> {
-                        navController.navigate(Screen.Home.route)
+                        navController.navigate(Screen.Home.route){
+                            popUpTo(navController.graph.id){
+                                inclusive = true
+                            }
+                        }
                     }
                     is UiState.Error -> {
                         if(showDialog) {

@@ -15,30 +15,48 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import id.pawra.R
+import id.pawra.data.ViewModelFactory
+import id.pawra.data.local.preference.SessionModel
+import id.pawra.di.Injection
+import id.pawra.ui.common.UiState
+import id.pawra.ui.navigation.Screen
+import id.pawra.ui.screen.auth.AuthViewModel
 import id.pawra.ui.theme.LightGreen
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
 import kotlinx.coroutines.delay
-import id.pawra.ui.navigation.Screen
 
 @Composable
 fun SplashScreen(navController: NavController) {
     val scale = remember {
         Animatable(0.5f)
     }
+    val viewModel: AuthViewModel = viewModel(
+        factory = ViewModelFactory(Injection.provideAuthRepository(LocalContext.current))
+    )
+
+    viewModel.getSession()
+
+    val sessionState by viewModel.sessionState.collectAsState()
+    val userInfo = (sessionState as UiState.Success<SessionModel>).data
+
     LaunchedEffect(key1 = true) {
         scale.animateTo(
             targetValue = 1f,
@@ -50,7 +68,11 @@ fun SplashScreen(navController: NavController) {
             )
         )
         delay(3000L)
-        navController.navigate(Screen.OnBoarding.route)
+        navController.navigate(if (userInfo.isLogin) Screen.Home.route else Screen.OnBoarding.route){
+            popUpTo(Screen.SplashScreen.route) {
+                inclusive = true
+            }
+        }
     }
 
     Column(
