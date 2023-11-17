@@ -1,12 +1,10 @@
 package id.pawra.ui.components.profile
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -25,7 +23,11 @@ import id.pawra.data.local.preference.SessionModel
 import id.pawra.di.Injection
 import id.pawra.ui.common.UiState
 import id.pawra.ui.screen.auth.AuthViewModel
-import id.pawra.ui.theme.*
+import id.pawra.ui.theme.Black
+import id.pawra.ui.theme.DarkGreen
+import id.pawra.ui.theme.MobileGray
+import id.pawra.ui.theme.PawraTheme
+import id.pawra.ui.theme.Poppins
 
 @Composable
 fun ProfilePage(
@@ -33,10 +35,8 @@ fun ProfilePage(
     viewModel: AuthViewModel,
     navController: NavController
 ) {
-    LaunchedEffect(true) {
-        viewModel.getSession()
-    }
 
+    viewModel.getSession()
     val sessionState by viewModel.sessionState.collectAsState()
 
     Column(
@@ -46,9 +46,7 @@ fun ProfilePage(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        ProfileImage(viewModel = viewModel(
-            factory = ViewModelFactory(Injection.provideAuthRepository(LocalContext.current))
-        ))
+        ProfileImage()
 
         when (sessionState) {
             is UiState.Success -> {
