@@ -59,7 +59,7 @@ fun Pawra(
            )
         }
         composable(Screen.Home.route) {
-            HomeNav()
+            HomeNav(navController = navController)
         }
         composable(Screen.EditProfile.route) {
             ProfileEditScreen(
@@ -74,7 +74,8 @@ fun Pawra(
 @Composable
 private fun HomeNav(
     modifier: Modifier = Modifier,
-    navHomeController: NavHostController = rememberNavController()
+    navHomeController: NavHostController = rememberNavController(),
+    navController: NavHostController
 ){
     val navBackStackEntry by navHomeController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -106,7 +107,10 @@ private fun HomeNav(
             }
 
             composable(Screen.Profile.route) {
-                ProfileScreen(navController = navHomeController)
+                ProfileScreen(
+                    navHomeController = navHomeController,
+                    navController = navController
+                )
             }
         }
     }

@@ -52,7 +52,8 @@ import id.pawra.ui.theme.White
 @Composable
 fun ProfileScreen(
     modifier: Modifier = Modifier,
-    navController: NavController,
+    navHomeController: NavController,
+    navController: NavController
 ) {
     Column {
         TopAppBar(
@@ -83,8 +84,7 @@ fun ProfileScreen(
 
             ProfilePage(viewModel = viewModel(
                 factory = ViewModelFactory(Injection.provideAuthRepository(LocalContext.current))
-            ),
-                navController = rememberNavController())
+            ), navController = rememberNavController())
 
             Spacer(modifier = Modifier.height(28.dp))
 
@@ -95,7 +95,7 @@ fun ProfileScreen(
             ) {
                 Button(
                     onClick = {
-                        navController.navigate(Screen.SignIn.route)
+                        navController.navigate(Screen.EditProfile.route)
                     },
                     shape = RoundedCornerShape(10.dp),
                     modifier = Modifier
@@ -120,7 +120,7 @@ fun ProfileScreen(
 
                 Button(
                     onClick = {
-                        navController.navigate(Screen.EditProfile.route)
+                        navController.navigate(Screen.SignIn.route)
                     },
                     shape = RoundedCornerShape(10.dp),
                     modifier = Modifier
@@ -174,6 +174,7 @@ fun SettingAction() {
 fun ProfileScreenPreview() {
     PawraTheme {
         ProfileScreen(
+            navHomeController = rememberNavController(),
             navController = rememberNavController()
         )
     }
