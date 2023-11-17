@@ -35,8 +35,7 @@ class Preference private constructor(private val dataStore: DataStore<Preference
                 preferences[IS_LOGIN_KEY] ?: false,
                 preferences[NAME_KEY] ?: "",
                 preferences[EMAIL_KEY] ?: "",
-                preferences[SUMMARY_KEY] ?: "",
-                preferences[PHOTOURL_KEY] ?: ""
+                preferences[SUMMARY_KEY] ?: ""
             )
         }.onEach {
             Log.d("Preference", "Session retrieved: $it")
@@ -59,7 +58,6 @@ class Preference private constructor(private val dataStore: DataStore<Preference
         private val NAME_KEY = stringPreferencesKey("name")
         private val EMAIL_KEY = stringPreferencesKey("email")
         private val SUMMARY_KEY = stringPreferencesKey("summary")
-        private val PHOTOURL_KEY = stringPreferencesKey("photoUrl")
 
         fun getInstance(dataStore: DataStore<Preferences>): Preference {
             return INSTANCE ?: synchronized(this) {

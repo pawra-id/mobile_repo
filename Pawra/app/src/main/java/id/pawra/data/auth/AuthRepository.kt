@@ -61,8 +61,7 @@ class AuthRepository private constructor(
                     "He’s been with me for a year.\n" +
                     "He’s been with me for a year.\n" +
                     "He’s been with me for a year.\n" +
-                    "Playing catch is our favorite activity"),
-            photoUrl = loginResult.photoUrl ?: ""
+                    "Playing catch is our favorite activity")
         )
         preference.saveSession(sessionModel)
     }

@@ -16,9 +16,6 @@ data class SignInResponse(
 
 data class SignInResult(
 
-    @field:SerializedName("photoUrl")
-    val photoUrl: String? = null,
-
     @field:SerializedName("name")
     val name: String? = null,
 
