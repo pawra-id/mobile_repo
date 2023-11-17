@@ -30,4 +30,9 @@
     <string name="onboarding2_desc">Connecting with other dog owners through apps can be a great way to share experiences, tips, and even arrange playdates for your dogs.</string>
     <string name="onboarding3_subtitle">Share Your Dog Health Status to Others</string>
     <string name="onboarding3_desc">Sharing your dog\'s health status with others is an important step to ensure the well-being of your pet, seek support, or inform others about any changes in your dog\'s condition.</string>
+    <string name="username">username</string>
+    <string name="save">Save\n</string>
+    <string name="summary">Summary</string>
+    <string name="edit">Edit</string>
+    <string name="logout">Logout\n</string>
 </resources>

@@ -1,5 +1,7 @@
 package id.pawra
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -12,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import id.pawra.ui.components.onboarding.Onboarding
+import id.pawra.ui.navigation.AddButton
 import id.pawra.ui.navigation.BottomNavigation
 import id.pawra.ui.navigation.Screen
 import id.pawra.ui.screen.auth.SignInScreen
@@ -19,10 +22,12 @@ import id.pawra.ui.screen.auth.SignUpScreen
 import id.pawra.ui.screen.explore.ExploreScreen
 import id.pawra.ui.screen.home.HomeScreen
 import id.pawra.ui.screen.pet.PetScreen
+import id.pawra.ui.screen.profile.ProfileEditScreen
 import id.pawra.ui.screen.profile.ProfileScreen
 import id.pawra.ui.screen.splashscreen.SplashScreen
 import id.pawra.ui.theme.PawraTheme
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Pawra(
     modifier: Modifier = Modifier,
@@ -56,10 +61,16 @@ fun Pawra(
         composable(Screen.Home.route) {
             HomeNav()
         }
+        composable(Screen.EditProfile.route) {
+            ProfileEditScreen(
+                navController = navController
+            )
+        }
     }
 
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 private fun HomeNav(
     modifier: Modifier = Modifier,
@@ -71,6 +82,9 @@ private fun HomeNav(
     Scaffold(
         bottomBar = {
             BottomNavigation(navHomeController = navHomeController)
+        },
+        floatingActionButton = {
+            AddButton(navHomeController = navHomeController)
         },
         modifier = modifier
     ) { paddingValues ->
@@ -92,12 +106,13 @@ private fun HomeNav(
             }
 
             composable(Screen.Profile.route) {
-                ProfileScreen(navHomeController = navHomeController)
+                ProfileScreen(navController = navHomeController)
             }
         }
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun PawraAppPreview() {
