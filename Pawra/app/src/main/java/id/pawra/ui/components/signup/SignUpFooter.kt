@@ -68,7 +68,11 @@ fun HaveAccountText(
         text = annotatedString,
         style = TextStyle(fontFamily = Poppins),
         onClick = {
-            navController.navigate(Screen.SignIn.route)
+            navController.navigate(Screen.SignIn.route) {
+                popUpTo(Screen.SignUp.route) {
+                    inclusive = true
+                }
+            }
         },
         modifier = modifier.padding(vertical = 20.dp)
     )

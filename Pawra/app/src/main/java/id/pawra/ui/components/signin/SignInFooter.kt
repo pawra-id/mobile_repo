@@ -104,7 +104,11 @@ fun DontHaveAccountText(
         text = annotatedString,
         style = TextStyle(fontFamily = Poppins),
         onClick = {
-            navController.navigate(Screen.SignUp.route)
+            navController.navigate(Screen.SignUp.route) {
+                popUpTo(Screen.SignIn.route) {
+                    inclusive = true
+                }
+            }
         },
         modifier = modifier.padding(vertical = 20.dp)
     )

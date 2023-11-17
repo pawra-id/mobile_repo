@@ -52,6 +52,10 @@ fun BottomNavigation(
             val navBackStackEntry by navHomeController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry?.destination?.route
 
+            if (currentRoute == Screen.Home.route){
+                BackPressSample()
+            }
+
             val navigationItems = listOf(
                 NavigationItem(
                     title = stringResource(R.string.menu_home),
@@ -86,14 +90,9 @@ fun BottomNavigation(
                             }
                             restoreState = true
                             launchSingleTop = true
-
-                            if (currentRoute == Screen.Home.route){
-
-                            }
                         }
                     },
                     icon = {
-
                         Box(
                             Modifier
                                 .width(50.dp)
@@ -126,7 +125,7 @@ sealed class BackPress {
 }
 
 @Composable
-fun BackPressSample() {
+private fun BackPressSample() {
     var showToast by remember { mutableStateOf(false) }
 
     var backPressState by remember { mutableStateOf<BackPress>(BackPress.Idle) }
