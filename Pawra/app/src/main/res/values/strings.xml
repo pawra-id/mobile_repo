@@ -36,4 +36,5 @@
     <string name="edit">Edit</string>
     <string name="logout">Logout\n</string>
     <string name="hi_pawra">Hi! %s</string>
+    <string name="dog_age">%.0f year</string>
 </resources>

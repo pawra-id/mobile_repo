@@ -94,6 +94,6 @@ fun Welcome(
 @Preview(showBackground = true)
 fun WelcomePreview() {
     PawraTheme {
-        Welcome("a", "haris")
+        Welcome("", "")
     }
 }
