@@ -108,8 +108,7 @@ fun HomeNav(
 
             composable(Screen.Profile.route) {
                 ProfileScreen(
-                    navHomeController = navHomeController,
-                    navController = navController
+                    navHomeController = navHomeController
                 )
             }
         }

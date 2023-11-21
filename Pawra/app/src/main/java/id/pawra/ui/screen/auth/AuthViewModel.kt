@@ -65,4 +65,15 @@ class AuthViewModel(
             }
         }
     }
+
+    fun logout() {
+        viewModelScope.launch {
+            try {
+                authRepository.logout()
+                _sessionState.value = UiState.Success(SessionModel("", false, "", "", ""))
+            } catch (e: Exception) {
+                _sessionState.value = UiState.Error(e.message.toString())
+            }
+        }
+    }
 }

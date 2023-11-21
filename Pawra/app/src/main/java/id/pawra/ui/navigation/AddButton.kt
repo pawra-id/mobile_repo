@@ -34,6 +34,7 @@ fun AddButton(
         FloatingActionButton(
             onClick = { navHomeController.navigate(Screen.EditProfile.route) },
             shape = CircleShape,
+            containerColor = LightGreen,
             contentColor = DarkGreen,
         ) {
             Icon(Icons.Filled.Edit, "Add Story")
