@@ -24,13 +24,11 @@ import androidx.navigation.compose.rememberNavController
 import id.pawra.data.ViewModelFactory
 import id.pawra.di.Injection
 import id.pawra.ui.components.profile.ProfileEditForm
+import id.pawra.ui.components.profile.ProfileEditTopBar
 import id.pawra.ui.screen.auth.AuthViewModel
-import id.pawra.ui.theme.DarkGreen
 import id.pawra.ui.theme.MobileGray
 import id.pawra.ui.theme.PawraTheme
-import id.pawra.ui.theme.Poppins
 
-@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ProfileEditScreen(
@@ -41,21 +39,7 @@ fun ProfileEditScreen(
     navController: NavController
 ) {
     Column {
-        TopAppBar(
-            title = {
-                Text(
-                    text = "Edit Profile",
-                    color = (DarkGreen),
-                    fontFamily = Poppins,
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.Medium
-
-                )
-            },
-            actions = {
-                AppBarProfileEditActions()
-            }
-        )
+        ProfileEditTopBar()
         Spacer(modifier = Modifier.height(16.dp))
         Box(modifier = modifier) {
             val isLoading by remember { mutableStateOf(false) }
@@ -84,35 +68,8 @@ fun ProfileEditScreen(
                     navController = navController)
             }
         }
-        Spacer(modifier = Modifier.height(16.dp))
-    }
-}
 
-@Composable
-fun AppBarProfileEditActions(){
-    Box(
-        modifier = Modifier
-            .width(90.dp)
-    ) {
-        CancelAction(onCancel = {
-            // Implement the cancel action logic here
-        })
-    }
-}
-
-@Composable
-fun CancelAction(onCancel: () -> Unit) {
-    IconButton(
-        modifier = Modifier
-            .width(90.dp),
-        onClick = onCancel
-    ) {
-        Text(
-            text = "Cancel",
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Normal,
-            color = (MobileGray)
-        )
+        Spacer(modifier = Modifier.height(30.dp))
     }
 }
 
