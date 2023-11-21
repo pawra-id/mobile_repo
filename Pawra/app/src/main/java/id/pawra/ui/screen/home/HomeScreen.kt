@@ -18,6 +18,10 @@ import id.pawra.data.ViewModelFactory
 import id.pawra.data.local.preference.SessionModel
 import id.pawra.di.Injection
 import id.pawra.ui.common.UiState
+import id.pawra.ui.components.home.Activities
+import id.pawra.ui.components.home.ListDog
+import id.pawra.ui.components.home.Banner
+import id.pawra.ui.components.home.NearbyVets
 import id.pawra.ui.components.home.Welcome
 import id.pawra.ui.screen.auth.AuthViewModel
 import id.pawra.ui.theme.PawraTheme
@@ -46,6 +50,16 @@ fun HomeScreen(
             image = "https://dicoding-web-img.sgp1.cdn.digitaloceanspaces.com/small/avatar/dos:5121efa9bf4f08285ea0d098ce7756aa20230924195603.png",
             name = userInfo.name
         )
+        Banner()
+        ListDog(
+            "https://static.vecteezy.com/system/resources/previews/005/857/332/non_2x/funny-portrait-of-cute-corgi-dog-outdoors-free-photo.jpg",
+            "Max",
+            "Retriever",
+            "Male",
+            0.6
+        )
+        NearbyVets()
+        Activities()
     }
 }
 
