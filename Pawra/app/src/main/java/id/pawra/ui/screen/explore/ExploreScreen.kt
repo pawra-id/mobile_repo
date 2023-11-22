@@ -26,7 +26,6 @@ fun ExploreScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState()),
     ) {
         ExploreTopBar()
         MenuSearch()

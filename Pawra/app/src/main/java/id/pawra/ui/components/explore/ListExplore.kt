@@ -32,9 +32,6 @@ import id.pawra.ui.theme.PawraTheme
 
 @Composable
 fun ListExplore(
-    image: String,
-    name: String,
-    gender: String,
     activeMenu: String,
     modifier: Modifier = Modifier
 ) {
@@ -43,98 +40,12 @@ fun ListExplore(
     ) {
         if (activeMenu == Menu.MentalHealth.name) {
             (0 until 3).forEach { _ ->
-                Row(
-                    modifier = modifier
-                        .padding(
-                            top = 10.dp,
-                            bottom = 10.dp
-                        ).height(90.dp)
-                        .clip(shape = RoundedCornerShape(15.dp))
-                        .clickable { }
-                ) {
-                    Box(
-                        modifier = modifier
-                    ) {
-                        AsyncImage(
-                            model = "https://static.vecteezy.com/system/resources/previews/005/857/332/non_2x/funny-portrait-of-cute-corgi-dog-outdoors-free-photo.jpg",
-                            contentDescription = "",
-                            modifier = modifier
-                                .size(90.dp)
-                                .clip(RoundedCornerShape(15.dp)),
-                            contentScale = ContentScale.Crop
-                        )
-
-                        Box(
-                            modifier = modifier.padding(5.dp)
-                                .align(Alignment.BottomEnd)
-                        ) {
-                            Text(
-                                text = gender,
-                                fontSize = 11.sp,
-                                color = colorResource(id = if (gender == "Male") R.color.dark_blue else R.color.dark_pink),
-                                modifier = modifier
-                                    .clip(shape = RoundedCornerShape(15.dp))
-                                    .background(
-                                        color = colorResource(
-                                            id =
-                                            if (gender == "Male") R.color.light_blue else R.color.light_pink
-                                        )
-                                    )
-                                    .padding(vertical = 2.dp, horizontal = 10.dp)
-                            )
-                        }
-
-                    }
-
-                    Column(
-                        modifier = modifier.padding(start = 10.dp),
-                        verticalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            text = name,
-                            fontSize = 13.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = Black
-                        )
-
-                        Text(
-                            text = "15:24, 12 May 2023",
-                            fontSize = 11.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = LightGray
-                        )
-
-                        Text(
-                            text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec porttitor quis nisi a fringilla. Etiam tempor orci in nisl consectetur, ac venenatis eros eleifend. Morbi massa odio, rhoncus quis iaculis ullamcorper, vestibulum in enim.",
-                            fontSize = 13.sp,
-                            color = Black,
-                            lineHeight = 18.sp,
-                            maxLines = 2,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = modifier.weight(1f)
-                        )
-
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(10.dp),
-
-                            ) {
-                            Text(
-                                text = "56% Depression",
-                                fontSize = 10.sp,
-                                color = DarkGreen,
-                                modifier = modifier
-                                    .clip(shape = RoundedCornerShape(15.dp))
-                                    .background(
-                                        color = colorResource(id = R.color.disabled_green)
-                                    )
-                                    .padding(vertical = 2.dp, horizontal = 10.dp),
-                            )
-                        }
-                    }
-                }
+                SharedMental()
             }
         } else {
-            Text("Blogs")
+            (0 until 3).forEach { _ ->
+                Blogs()
+            }
         }
     }
 }
@@ -144,10 +55,7 @@ fun ListExplore(
 fun ListExplorePreview() {
     PawraTheme {
         ListExplore(
-            "",
-            "Dianna",
-            "Female",
-            Menu.MentalHealth.name
+            ""
         )
     }
 }
