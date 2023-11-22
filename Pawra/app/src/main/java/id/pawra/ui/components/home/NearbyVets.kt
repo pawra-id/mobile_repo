@@ -2,7 +2,9 @@ package id.pawra.ui.components.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,14 +16,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,9 +50,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import id.pawra.R
+import id.pawra.ui.components.explore.Menu
 import id.pawra.ui.components.profile.ProfileImage
 import id.pawra.ui.theme.DarkGreen
+import id.pawra.ui.theme.DisabledGreen
 import id.pawra.ui.theme.LightGray
+import id.pawra.ui.theme.LightGreen
 import id.pawra.ui.theme.MobileGray
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
@@ -56,6 +67,8 @@ fun NearbyVets(
     val image = "https://2.bp.blogspot.com/-_sOpXiMO0m4/ViVULhN611I/AAAAAAAAMCk/LbqKTS7T9Fw/s1600/indah%2Bkusuma%2Bhot%2Bdoctor%2Bindonesia.jpg"
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
+
+    var activeVet by remember { mutableStateOf(Menu.MentalHealth.name) }
 
     Column(
         modifier = modifier
@@ -89,22 +102,19 @@ fun NearbyVets(
             )
         }
         Row(
-            modifier = modifier.padding(vertical = 10.dp, horizontal = 0.dp),
+            modifier = modifier.padding(vertical = 10.dp, horizontal = 0.dp)
+                .horizontalScroll(rememberScrollState()),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(25.dp)
         ) {
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = modifier
+                    .size(60.dp)
                     .clip(shape = CircleShape)
+                    .border(5.dp, LightGreen, shape = CircleShape)
                     .clickable {  }
             ) {
-                Image(
-                    painterResource(id = R.drawable.background_profileimage),
-                    modifier = Modifier
-                        .size(60.dp),
-                    contentDescription = "Background Profile Image",
-                )
                 Card(
                     shape = CircleShape,
                     modifier = Modifier
@@ -121,14 +131,13 @@ fun NearbyVets(
                 }
             }
             Box(
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
+                modifier = modifier
+                    .size(60.dp)
+                    .clip(shape = CircleShape)
+                    .border((1.5).dp, LightGreen, shape = CircleShape)
+                    .clickable {  }
             ) {
-                Image(
-                    painterResource(id = R.drawable.background_profileimage),
-                    modifier = Modifier
-                        .size(60.dp),
-                    contentDescription = "Background Profile Image",
-                )
                 Card(
                     shape = CircleShape,
                     modifier = Modifier

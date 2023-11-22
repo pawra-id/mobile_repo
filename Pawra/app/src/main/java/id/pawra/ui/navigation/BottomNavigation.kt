@@ -150,7 +150,7 @@ private fun BackPressSample() {
     }
 }
 
-private object NoRippleTheme : RippleTheme {
+object NoRippleTheme : RippleTheme {
     @Composable
     override fun defaultColor() = Color.Unspecified
 
