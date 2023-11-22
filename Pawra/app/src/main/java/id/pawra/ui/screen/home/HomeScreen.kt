@@ -45,16 +45,24 @@ fun HomeScreen(
         modifier = modifier
             .fillMaxSize()
     ) {
-        Welcome(
-            image = "https://dicoding-web-img.sgp1.cdn.digitaloceanspaces.com/small/avatar/dos:5121efa9bf4f08285ea0d098ce7756aa20230924195603.png",
-            name = userInfo.name
-        )
-        Banner()
-        ListDog(
-            navController = navController
-        )
-        NearbyVets()
-        Activities()
+        Row {
+            Welcome(
+                image = "https://dicoding-web-img.sgp1.cdn.digitaloceanspaces.com/small/avatar/dos:5121efa9bf4f08285ea0d098ce7756aa20230924195603.png",
+                name = userInfo.name
+            )
+        }
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
+        ) {
+            Banner()
+            ListDog(
+                navController = navController
+            )
+            NearbyVets()
+            Activities()
+        }
     }
 }
 
