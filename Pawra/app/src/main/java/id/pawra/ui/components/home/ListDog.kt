@@ -28,20 +28,25 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import id.pawra.R
+import id.pawra.ui.navigation.Screen
 import id.pawra.ui.theme.LightGreen
 import id.pawra.ui.theme.PawraTheme
 
 @Composable
 fun ListDog(
-    image: String,
-    name: String,
-    type: String,
-    gender: String,
-    age: Double,
+    navController: NavController,
     modifier: Modifier = Modifier
 ) {
+    val image = "https://static.vecteezy.com/system/resources/previews/005/857/332/non_2x/funny-portrait-of-cute-corgi-dog-outdoors-free-photo.jpg"
+    val name = "Max"
+    val type = "Retriever"
+    val gender = "Male"
+    val age = 0.6
+
     Row(
         modifier = modifier
             .padding(
@@ -58,6 +63,10 @@ fun ListDog(
         ) {
             Box(
                 modifier = modifier
+                    .clip(shape = RoundedCornerShape(15.dp))
+                    .clickable {
+                        navController.navigate(Screen.PetProfile.route)
+                    },
             ) {
                 AsyncImage(
                     model = image,
@@ -69,7 +78,8 @@ fun ListDog(
                 )
 
                 Box(
-                    modifier = modifier.padding(5.dp)
+                    modifier = modifier
+                        .padding(5.dp)
                         .align(Alignment.BottomEnd)
                 ) {
                     Text(
@@ -120,7 +130,7 @@ fun ListDog(
                 .width(90.dp)
                 .clip(shape = RoundedCornerShape(15.dp))
                 .background(color = colorResource(id = R.color.disabled_green))
-                .clickable{
+                .clickable {
 
                 },
         ) {
@@ -128,7 +138,9 @@ fun ListDog(
                 Icons.Filled.Add,
                 "Add Dog",
                 tint = LightGreen,
-                modifier = modifier.size(44.dp).align(Alignment.Center)
+                modifier = modifier
+                    .size(44.dp)
+                    .align(Alignment.Center)
             )
         }
     }
@@ -141,11 +153,7 @@ fun ListDog(
 fun ListDogPreview() {
     PawraTheme {
         ListDog(
-            "https://static.vecteezy.com/system/resources/previews/005/857/332/non_2x/funny-portrait-of-cute-corgi-dog-outdoors-free-photo.jpg",
-            "Max",
-            "Retriever",
-            "Male",
-            0.6
+            navController = rememberNavController()
         )
     }
 }
