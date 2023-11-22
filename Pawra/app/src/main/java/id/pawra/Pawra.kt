@@ -16,11 +16,15 @@ import androidx.navigation.compose.rememberNavController
 import id.pawra.ui.components.onboarding.Onboarding
 import id.pawra.ui.navigation.AddButton
 import id.pawra.ui.navigation.BottomNavigation
+import id.pawra.ui.navigation.PetBottomNavigation
 import id.pawra.ui.navigation.Screen
 import id.pawra.ui.screen.auth.SignInScreen
 import id.pawra.ui.screen.auth.SignUpScreen
 import id.pawra.ui.screen.explore.ExploreScreen
 import id.pawra.ui.screen.home.HomeScreen
+import id.pawra.ui.screen.pet.PetActivitiesScreen
+import id.pawra.ui.screen.pet.PetMentalHealthScreen
+import id.pawra.ui.screen.pet.PetProfileScreen
 import id.pawra.ui.screen.pet.PetScreen
 import id.pawra.ui.screen.profile.ProfileEditScreen
 import id.pawra.ui.screen.profile.ProfileScreen
@@ -61,6 +65,11 @@ fun Pawra(
         composable(Screen.Home.route) {
             HomeNav(navController = navController)
         }
+
+        composable(Screen.PetProfile.route) {
+            PetNav(navController = navController)
+        }
+
         composable(Screen.EditProfile.route) {
             ProfileEditScreen(
                 navController = navController
@@ -95,7 +104,10 @@ fun HomeNav(
             modifier = modifier.padding(paddingValues)
         ) {
             composable(Screen.Home.route) {
-                HomeScreen(navHomeController = navHomeController)
+                HomeScreen(
+                    navHomeController = navHomeController,
+                    navController = navController
+                )
             }
 
             composable(Screen.Pet.route) {
@@ -111,6 +123,43 @@ fun HomeNav(
                     navHomeController = navHomeController,
                     navController = navController
                 )
+            }
+        }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun PetNav(
+    modifier: Modifier = Modifier,
+    navPetController: NavHostController = rememberNavController(),
+    navController: NavHostController
+){
+    val navBackStackEntry by navPetController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+
+    Scaffold(
+        bottomBar = {
+            PetBottomNavigation(navPetController = navPetController)
+        },
+
+        modifier = modifier
+    ) { paddingValues ->
+        NavHost(
+            navController = navPetController,
+            startDestination = Screen.PetProfile.route,
+            modifier = modifier.padding(paddingValues)
+        ) {
+            composable(Screen.PetProfile.route) {
+                PetProfileScreen(navPetController = navPetController)
+            }
+
+            composable(Screen.PetActivities.route) {
+                PetActivitiesScreen(navPetController = navPetController)
+            }
+
+            composable(Screen.PetMentalHealth.route) {
+                PetMentalHealthScreen(navPetController = navPetController)
             }
         }
     }

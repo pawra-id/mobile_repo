@@ -8,7 +8,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,7 +29,8 @@ import id.pawra.ui.theme.PawraTheme
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    navHomeController: NavController
+    navHomeController: NavController,
+    navController: NavController
 ) {
     val viewModel: AuthViewModel = viewModel(
         factory = ViewModelFactory(Injection.provideAuthRepository(LocalContext.current))
@@ -45,29 +45,16 @@ fun HomeScreen(
         modifier = modifier
             .fillMaxSize()
     ) {
-        Row {
-            Welcome(
-                image = "https://dicoding-web-img.sgp1.cdn.digitaloceanspaces.com/small/avatar/dos:5121efa9bf4f08285ea0d098ce7756aa20230924195603.png",
-                name = userInfo.name
-            )
-        }
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
-        ) {
-            Banner()
-            ListDog(
-                "https://static.vecteezy.com/system/resources/previews/005/857/332/non_2x/funny-portrait-of-cute-corgi-dog-outdoors-free-photo.jpg",
-                "Max",
-                "Retriever",
-                "Male",
-                0.6
-            )
-            NearbyVets()
-            Activities()
-        }
-
+        Welcome(
+            image = "https://dicoding-web-img.sgp1.cdn.digitaloceanspaces.com/small/avatar/dos:5121efa9bf4f08285ea0d098ce7756aa20230924195603.png",
+            name = userInfo.name
+        )
+        Banner()
+        ListDog(
+            navController = navController
+        )
+        NearbyVets()
+        Activities()
     }
 }
 
@@ -76,7 +63,8 @@ fun HomeScreen(
 fun HomeScreenPreview() {
     PawraTheme {
         HomeScreen(
-            navHomeController = rememberNavController()
+            navHomeController = rememberNavController(),
+            navController = rememberNavController()
         )
     }
 }
