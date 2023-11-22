@@ -11,8 +11,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -29,7 +27,6 @@ import id.pawra.data.ViewModelFactory
 import id.pawra.di.Injection
 import id.pawra.ui.navigation.Screen
 import id.pawra.ui.screen.auth.AuthViewModel
-import id.pawra.ui.screen.profile.ProfileViewModel
 import id.pawra.ui.theme.DarkGreen
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.White

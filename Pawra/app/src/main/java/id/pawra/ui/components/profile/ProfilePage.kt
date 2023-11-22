@@ -33,7 +33,6 @@ import id.pawra.ui.theme.Poppins
 fun ProfilePage(
     modifier: Modifier = Modifier,
     viewModel: AuthViewModel,
-    navController: NavController
 ) {
 
     viewModel.getSession()
@@ -100,7 +99,6 @@ fun ProfilePagePreview() {
     PawraTheme {
         ProfilePage(viewModel = viewModel(
             factory = ViewModelFactory(Injection.provideAuthRepository(LocalContext.current))
-        ),
-            navController = rememberNavController())
+        ))
     }
 } 

@@ -29,7 +29,8 @@ import id.pawra.ui.theme.PawraTheme
 @Composable
 fun ProfileScreen(
     modifier: Modifier = Modifier,
-    navHomeController: NavController
+    navHomeController: NavController,
+    navController: NavController
 ) {
     Column {
         ProfileTopBar()
@@ -46,11 +47,11 @@ fun ProfileScreen(
 
             ProfilePage(viewModel = viewModel(
                 factory = ViewModelFactory(Injection.provideAuthRepository(LocalContext.current))
-            ), navController = rememberNavController())
+            ))
 
             Spacer(modifier = Modifier.height(28.dp))
 
-            ProfileButton(navController = rememberNavController())
+            ProfileButton(navController = navController)
 
             Spacer(modifier = Modifier.height(28.dp))
         }
@@ -63,7 +64,8 @@ fun ProfileScreen(
 fun ProfileScreenPreview() {
     PawraTheme {
         ProfileScreen(
-            navHomeController = rememberNavController()
+            navHomeController = rememberNavController(),
+            navController = rememberNavController()
         )
     }
 }
