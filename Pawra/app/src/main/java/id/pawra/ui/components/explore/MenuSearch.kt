@@ -31,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import id.pawra.ui.common.NoRippleTheme
+import id.pawra.ui.components.general.SearchBar
 import id.pawra.ui.theme.DarkGreen
 import id.pawra.ui.theme.LightGray
 import id.pawra.ui.theme.LightGreen
