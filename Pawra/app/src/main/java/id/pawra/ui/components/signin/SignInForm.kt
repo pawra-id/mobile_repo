@@ -1,5 +1,6 @@
 package id.pawra.ui.components.signin
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -10,6 +11,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,8 +43,11 @@ import id.pawra.R
 import id.pawra.data.ViewModelFactory
 import id.pawra.di.Injection
 import id.pawra.ui.screen.auth.AuthViewModel
+import id.pawra.ui.screen.auth.SignInFormEvent
+import id.pawra.ui.screen.auth.SignUpFormEvent
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
+import id.pawra.ui.theme.Red
 
 @Composable
 fun SignInForm(
@@ -51,16 +56,15 @@ fun SignInForm(
     showDialog: (Boolean) -> Unit,
     navController: NavController
 ) {
+    val state = viewModel.stateSignIn
+    val context = LocalContext.current
+
     Column(
         modifier = modifier
             .padding(horizontal = 30.dp, vertical = 5.dp)
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
-        var email by remember { mutableStateOf(TextFieldValue()) }
-        var password by remember { mutableStateOf(TextFieldValue()) }
-
         Text(
             text = stringResource(R.string.email),
             color = colorResource(id = R.color.gray),
@@ -68,9 +72,9 @@ fun SignInForm(
             modifier = modifier
                 .fillMaxWidth())
         OutlinedTextField(
-            value = email,
+            value = state.email,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-            onValueChange = { email = it },
+            onValueChange = { viewModel.onEventSignIn(SignInFormEvent.EmailChanged(it)) },
             singleLine = true,
             shape = RoundedCornerShape(10.dp),
             modifier = modifier
@@ -80,7 +84,17 @@ fun SignInForm(
                 fontSize = 16.sp,
                 color = colorResource(id = R.color.gray),
                 fontFamily = Poppins
-            )
+            ),
+            supportingText = {
+                if (state.emailError != null) {
+                    Text(
+                        text = state.emailError,
+                        color = Red,
+                        modifier = Modifier.align(Alignment.End)
+                    )
+                }
+            },
+            isError = state.emailError != null
         )
         Text(
             text = stringResource(R.string.password),
@@ -91,7 +105,7 @@ fun SignInForm(
 
         var showPassword by remember { mutableStateOf(false) }
         OutlinedTextField(
-            value = password,
+            value = state.password,
             visualTransformation = if (showPassword) {
                 VisualTransformation.None
             } else {
@@ -116,7 +130,7 @@ fun SignInForm(
                 }
             },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            onValueChange = { password = it },
+            onValueChange = { viewModel.onEventSignIn(SignInFormEvent.PasswordChanged(it)) },
             singleLine = true,
             shape = RoundedCornerShape(10.dp),
             modifier = modifier
@@ -126,7 +140,17 @@ fun SignInForm(
                 fontSize = 16.sp,
                 color = colorResource(id = R.color.gray),
                 fontFamily = Poppins
-            )
+            ),
+            supportingText = {
+                if (state.passwordError != null) {
+                    Text(
+                        text = state.passwordError,
+                        color = Red,
+                        modifier = Modifier.align(Alignment.End)
+                    )
+                }
+            },
+            isError = state.passwordError != null
         )
 
         ClickableText(
@@ -139,18 +163,16 @@ fun SignInForm(
             ),
             onClick = {
 //                TODO: set route to forgot password screen
-                navController.navigate("")
+//                navController.navigate("")
+                Toast.makeText(context, "not developed yet", Toast.LENGTH_SHORT).show()
             },
             modifier = modifier.align(Alignment.End)
         )
 
         Button(
             onClick = {
-                viewModel.signIn(
-                    email.text,
-                    password.text
-                )
-                showDialog(true)},
+                viewModel.onEventSignIn(SignInFormEvent.Submit)
+                showDialog(viewModel.showDialog)},
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
                 .fillMaxWidth()
