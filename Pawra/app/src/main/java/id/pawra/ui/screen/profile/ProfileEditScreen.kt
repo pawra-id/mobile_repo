@@ -23,6 +23,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import id.pawra.data.ViewModelFactory
 import id.pawra.di.Injection
+import id.pawra.ui.components.loading.LoadingBox
 import id.pawra.ui.components.profile.ProfileEditForm
 import id.pawra.ui.components.profile.ProfileEditTopBar
 import id.pawra.ui.screen.auth.AuthViewModel
@@ -50,7 +51,7 @@ fun ProfileEditScreen(
                     verticalArrangement = Arrangement.Top,
                     modifier = modifier.fillMaxSize()
                 ) {
-                    CircularProgressIndicator()
+                    LoadingBox()
                 }
             }
 

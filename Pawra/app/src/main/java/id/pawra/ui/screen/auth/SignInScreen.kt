@@ -22,6 +22,7 @@ import id.pawra.data.ViewModelFactory
 import id.pawra.di.Injection
 import id.pawra.ui.common.UiState
 import id.pawra.ui.components.dialog.ResultDialog
+import id.pawra.ui.components.loading.LoadingBox
 import id.pawra.ui.components.signin.SignInFooter
 import id.pawra.ui.components.signin.SignInForm
 import id.pawra.ui.components.signin.SignInHeader
@@ -37,6 +38,7 @@ fun SignInScreen(
 ) {
     Box(modifier = modifier) {
         var isLoading by remember { mutableStateOf(false) }
+        var showDialog by remember { mutableStateOf(false) }
 
         if (isLoading) {
             Column(
@@ -44,7 +46,7 @@ fun SignInScreen(
                 verticalArrangement = Arrangement.Center,
                 modifier = modifier.fillMaxSize()
             ) {
-                CircularProgressIndicator()
+                LoadingBox()
             }
         }
 
@@ -55,8 +57,6 @@ fun SignInScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
-            var showDialog by remember { mutableStateOf(false) }
-
             SignInHeader()
             SignInForm(
                 viewModel = viewModel,
@@ -81,14 +81,12 @@ fun SignInScreen(
                     }
                     is UiState.Error -> {
                         if(showDialog) {
+                            isLoading = false
                             ResultDialog(
                                 success = false,
                                 message = userState.errorMessage,
                                 setShowDialog = {
                                     showDialog = it
-                                },
-                                setLoading = {
-                                    isLoading = it
                                 }
                             )
                         }
