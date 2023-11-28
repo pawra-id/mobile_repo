@@ -111,7 +111,8 @@ fun HomeNav(
             }
 
             composable(Screen.Pet.route) {
-                PetScreen(navHomeController = navHomeController)
+                PetScreen(navHomeController = navHomeController,
+                    navController = navController)
             }
 
             composable(Screen.Explore.route) {
