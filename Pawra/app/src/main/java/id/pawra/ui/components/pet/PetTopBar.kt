@@ -59,8 +59,8 @@ fun PetTopBar(
 
 @Composable
 @Preview(showBackground = true)
-fun ExploreTopBarPreview() {
+fun PetTopBarPreview() {
     PawraTheme {
-        ExploreTopBar()
+        PetTopBar()
     }
 }
