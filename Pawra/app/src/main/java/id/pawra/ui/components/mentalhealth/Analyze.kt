@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,7 +41,7 @@ fun Analyze(
 ) {
     Column(
         modifier = modifier
-            .padding(horizontal = 20.dp, vertical = 10.dp)
+            .padding(horizontal = 22.dp, vertical = 20.dp)
             .fillMaxWidth()
     ) {
 
@@ -81,7 +82,8 @@ fun Analyze(
                     text = if (isFinished) "Analyzing mental health finished" else "Analyzing mental health",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = DarkGreen
+                    color = DarkGreen,
+                    textAlign = TextAlign.Center
                 )
 
                 if (isFinished) {
