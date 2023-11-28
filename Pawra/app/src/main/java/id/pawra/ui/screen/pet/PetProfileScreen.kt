@@ -13,7 +13,7 @@ import androidx.navigation.NavController
 @Composable
 fun PetProfileScreen(
     modifier: Modifier = Modifier,
-    navPetController: NavController
+    navController: NavController
 ) {
     Column(
         modifier = modifier

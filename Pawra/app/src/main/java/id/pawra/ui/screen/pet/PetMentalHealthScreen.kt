@@ -19,7 +19,7 @@ import id.pawra.ui.theme.PawraTheme
 @Composable
 fun PetMentalHealthScreen(
     modifier: Modifier = Modifier,
-    navPetController: NavController
+    navController: NavController
 ) {
     Column(
         modifier = modifier
@@ -36,6 +36,6 @@ fun PetMentalHealthScreen(
 @Preview(showBackground = true)
 fun PetMentalHealthScreenPreview() {
     PawraTheme {
-        PetMentalHealthScreen(navPetController = rememberNavController())
+        PetMentalHealthScreen(navController = rememberNavController())
     }
 }

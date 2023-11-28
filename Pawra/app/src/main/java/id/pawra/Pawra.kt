@@ -151,15 +151,15 @@ fun PetNav(
             modifier = modifier.padding(paddingValues)
         ) {
             composable(Screen.PetProfile.route) {
-                PetProfileScreen(navPetController = navPetController)
+                PetProfileScreen(navController = navController)
             }
 
             composable(Screen.PetActivities.route) {
-                PetActivitiesScreen(navPetController = navPetController)
+                PetActivitiesScreen(navController = navController)
             }
 
             composable(Screen.PetMentalHealth.route) {
-                PetMentalHealthScreen(navPetController = navPetController)
+                PetMentalHealthScreen(navController = navController)
             }
         }
     }

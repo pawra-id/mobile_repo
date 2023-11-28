@@ -10,18 +10,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material3.Icon
@@ -36,16 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.NestedScrollDispatcher
-import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.input.pointer.PointerEventPass
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.input.pointer.positionChange
-import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -53,7 +40,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import id.pawra.R
 import id.pawra.ui.common.NoRippleTheme
-import id.pawra.ui.components.general.BottomSheet
 import id.pawra.ui.components.general.SearchBar
 import id.pawra.ui.theme.DarkGreen
 import id.pawra.ui.theme.DisabledGreen
@@ -63,19 +49,21 @@ import id.pawra.ui.theme.MobileGray
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Red
 import id.pawra.ui.theme.White
-import java.lang.Math.abs
 
 @Composable
-fun PetActivitiesBottomSheet(
-    modifier: Modifier
+fun PetActivities(
+    modifier: Modifier = Modifier
 ) {
     val query by remember { mutableStateOf("") }
     var activeFilter by remember { mutableStateOf(Filter.Latest.name) }
 
-    BottomSheet(topBar = { PetActivitiesTopBar() }) {
+    Column(
+        modifier = modifier
+            .padding(horizontal = 22.dp, vertical = 10.dp)
+    ) {
         Row(
             modifier = modifier
-                .padding(horizontal = 20.dp, vertical = 10.dp),
+                .padding(top = 10.dp),
             horizontalArrangement = Arrangement.spacedBy(15.dp)
         ) {
 
@@ -120,8 +108,8 @@ fun PetActivitiesBottomSheet(
             Row(
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
                 modifier = modifier
-                    .padding(horizontal = 20.dp, vertical = 10.dp)
                     .horizontalScroll(rememberScrollState())
+                    .padding(top = 20.dp, bottom = 20.dp)
             ) {
                 for (filter in Filter.entries) {
                     Box(
@@ -151,8 +139,8 @@ fun PetActivitiesBottomSheet(
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .padding(horizontal = 20.dp, vertical = 10.dp)
-                .verticalScroll(rememberScrollState()),
+                .verticalScroll(rememberScrollState())
+                .padding(top = 10.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
@@ -235,13 +223,15 @@ fun PetActivitiesBottomSheet(
             }
         }
     }
+
 }
+
 
 @Composable
 @Preview(showBackground = true)
-fun PetActivitiesBottomSheetPreview() {
+fun PetActivitiesPreview() {
     PawraTheme {
-        PetActivitiesBottomSheet(
+        PetActivities(
             Modifier
         )
     }
