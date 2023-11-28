@@ -39,6 +39,16 @@ import id.pawra.ui.theme.White
 fun Analyze(
     modifier: Modifier = Modifier
 ) {
+    var showDialog by remember { mutableStateOf(false) }
+
+    if(showDialog) {
+        AnalyzePopUpForm(
+            setShowDialog = {
+                showDialog = it
+            }
+        )
+    }
+
     Column(
         modifier = modifier
             .padding(horizontal = 22.dp, vertical = 20.dp)
@@ -47,10 +57,13 @@ fun Analyze(
 
         Button(
             modifier = modifier
+                .padding(top = 10.dp, bottom = 10.dp)
                 .height(56.dp)
                 .fillMaxWidth(),
             shape = RoundedCornerShape(10.dp),
-            onClick = {}
+            onClick = {
+                showDialog = true
+            }
         ) {
             Text(
                 text = "Analyze",
