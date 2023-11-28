@@ -1,8 +1,8 @@
 package id.pawra.ui.components.petactivities
 
-enum class Filter(name: String) {
+enum class FilterActivities(name: String) {
     Latest("latest"),
     Oldest("oldest"),
-    AZ("A-Z"),
-    ZA("Z-A")
+    AZ("a_z"),
+    ZA("z_a")
 }
