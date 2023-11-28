@@ -48,10 +48,13 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import id.pawra.R
 import id.pawra.ui.components.explore.Menu
 import id.pawra.ui.components.profile.ProfileImage
+import id.pawra.ui.navigation.Screen
 import id.pawra.ui.theme.DarkGreen
 import id.pawra.ui.theme.DisabledGreen
 import id.pawra.ui.theme.LightGray
@@ -62,7 +65,8 @@ import id.pawra.ui.theme.Poppins
 
 @Composable
 fun NearbyVets(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavController
 ) {
     val image = "https://2.bp.blogspot.com/-_sOpXiMO0m4/ViVULhN611I/AAAAAAAAMCk/LbqKTS7T9Fw/s1600/indah%2Bkusuma%2Bhot%2Bdoctor%2Bindonesia.jpg"
     val configuration = LocalConfiguration.current
@@ -96,13 +100,14 @@ fun NearbyVets(
                 color = MobileGray, fontFamily = Poppins, fontSize = 13.sp,
                 modifier = modifier
                     .clip(shape = RoundedCornerShape(15.dp))
-                    .clickable{
-
-                }
+                    .clickable {
+                        navController.navigate(Screen.Vets.route)
+                    }
             )
         }
         Row(
-            modifier = modifier.padding(vertical = 10.dp, horizontal = 0.dp)
+            modifier = modifier
+                .padding(vertical = 10.dp, horizontal = 0.dp)
                 .horizontalScroll(rememberScrollState()),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(25.dp)
@@ -113,7 +118,7 @@ fun NearbyVets(
                     .size(60.dp)
                     .clip(shape = CircleShape)
                     .border(5.dp, LightGreen, shape = CircleShape)
-                    .clickable {  }
+                    .clickable { }
             ) {
                 Card(
                     shape = CircleShape,
@@ -136,7 +141,7 @@ fun NearbyVets(
                     .size(60.dp)
                     .clip(shape = CircleShape)
                     .border((1.5).dp, LightGreen, shape = CircleShape)
-                    .clickable {  }
+                    .clickable { }
             ) {
                 Card(
                     shape = CircleShape,
@@ -210,6 +215,8 @@ fun NearbyVets(
 @Preview(showBackground = true)
 fun NearbyVetsPreview() {
     PawraTheme {
-        NearbyVets()
+        NearbyVets(
+            navController = rememberNavController()
+        )
     }
 }

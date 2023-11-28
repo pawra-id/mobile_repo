@@ -41,7 +41,7 @@ fun MentalHealthTopBar(
         IconButton(
             onClick = { /*TODO*/ },
             modifier = modifier
-                .background(White, CircleShape)
+                .background(DisabledGreen, CircleShape)
                 .size(32.dp)
         ) {
             Icon(

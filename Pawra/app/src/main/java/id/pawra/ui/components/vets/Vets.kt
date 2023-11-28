@@ -1,4 +1,4 @@
-package id.pawra.ui.components.petactivities
+package id.pawra.ui.components.vets
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material3.Icon
@@ -32,15 +33,21 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import id.pawra.R
 import id.pawra.ui.common.NoRippleTheme
 import id.pawra.ui.components.general.SearchBar
+import id.pawra.ui.components.petactivities.FilterActivities
+import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkGreen
 import id.pawra.ui.theme.DisabledGreen
 import id.pawra.ui.theme.LightGray
@@ -51,11 +58,12 @@ import id.pawra.ui.theme.Red
 import id.pawra.ui.theme.White
 
 @Composable
-fun PetActivities(
-    modifier: Modifier = Modifier
+fun Vets(
+    modifier: Modifier = Modifier,
+    navController: NavController
 ) {
     val query by remember { mutableStateOf("") }
-    var activeFilter by remember { mutableStateOf(FilterActivities.Latest.name) }
+    var activeFilter by remember { mutableStateOf(FilterVets.Nearest.name) }
 
     Column(
         modifier = modifier
@@ -82,7 +90,7 @@ fun PetActivities(
                 },
                 placeholder = {
                     Text(
-                        "Search activity",
+                        "Search vets",
                         color = MobileGray
                     )
                 },
@@ -96,8 +104,8 @@ fun PetActivities(
                     .size(56.dp)
             ) {
                 Icon(
-                    Icons.Filled.Add,
-                    "Add Activity",
+                    Icons.Filled.LocationOn,
+                    "Add Location",
                     tint = DarkGreen,
                     modifier = modifier
                 )
@@ -111,7 +119,7 @@ fun PetActivities(
                     .horizontalScroll(rememberScrollState())
                     .padding(top = 20.dp, bottom = 20.dp)
             ) {
-                for (filter in FilterActivities.entries) {
+                for (filter in FilterVets.entries) {
                     Box(
                         modifier = modifier
                             .clip(shape = RoundedCornerShape(20.dp))
@@ -148,76 +156,77 @@ fun PetActivities(
                 Row(
                     modifier = modifier
                         .clip(shape = RoundedCornerShape(15.dp))
-                        .background(DisabledGreen)
+                        .background(White)
+                        .border(1.dp, LightGray, RoundedCornerShape(15.dp))
                         .fillMaxWidth()
-                        .padding(horizontal = 20.dp, vertical = 15.dp),
+                        .padding(horizontal = 10.dp, vertical = 15.dp),
                     horizontalArrangement = Arrangement.spacedBy(20.dp)
                 ) {
+                    AsyncImage(
+                        model = "https://2.bp.blogspot.com/-_sOpXiMO0m4/ViVULhN611I/AAAAAAAAMCk/LbqKTS7T9Fw/s1600/indah%2Bkusuma%2Bhot%2Bdoctor%2Bindonesia.jpg",
+                        contentDescription = "Vets Name",
+                        modifier = modifier
+                            .size(90.dp)
+                            .clip(RoundedCornerShape(15.dp)),
+                        contentScale = ContentScale.Crop
+                    )
+
                     Column(
-                        modifier = modifier.weight(1f)
+                        modifier = modifier
                     ) {
                         Text(
-                            text = "14:00, 17 February 2023",
-                            fontSize = 11.sp,
-                            color = DarkGreen,
+                            text = "drh. Humberto Chavez",
+                            fontSize = 13.sp,
+                            color = Black,
                             fontWeight = FontWeight.SemiBold,
                         )
 
                         Text(
-                            text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec porttitor quis nisi a fringilla. Etiam tempor orci in nisl consectetur, ac venenatis eros eleifend. Morbi massa odio, rhoncus quis iaculis ullamcorper, vestibulum in enim.",
-                            fontSize = 13.sp,
-                            color = DarkGreen,
-                            maxLines = 2,
-                            lineHeight = 18.sp,
+                            text = "Klinik Hewan Purnama",
+                            fontSize = 12.sp,
+                            color = MobileGray,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+
+                        Text(
+                            text = "Jl. Karma No 4, Sekarmadu, Jogjakarta",
+                            fontSize = 10.sp,
+                            color = MobileGray,
+                            maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             modifier = modifier.padding(bottom = 10.dp)
                         )
 
-                        Text(
-                            text = "Happy",
-                            fontSize = 10.sp,
-                            color = DisabledGreen,
-                            modifier = modifier
-                                .clip(shape = RoundedCornerShape(15.dp))
-                                .background(
-                                    color = DarkGreen
-                                )
-                                .padding(vertical = 2.dp, horizontal = 10.dp),
-                        )
-                    }
-
-                    Column(
-                        modifier = modifier,
-                        verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        IconButton(
-                            onClick = { /* do something */ },
-                            modifier = modifier
-                                .background(DarkGreen, CircleShape)
-                                .size(35.dp)
+                        Row(
+                            modifier = modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start)
                         ) {
-                            Icon(
-                                painterResource(id = R.drawable.edit_square),
-                                "Edit Activity",
-                                tint = White,
+                            Text(
+                                text = "2.3 km",
+                                fontSize = 10.sp,
+                                color = DarkGreen,
                                 modifier = modifier
+                                    .clip(shape = RoundedCornerShape(15.dp))
+                                    .background(
+                                        color = DisabledGreen
+                                    )
+                                    .padding(vertical = 2.dp, horizontal = 10.dp),
+                            )
+
+                            Text(
+                                text = "9am - 3pm",
+                                fontSize = 10.sp,
+                                color = DarkGreen,
+                                modifier = modifier
+                                    .clip(shape = RoundedCornerShape(15.dp))
+                                    .background(
+                                        color = DisabledGreen
+                                    )
+                                    .padding(vertical = 2.dp, horizontal = 10.dp),
                             )
                         }
 
-                        IconButton(
-                            onClick = { /* do something */ },
-                            modifier = modifier
-                                .background(Red, CircleShape)
-                                .size(35.dp)
-                        ) {
-                            Icon(
-                                painterResource(id = R.drawable.delete_rounded),
-                                "Delete Activity",
-                                tint = White,
-                                modifier = modifier
-                            )
-                        }
                     }
                 }
             }
@@ -229,10 +238,10 @@ fun PetActivities(
 
 @Composable
 @Preview(showBackground = true)
-fun PetActivitiesPreview() {
+fun VetsPreview() {
     PawraTheme {
-        PetActivities(
-            Modifier
+        Vets(
+            navController = rememberNavController()
         )
     }
 }
