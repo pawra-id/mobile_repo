@@ -22,4 +22,5 @@ sealed class Screen(val route: String) {
 
     // Vet Navigation
     data object Vets : Screen("vets")
+    data object MapAddress : Screen("map_address")
 }

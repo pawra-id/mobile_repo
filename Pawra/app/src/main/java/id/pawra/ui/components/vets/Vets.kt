@@ -1,5 +1,12 @@
 package id.pawra.ui.components.vets
 
+import android.Manifest
+import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.content.Context
+import android.content.pm.PackageManager
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -26,6 +33,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,25 +42,33 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionState
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.android.gms.location.FusedLocationProviderClient
 import id.pawra.R
 import id.pawra.ui.common.NoRippleTheme
 import id.pawra.ui.components.general.SearchBar
 import id.pawra.ui.components.petactivities.FilterActivities
+import id.pawra.ui.navigation.Screen
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkGreen
 import id.pawra.ui.theme.DisabledGreen
 import id.pawra.ui.theme.LightGray
 import id.pawra.ui.theme.LightGreen
-import id.pawra.ui.theme.MobileGray
+import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Red
 import id.pawra.ui.theme.White
@@ -85,20 +101,22 @@ fun Vets(
                     Icon(
                         imageVector = Icons.Default.Search,
                         contentDescription = null,
-                        tint = MobileGray
+                        tint = Gray
                     )
                 },
                 placeholder = {
                     Text(
                         "Search vets",
-                        color = MobileGray
+                        color = Gray
                     )
                 },
                 modifier = modifier.weight(1f)
             ) {}
 
             IconButton(
-                onClick = { /* do something */ },
+                onClick = {
+                    navController.navigate(Screen.MapAddress.route)
+                },
                 modifier = modifier
                     .background(LightGreen, RoundedCornerShape(10.dp))
                     .size(56.dp)
@@ -184,7 +202,7 @@ fun Vets(
                         Text(
                             text = "Klinik Hewan Purnama",
                             fontSize = 12.sp,
-                            color = MobileGray,
+                            color = Gray,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -192,7 +210,7 @@ fun Vets(
                         Text(
                             text = "Jl. Karma No 4, Sekarmadu, Jogjakarta",
                             fontSize = 10.sp,
-                            color = MobileGray,
+                            color = Gray,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             modifier = modifier.padding(bottom = 10.dp)
@@ -234,7 +252,6 @@ fun Vets(
     }
 
 }
-
 
 @Composable
 @Preview(showBackground = true)

@@ -35,8 +35,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import id.pawra.R
+import id.pawra.ui.theme.DarkGreen
+import id.pawra.ui.theme.DisabledGreen
+import id.pawra.ui.theme.Linear1
+import id.pawra.ui.theme.Linear2
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
+import id.pawra.ui.theme.White
 
 @Composable
 fun Banner(
@@ -63,7 +68,7 @@ fun Banner(
                 .height(130.dp)
                 .width(bannerWidth)
                 .clip(shape = RoundedCornerShape(15.dp))
-                .background(color = colorResource(id = R.color.disabled_green)),
+                .background(color = DisabledGreen),
         ) {
             Column(
                 modifier = modifier
@@ -77,13 +82,13 @@ fun Banner(
                     fontFamily = Poppins,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 16.sp,
-                    color = colorResource(id = R.color.dark_green),
+                    color = DarkGreen,
                 )
                 Text(
                     text = "Don't waste any more time",
                     fontFamily = Poppins,
                     fontSize = 13.sp,
-                    color = colorResource(id = R.color.dark_green),
+                    color = DarkGreen,
                     lineHeight = 15.sp
                 )
 
@@ -97,7 +102,7 @@ fun Banner(
                     .width(65.dp),
                 contentPadding = PaddingValues(0.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = colorResource(id = R.color.dark_green)
+                    containerColor = DarkGreen
                 ),
             ) {
                 Text(
@@ -127,8 +132,8 @@ fun Banner(
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
-                            colorResource(id = R.color.linear1),
-                            colorResource(id = R.color.linear2)
+                            Linear1,
+                            Linear2
                         )
                     )
                 ),
@@ -144,13 +149,13 @@ fun Banner(
                     fontFamily = Poppins,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 16.sp,
-                    color = colorResource(id = R.color.white),
+                    color = White,
                 )
                 Text(
                     text = "Check these shared mental health result",
                     fontFamily = Poppins,
                     fontSize = 13.sp,
-                    color = colorResource(id = R.color.white),
+                    color = White,
                     lineHeight = 15.sp
                 )
             }
@@ -164,7 +169,7 @@ fun Banner(
                     .width(80.dp),
                 contentPadding = PaddingValues(0.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = colorResource(id = R.color.white)
+                    containerColor = White
                 ),
             ) {
                 Text(
@@ -174,8 +179,8 @@ fun Banner(
                     style = TextStyle(
                         brush = Brush.verticalGradient(
                             colors = listOf(
-                                colorResource(id = R.color.linear1),
-                                colorResource(id = R.color.linear2)
+                                Linear1,
+                                Linear2
                             ),
                         )
                     )

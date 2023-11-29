@@ -30,6 +30,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import id.pawra.R
 import id.pawra.ui.theme.DarkGreen
+import id.pawra.ui.theme.DisabledGreen
+import id.pawra.ui.theme.DisabledRed
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Red
 import id.pawra.ui.theme.White
@@ -56,9 +58,7 @@ fun ResultDialog(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(
-                        color = if (success) colorResource(id = R.color.disabled_green) else colorResource(
-                            id = R.color.disabled_red
-                        )
+                        color = if (success) DisabledGreen else DisabledRed
                     ).padding(vertical = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -74,7 +74,7 @@ fun ResultDialog(
                         .fillMaxWidth()
                         .padding(top = 16.dp, start = 26.dp, end = 26.dp, bottom = 36.dp),
                     text = message,
-                    color = if (success) DarkGreen else White,
+                    color = if (success) DarkGreen else Red,
                     textAlign = TextAlign.Center,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium

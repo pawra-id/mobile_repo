@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import id.pawra.R
 import id.pawra.ui.theme.DarkGreen
+import id.pawra.ui.theme.DisabledGreen
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.White
 
@@ -78,7 +79,7 @@ fun Analyze(
             modifier = modifier
                 .padding(top = 20.dp, bottom = 20.dp)
                 .clip(shape = RoundedCornerShape(15.dp))
-                .background(color = colorResource(id = R.color.disabled_green))
+                .background(color = DisabledGreen)
                 .clickable {
                     if (isFinished) {
 

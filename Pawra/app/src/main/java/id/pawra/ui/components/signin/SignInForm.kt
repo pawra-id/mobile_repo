@@ -45,6 +45,8 @@ import id.pawra.di.Injection
 import id.pawra.ui.screen.auth.AuthViewModel
 import id.pawra.ui.screen.auth.SignInFormEvent
 import id.pawra.ui.screen.auth.SignUpFormEvent
+import id.pawra.ui.theme.DarkGreen
+import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
 import id.pawra.ui.theme.Red
@@ -67,7 +69,7 @@ fun SignInForm(
     ) {
         Text(
             text = stringResource(R.string.email),
-            color = colorResource(id = R.color.gray),
+            color = Gray,
             fontSize = 14.sp,
             modifier = modifier
                 .fillMaxWidth())
@@ -82,7 +84,7 @@ fun SignInForm(
                 .padding(bottom = 15.dp),
             textStyle = TextStyle.Default.copy(
                 fontSize = 16.sp,
-                color = colorResource(id = R.color.gray),
+                color = Gray,
                 fontFamily = Poppins
             ),
             supportingText = {
@@ -98,7 +100,7 @@ fun SignInForm(
         )
         Text(
             text = stringResource(R.string.password),
-            color = colorResource(id = R.color.gray),
+            color = Gray,
             fontSize = 14.sp,
             modifier = modifier
                 .fillMaxWidth())
@@ -138,7 +140,7 @@ fun SignInForm(
                 .padding(bottom = 15.dp),
             textStyle = TextStyle.Default.copy(
                 fontSize = 16.sp,
-                color = colorResource(id = R.color.gray),
+                color = Gray,
                 fontFamily = Poppins
             ),
             supportingText = {
@@ -156,7 +158,7 @@ fun SignInForm(
         ClickableText(
             text = AnnotatedString(stringResource(R.string.forgot_password)),
             style = TextStyle(
-                color = colorResource(id = R.color.dark_green),
+                color = DarkGreen,
                 fontWeight = FontWeight.SemiBold,
                 fontFamily = Poppins,
                 textDecoration = TextDecoration.Underline
