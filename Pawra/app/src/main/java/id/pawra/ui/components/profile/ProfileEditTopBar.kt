@@ -19,7 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import id.pawra.data.ViewModelFactory
 import id.pawra.di.Injection
 import id.pawra.ui.theme.DarkGreen
-import id.pawra.ui.theme.MobileGray
+import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
 
@@ -55,7 +55,7 @@ fun ProfileEditTopBar(
                 text = "Cancel",
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Normal,
-                color = (MobileGray)
+                color = (Gray)
             )
         }
     }

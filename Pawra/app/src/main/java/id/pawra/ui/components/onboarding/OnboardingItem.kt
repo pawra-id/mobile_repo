@@ -23,6 +23,7 @@ import id.pawra.R
 import id.pawra.ui.screen.onboarding.OnBoardingPager
 import id.pawra.ui.screen.onboarding.rememberPagerState
 import id.pawra.ui.theme.DarkGreen
+import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.LightGreen
 import kotlinx.coroutines.DelicateCoroutinesApi
 
@@ -105,7 +106,7 @@ fun Indicator(isSelected: Boolean, color: Color) {
             .width(width.value)
             .clip(CircleShape)
             .background(
-                if (isSelected) color else Color.Gray.copy(alpha = 0.5f)
+                if (isSelected) color else Gray.copy(alpha = 0.5f)
             )
     )
 }

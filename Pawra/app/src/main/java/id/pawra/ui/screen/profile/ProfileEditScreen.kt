@@ -27,7 +27,7 @@ import id.pawra.ui.components.loading.LoadingBox
 import id.pawra.ui.components.profile.ProfileEditForm
 import id.pawra.ui.components.profile.ProfileEditTopBar
 import id.pawra.ui.screen.auth.AuthViewModel
-import id.pawra.ui.theme.MobileGray
+import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.PawraTheme
 
 @RequiresApi(Build.VERSION_CODES.O)

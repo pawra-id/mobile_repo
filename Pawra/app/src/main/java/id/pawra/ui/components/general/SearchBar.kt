@@ -36,7 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import id.pawra.ui.theme.LightGray
-import id.pawra.ui.theme.MobileGray
+import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.PawraTheme
 
 @Composable
@@ -64,9 +64,9 @@ fun SearchBar(
             textStyle = TextStyle(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Normal,
-                color = MobileGray
+                color = Gray
             ),
-            cursorBrush = SolidColor(MobileGray),
+            cursorBrush = SolidColor(Gray),
             enabled = enabled,
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
             keyboardActions = KeyboardActions(onSearch = { onSearch(query) }),
@@ -145,13 +145,13 @@ fun SearchBarPreview() {
                 Icon(
                     imageVector = Icons.Default.Search,
                     contentDescription = null,
-                    tint = MobileGray
+                    tint = Gray
                 )
             },
             placeholder = {
                 Text(
                     "Search",
-                    color = MobileGray
+                    color = Gray
                 )
             },
         ){}

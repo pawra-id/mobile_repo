@@ -25,7 +25,7 @@ import id.pawra.ui.common.UiState
 import id.pawra.ui.screen.auth.AuthViewModel
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkGreen
-import id.pawra.ui.theme.MobileGray
+import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
 
@@ -63,7 +63,7 @@ fun ProfilePage(
                 Text(
                     text = userInfo.email,
                     modifier = Modifier.padding(top = 7.dp),
-                    color = MobileGray,
+                    color = Gray,
                     fontFamily = Poppins,
                     fontSize = 13.sp,
                     textAlign = TextAlign.Center,

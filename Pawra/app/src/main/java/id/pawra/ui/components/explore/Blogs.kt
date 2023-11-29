@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import id.pawra.R
 import id.pawra.ui.theme.Black
-import id.pawra.ui.theme.MobileGray
+import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.PawraTheme
 
 @Composable
@@ -58,14 +58,14 @@ fun Blogs(
             )
 
             Text(
-                color = MobileGray,
+                color = Gray,
                 fontSize = 13.sp,
                 text = "by",
                 modifier = modifier.padding(start = 10.dp)
             )
             Text(
                 text = "Admin",
-                color = MobileGray,
+                color = Gray,
                 fontSize = 13.sp,
                 fontWeight = FontWeight.SemiBold,
                 modifier = modifier.padding(start = 5.dp)
@@ -92,7 +92,7 @@ fun Blogs(
 
         Text(
             text = date,
-            color = MobileGray,
+            color = Gray,
             fontSize = 13.sp,
             modifier = modifier.padding(top = 5.dp).align(Alignment.End)
         )

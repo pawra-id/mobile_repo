@@ -45,7 +45,7 @@ import id.pawra.ui.theme.DarkGreen
 import id.pawra.ui.theme.DisabledGreen
 import id.pawra.ui.theme.LightGray
 import id.pawra.ui.theme.LightGreen
-import id.pawra.ui.theme.MobileGray
+import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Red
 import id.pawra.ui.theme.White
@@ -77,13 +77,13 @@ fun PetActivities(
                     Icon(
                         imageVector = Icons.Default.Search,
                         contentDescription = null,
-                        tint = MobileGray
+                        tint = Gray
                     )
                 },
                 placeholder = {
                     Text(
                         "Search activity",
-                        color = MobileGray
+                        color = Gray
                     )
                 },
                 modifier = modifier.weight(1f)

@@ -55,11 +55,12 @@ import id.pawra.R
 import id.pawra.ui.components.explore.Menu
 import id.pawra.ui.components.profile.ProfileImage
 import id.pawra.ui.navigation.Screen
+import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkGreen
 import id.pawra.ui.theme.DisabledGreen
 import id.pawra.ui.theme.LightGray
 import id.pawra.ui.theme.LightGreen
-import id.pawra.ui.theme.MobileGray
+import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
 
@@ -91,13 +92,13 @@ fun NearbyVets(
                 text = "Nearby Vets",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = colorResource(id = R.color.black),
+                color = Black,
                 modifier = modifier.weight(1f)
             )
 
             Text(
                 text = "more",
-                color = MobileGray, fontFamily = Poppins, fontSize = 13.sp,
+                color = Gray, fontFamily = Poppins, fontSize = 13.sp,
                 modifier = modifier
                     .clip(shape = RoundedCornerShape(15.dp))
                     .clickable {
@@ -165,7 +166,7 @@ fun NearbyVets(
                 .padding(top = 10.dp, bottom = 10.dp)
                 .width(screenWidth)
                 .clip(shape = RoundedCornerShape(15.dp))
-                .background(color = colorResource(id = R.color.disabled_green)),
+                .background(color = DisabledGreen),
         ) {
             Column(
                 modifier = modifier
@@ -196,7 +197,7 @@ fun NearbyVets(
                     modifier = modifier
                         .padding(top = 16.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = colorResource(id = R.color.dark_green)
+                        containerColor = DarkGreen
                     ),
                 ) {
                     Text(
