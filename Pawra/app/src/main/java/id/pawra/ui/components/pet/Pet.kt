@@ -33,6 +33,11 @@ import coil.compose.AsyncImage
 import id.pawra.R
 import id.pawra.data.local.preference.PetData
 import id.pawra.ui.navigation.Screen
+import id.pawra.ui.theme.DarkBlue
+import id.pawra.ui.theme.DarkPink
+import id.pawra.ui.theme.DisabledBlue
+import id.pawra.ui.theme.DisabledGreen
+import id.pawra.ui.theme.DisabledPink
 import id.pawra.ui.theme.LightGreen
 import id.pawra.ui.theme.PawraTheme
 
@@ -104,7 +109,7 @@ fun Pet(
                     .height(150.dp)
                     .width(150.dp)
                     .clip(shape = RoundedCornerShape(12.dp))
-                    .background(color = colorResource(id = R.color.disabled_green))
+                    .background(color = DisabledGreen)
                     .clickable {
 
                     },
@@ -153,15 +158,10 @@ fun PetItem(
                 Text(
                     text = gender,
                     fontSize = 11.sp,
-                    color = colorResource(id = if (gender == "Male") R.color.dark_blue else R.color.dark_pink),
+                    color = if (gender == "Male") DarkBlue else DarkPink,
                     modifier = modifier
                         .clip(shape = RoundedCornerShape(12.dp))
-                        .background(
-                            color = colorResource(
-                                id =
-                                if (gender == "Male") R.color.light_blue else R.color.light_pink
-                            )
-                        )
+                        .background(color = if (gender == "Male") DisabledBlue else DisabledPink)
                         .padding(vertical = 2.dp, horizontal = 10.dp)
                 )
             }

@@ -60,7 +60,9 @@ fun HomeScreen(
             ListDog(
                 navController = navController
             )
-            NearbyVets()
+            NearbyVets(
+                navController = navController
+            )
             Activities()
         }
     }

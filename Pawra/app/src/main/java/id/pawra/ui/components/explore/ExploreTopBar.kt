@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import id.pawra.R
 import id.pawra.ui.components.home.Welcome
+import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkGreen
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
@@ -52,7 +53,7 @@ fun ExploreTopBar(
             Icon(
                 imageVector = Icons.Filled.Settings,
                 contentDescription = null,
-                tint = colorResource(id = R.color.black)
+                tint = Black
             )
         }
 

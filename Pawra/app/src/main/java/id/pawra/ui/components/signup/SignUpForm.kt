@@ -50,6 +50,8 @@ import id.pawra.ui.screen.auth.AuthViewModel
 import id.pawra.ui.screen.auth.SignInFormEvent
 import id.pawra.ui.screen.auth.SignUpFormEvent
 import id.pawra.ui.screen.auth.SignUpFormState
+import id.pawra.ui.theme.DarkGreen
+import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
 import id.pawra.ui.theme.Red
@@ -71,7 +73,7 @@ fun SignUpForm(
 
         Text(
             text = stringResource(R.string.name),
-            color = colorResource(id = R.color.gray),
+            color = Gray,
             fontSize = 14.sp,
             modifier = modifier
                 .fillMaxWidth())
@@ -86,7 +88,7 @@ fun SignUpForm(
                 .padding(bottom = 15.dp),
             textStyle = TextStyle.Default.copy(
                 fontSize = 16.sp,
-                color = colorResource(id = R.color.gray),
+                color = Gray,
                 fontFamily = Poppins
             ),
             supportingText = {
@@ -103,7 +105,7 @@ fun SignUpForm(
 
         Text(
             text = stringResource(R.string.email),
-            color = colorResource(id = R.color.gray),
+            color = Gray,
             fontSize = 14.sp,
             modifier = modifier
                 .fillMaxWidth())
@@ -118,7 +120,7 @@ fun SignUpForm(
                 .padding(bottom = 15.dp),
             textStyle = TextStyle.Default.copy(
                 fontSize = 16.sp,
-                color = colorResource(id = R.color.gray),
+                color = Gray,
                 fontFamily = Poppins
             ),
             supportingText = {
@@ -134,7 +136,7 @@ fun SignUpForm(
         )
         Text(
             text = stringResource(R.string.password),
-            color = colorResource(id = R.color.gray),
+            color = Gray,
             fontSize = 14.sp,
             modifier = modifier
                 .fillMaxWidth())
@@ -166,7 +168,7 @@ fun SignUpForm(
                 .padding(bottom = 15.dp),
             textStyle = TextStyle.Default.copy(
                 fontSize = 16.sp,
-                color = colorResource(id = R.color.gray),
+                color = Gray,
                 fontFamily = Poppins
             ),
             supportingText = {
@@ -183,7 +185,7 @@ fun SignUpForm(
 
         Text(
             text = stringResource(R.string.confirm_password),
-            color = colorResource(id = R.color.gray),
+            color = Gray,
             fontSize = 14.sp,
             modifier = modifier
                 .fillMaxWidth())
@@ -215,7 +217,7 @@ fun SignUpForm(
                 .padding(bottom = 15.dp),
             textStyle = TextStyle.Default.copy(
                 fontSize = 16.sp,
-                color = colorResource(id = R.color.gray),
+                color = Gray,
                 fontFamily = Poppins
             ),
             supportingText = {
@@ -270,23 +272,23 @@ fun TermAndServiceText(
     val annotatedString = buildAnnotatedString {
         append(str)
         addStyle(
-            style = SpanStyle(color = colorResource(id = R.color.gray)
+            style = SpanStyle(color = Gray
             ), start = startAcceptIndex, end = endAcceptIndex
         )
         addStyle(
             style = SpanStyle(
-                color = colorResource(id = R.color.dark_green),
+                color = DarkGreen,
                 fontWeight = FontWeight.SemiBold,
                 textDecoration = TextDecoration.Underline
             ), start = startTermsIndex, end = endTermsIndex
         )
         addStyle(
-            style = SpanStyle(color = colorResource(id = R.color.gray)
+            style = SpanStyle(color = Gray
             ), start = startIndex, end = endIndex
         )
         addStyle(
             style = SpanStyle(
-                color = colorResource(id = R.color.dark_green),
+                color = DarkGreen,
                 fontWeight = FontWeight.SemiBold,
                 textDecoration = TextDecoration.Underline
             ), start = startServicesIndex, end = endServicesIndex

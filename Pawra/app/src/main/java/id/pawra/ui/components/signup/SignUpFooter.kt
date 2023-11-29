@@ -20,6 +20,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import id.pawra.R
 import id.pawra.ui.navigation.Screen
+import id.pawra.ui.theme.DarkGreen
+import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
 
@@ -52,12 +54,12 @@ fun HaveAccountText(
     val annotatedString = buildAnnotatedString {
         append(str)
         addStyle(
-            style = SpanStyle(color = colorResource(id = R.color.gray)
+            style = SpanStyle(color = Gray
             ), start = 0, end = startSignInIndex - 1
         )
         addStyle(
             style = SpanStyle(
-                color = colorResource(id = R.color.dark_green),
+                color = DarkGreen,
                 fontWeight = FontWeight.SemiBold,
                 textDecoration = TextDecoration.Underline
             ), start = startSignInIndex, end = endSignInIndex

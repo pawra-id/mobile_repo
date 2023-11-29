@@ -33,6 +33,14 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import id.pawra.R
 import id.pawra.ui.navigation.Screen
+import id.pawra.ui.theme.Black
+import id.pawra.ui.theme.DarkBlue
+import id.pawra.ui.theme.DarkGreen
+import id.pawra.ui.theme.DarkPink
+import id.pawra.ui.theme.DisabledBlue
+import id.pawra.ui.theme.DisabledGreen
+import id.pawra.ui.theme.DisabledPink
+import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.LightGreen
 import id.pawra.ui.theme.PawraTheme
 
@@ -85,15 +93,10 @@ fun ListDog(
                     Text(
                         text = gender,
                         fontSize = 11.sp,
-                        color = colorResource(id = if (gender == "Male") R.color.dark_blue else R.color.dark_pink),
+                        color = if (gender == "Male") DarkBlue else DarkPink,
                         modifier = modifier
                             .clip(shape = RoundedCornerShape(15.dp))
-                            .background(
-                                color = colorResource(
-                                    id =
-                                    if (gender == "Male") R.color.light_blue else R.color.light_pink
-                                )
-                            )
+                            .background(color = if (gender == "Male") DisabledBlue else DisabledPink)
                             .padding(vertical = 2.dp, horizontal = 10.dp)
                     )
                 }
@@ -103,23 +106,21 @@ fun ListDog(
                 text = name,
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 16.sp,
-                color = colorResource(id = R.color.black),
+                color = Black,
                 modifier = modifier.padding(top = 5.dp)
             )
             Text(
                 text = type,
                 fontSize = 11.sp,
-                color = colorResource(id = R.color.gray),
+                color = Gray,
             )
             Text(
                 text = stringResource(id = R.string.dog_age, age),
                 fontSize = 11.sp,
-                color = colorResource(id = R.color.dark_green),
+                color = DarkGreen,
                 modifier = modifier
                     .clip(shape = RoundedCornerShape(15.dp))
-                    .background(
-                        color = colorResource(id = R.color.disabled_green)
-                    )
+                    .background(color = DisabledGreen)
                     .padding(vertical = 2.dp, horizontal = 10.dp),
             )
         }
@@ -129,7 +130,7 @@ fun ListDog(
                 .height(90.dp)
                 .width(90.dp)
                 .clip(shape = RoundedCornerShape(15.dp))
-                .background(color = colorResource(id = R.color.disabled_green))
+                .background(color = DisabledGreen)
                 .clickable {
 
                 },

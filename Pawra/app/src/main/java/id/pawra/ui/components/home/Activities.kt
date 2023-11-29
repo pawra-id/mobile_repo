@@ -33,8 +33,9 @@ import coil.compose.AsyncImage
 import id.pawra.R
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkGreen
+import id.pawra.ui.theme.DisabledGreen
 import id.pawra.ui.theme.LightGray
-import id.pawra.ui.theme.MobileGray
+import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
 import org.jetbrains.annotations.Async
@@ -60,13 +61,13 @@ fun Activities(
                 text = "Activities",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = colorResource(id = R.color.black),
+                color = Black,
                 modifier = modifier.weight(1f)
             )
 
             Text(
                 text = "more",
-                color = MobileGray, fontFamily = Poppins, fontSize = 13.sp,
+                color = Gray, fontFamily = Poppins, fontSize = 13.sp,
                 modifier = modifier
                     .clip(shape = RoundedCornerShape(15.dp))
                     .clickable{
@@ -129,9 +130,7 @@ fun Activities(
                                 color = DarkGreen,
                                 modifier = modifier
                                     .clip(shape = RoundedCornerShape(15.dp))
-                                    .background(
-                                        color = colorResource(id = R.color.disabled_green)
-                                    )
+                                    .background(color = DisabledGreen)
                                     .padding(vertical = 2.dp, horizontal = 10.dp),
                             )
 
@@ -141,9 +140,7 @@ fun Activities(
                                 color = DarkGreen,
                                 modifier = modifier
                                     .clip(shape = RoundedCornerShape(15.dp))
-                                    .background(
-                                        color = colorResource(id = R.color.disabled_green)
-                                    )
+                                    .background(color = DisabledGreen)
                                     .padding(vertical = 2.dp, horizontal = 10.dp),
                             )
                         }

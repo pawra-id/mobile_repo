@@ -35,7 +35,7 @@ import id.pawra.ui.components.general.SearchBar
 import id.pawra.ui.theme.DarkGreen
 import id.pawra.ui.theme.LightGray
 import id.pawra.ui.theme.LightGreen
-import id.pawra.ui.theme.MobileGray
+import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.White
 
@@ -114,13 +114,13 @@ fun MenuSearch(
                 Icon(
                     imageVector = Icons.Default.Search,
                     contentDescription = null,
-                    tint = MobileGray
+                    tint = Gray
                 )
             },
             placeholder = {
                 Text(
                     "Search",
-                    color = MobileGray
+                    color = Gray
                 )
             },
             modifier = modifier

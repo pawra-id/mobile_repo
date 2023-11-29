@@ -48,6 +48,7 @@ import id.pawra.R
 import id.pawra.ui.screen.auth.SignUpFormEvent
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkGreen
+import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
 import id.pawra.ui.theme.Red
@@ -105,7 +106,7 @@ fun AnalyzePopUpForm(
 
                     Text(
                         text = "Last x days",
-                        color = colorResource(id = R.color.gray),
+                        color = Gray,
                         fontSize = 14.sp,
                         modifier = modifier
                             .fillMaxWidth())
@@ -121,7 +122,7 @@ fun AnalyzePopUpForm(
                             .padding(bottom = 15.dp),
                         textStyle = TextStyle.Default.copy(
                             fontSize = 16.sp,
-                            color = colorResource(id = R.color.gray),
+                            color = Gray,
                             fontFamily = Poppins
                         ),
                         isError = false,
@@ -129,7 +130,7 @@ fun AnalyzePopUpForm(
 
                     Text(
                         text = "Number of activities",
-                        color = colorResource(id = R.color.gray),
+                        color = Gray,
                         fontSize = 14.sp,
                         modifier = modifier
                             .fillMaxWidth())
@@ -145,7 +146,7 @@ fun AnalyzePopUpForm(
                             .padding(bottom = 15.dp),
                         textStyle = TextStyle.Default.copy(
                             fontSize = 16.sp,
-                            color = colorResource(id = R.color.gray),
+                            color = Gray,
                             fontFamily = Poppins
                         ),
                         isError = false,

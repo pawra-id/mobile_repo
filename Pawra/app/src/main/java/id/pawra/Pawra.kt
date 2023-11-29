@@ -29,6 +29,8 @@ import id.pawra.ui.screen.pet.PetScreen
 import id.pawra.ui.screen.profile.ProfileEditScreen
 import id.pawra.ui.screen.profile.ProfileScreen
 import id.pawra.ui.screen.splashscreen.SplashScreen
+import id.pawra.ui.screen.vet.MapAddressScreen
+import id.pawra.ui.screen.vet.VetScreen
 import id.pawra.ui.theme.PawraTheme
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -72,6 +74,18 @@ fun Pawra(
 
         composable(Screen.EditProfile.route) {
             ProfileEditScreen(
+                navController = navController
+            )
+        }
+
+        composable(Screen.Vets.route) {
+            VetScreen(
+                navController = navController
+            )
+        }
+
+        composable(Screen.MapAddress.route) {
+            MapAddressScreen(
                 navController = navController
             )
         }

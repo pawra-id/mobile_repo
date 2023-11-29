@@ -1,6 +1,10 @@
-    plugins {
+import java.util.Properties
+import java.io.FileInputStream
+
+plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -18,6 +22,17 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        val properties = Properties()
+        if (rootProject.file("local.properties").exists()) {
+            properties.load(FileInputStream("local.properties"))
+        }
+
+        buildConfigField(
+            "String",
+            "GOOGLE_MAPS_API_KEY",
+            properties.getProperty("GOOGLE_MAPS_API_KEY") ?: ""
+        )
     }
 
     buildTypes {
@@ -40,6 +55,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.2"
@@ -85,4 +101,13 @@ dependencies {
     implementation("com.google.accompanist:accompanist-pager:0.12.0")
 
     implementation("io.coil-kt:coil-compose:2.2.2")
+
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+    implementation("com.google.maps.android:maps-compose:2.8.0")
+
+    implementation("com.google.maps.android:maps-ktx:3.2.1")
+    implementation("com.google.maps.android:maps-utils-ktx:3.2.1")
+
+    implementation("com.google.accompanist:accompanist-permissions:0.32.0")
 }

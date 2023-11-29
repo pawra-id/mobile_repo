@@ -43,6 +43,7 @@ import id.pawra.di.Injection
 import id.pawra.ui.screen.auth.AuthViewModel
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkGreen
+import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.LightGray
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
@@ -69,7 +70,7 @@ fun ProfileEditForm(
 
         Text(
             text = stringResource(R.string.name),
-            color = colorResource(id = R.color.gray),
+            color = Gray,
             fontSize = 14.sp,
             modifier = modifier
                 .fillMaxWidth())
@@ -107,7 +108,7 @@ fun ProfileEditForm(
 
         Text(
             text = stringResource(R.string.email),
-            color = colorResource(id = R.color.gray),
+            color = Gray,
             fontSize = 14.sp,
             modifier = modifier
                 .fillMaxWidth())
@@ -146,7 +147,7 @@ fun ProfileEditForm(
 
         Text(
             text = stringResource(R.string.summary),
-            color = colorResource(id = R.color.gray),
+            color = Gray,
             fontSize = 14.sp,
             modifier = modifier
                 .fillMaxWidth())

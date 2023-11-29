@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import id.pawra.R
 import id.pawra.ui.theme.LightGray
-import id.pawra.ui.theme.MobileGray
+import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.PawraTheme
 
 @Composable
@@ -42,14 +42,14 @@ fun EmptyAnalyzeHistory(
             text = "Your history is empty!",
             fontSize = 20.sp,
             fontWeight = FontWeight.SemiBold,
-            color = MobileGray,
+            color = Gray,
             modifier = modifier
                 .padding(top = 20.dp)
         )
         Text(
             text = "analyzing your dog's mental health to get a list history ",
             fontSize = 12.sp,
-            color = MobileGray
+            color = Gray
         )
     }
 }
