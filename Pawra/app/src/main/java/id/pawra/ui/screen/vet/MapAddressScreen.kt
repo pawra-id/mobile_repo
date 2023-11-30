@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.IntentSender
 import android.content.pm.PackageManager
+import android.location.Geocoder
 import android.location.LocationManager
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -25,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.location.LocationManagerCompat
 import androidx.lifecycle.Lifecycle
@@ -44,9 +46,11 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.libraries.places.api.Places
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.rememberCameraPositionState
+import id.pawra.BuildConfig
 import id.pawra.data.ViewModelFactory
 import id.pawra.di.Injection
 import id.pawra.ui.components.dialog.ConfirmationDialog
@@ -69,6 +73,9 @@ fun MapAddressScreen(
     val context = LocalContext.current
     val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
     viewModel.fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
+    Places.initialize(context.applicationContext, BuildConfig.GOOGLE_MAPS_API_KEY)
+    viewModel.placesClient = Places.createClient(context)
+    viewModel.geoCoder = Geocoder(context)
 
     val locationPermissionState = rememberMultiplePermissionsState(listOf(
         Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -128,7 +135,7 @@ fun MapAddressScreen(
                 )
             }
             is LocationState.LocationAvailable -> {
-                MapAddress()
+                MapAddress(viewModel = viewModel)
             }
         }
     }
