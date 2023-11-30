@@ -31,7 +31,7 @@ android {
         buildConfigField(
             "String",
             "GOOGLE_MAPS_API_KEY",
-            properties.getProperty("GOOGLE_MAPS_API_KEY") ?: ""
+            "\"${properties.getProperty("GOOGLE_MAPS_API_KEY") ?: ""}\""
         )
     }
 
