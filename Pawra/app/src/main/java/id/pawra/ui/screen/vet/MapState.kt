@@ -10,3 +10,8 @@ sealed class LocationState {
     data class LocationAvailable(val location: LatLng): LocationState()
     data object Error: LocationState()
 }
+
+data class AutocompleteResult(
+    val address: String,
+    val placeId: String
+)
