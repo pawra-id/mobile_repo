@@ -84,12 +84,15 @@ fun PetProfileTopBar(
             contentAlignment = Alignment.BottomEnd
         ) {
             IconButton(
+                modifier = modifier
+                    .size(32.dp),
                 onClick = { displayMenu = !displayMenu }
             ) {
                 Icon(
                     imageVector = Icons.Filled.MoreVert,
                     contentDescription = "More",
                     tint = DarkGreen,
+                    modifier = modifier.size(25.dp),
                 )
             }
 
