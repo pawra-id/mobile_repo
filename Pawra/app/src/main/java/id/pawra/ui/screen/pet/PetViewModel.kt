@@ -23,12 +23,27 @@ class PetViewModel(
     val petState: StateFlow<UiState<List<PetResponseItem>>>
         get() = _petState
 
+    private val _petDetailState: MutableStateFlow<UiState<PetResponseItem>> = MutableStateFlow(UiState.None)
+    val petDetailState: StateFlow<UiState<PetResponseItem>>
+        get() = _petDetailState
+
+
     fun getDog() {
         viewModelScope.launch {
             val user = authRepository.getSession().first()
-            petRepository.getDog(user.token)
+            petRepository.getDog(user)
                 .collect { dogs ->
                     _petState.value = dogs
+                }
+        }
+    }
+
+    fun getDetailDog(petId: Int) {
+        viewModelScope.launch {
+            val user = authRepository.getSession().first()
+            petRepository.getDetailDog(user, petId)
+                .collect { dogDetail ->
+                    _petDetailState.value = dogDetail
                 }
         }
     }

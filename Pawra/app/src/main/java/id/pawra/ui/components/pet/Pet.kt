@@ -13,26 +13,30 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
-import id.pawra.R
-import id.pawra.data.local.preference.PetData
+import id.pawra.data.ViewModelFactory
+import id.pawra.ui.common.UiState
 import id.pawra.ui.navigation.Screen
+import id.pawra.ui.screen.pet.PetViewModel
 import id.pawra.ui.theme.DarkBlue
 import id.pawra.ui.theme.DarkPink
 import id.pawra.ui.theme.DisabledBlue
@@ -43,85 +47,70 @@ import id.pawra.ui.theme.PawraTheme
 
 @Composable
 fun Pet(
+    modifier: Modifier = Modifier,
     navController: NavController,
-    modifier: Modifier = Modifier
-) {
-    val pets = listOf(
-        PetData(
-            "https://static.vecteezy.com/system/resources/previews/005/857/332/non_2x/funny-portrait-of-cute-corgi-dog-outdoors-free-photo.jpg",
-            "Max",
-            "Corgi",
-            true,
-            1,
-            24,
-            "Male",
-            75,
-            "White, Gold",
-            "123456",
-            "A playful and friendly Corgi."
-
-        ),
-        PetData(
-            "https://static.vecteezy.com/system/resources/previews/005/857/330/large_2x/funny-portrait-of-cute-corgi-dog-outdoors-free-photo.jpg",
-            "Diana",
-            "Cairn Terier",
-            false,
-            2,
-            25,
-            "Female",
-            65,
-            "Brown",
-            "789012",
-            ""
-        )
+    petViewModel: PetViewModel = viewModel(
+        factory = ViewModelFactory(LocalContext.current)
     )
+) {
 
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
-    ) {
-        pets.forEach { pet ->
+    petViewModel.getDog()
+
+    petViewModel.petState.collectAsState().value.let { petState ->
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+        ) {
+            when (petState) {
+                is UiState.Success -> {
+                    items(petState.data, key = { it.id }) { data ->
+                        Box(
+                            modifier = modifier
+                                .height(150.dp)
+                                .width(150.dp)
+                                .clip(shape = RoundedCornerShape(12.dp))
+                                .clickable {
+                                    navController.navigate(Screen.PetProfile.createRoute(data.id))
+                                },
+                        ) {
+                            PetItem(
+                                image = data.image ?: "",
+                                gender = data.gender ?: "",
+                                name = data.name ?: "",
+                                modifier = modifier
+                            )
+                        }
+                    }
+                }
+                is UiState.Error -> {
+
+                }
+
+                else -> {}
+            }
+
             item {
                 Box(
                     modifier = modifier
                         .height(150.dp)
                         .width(150.dp)
                         .clip(shape = RoundedCornerShape(12.dp))
+                        .background(color = DisabledGreen)
                         .clickable {
-                            navController.navigate(Screen.PetProfile.route)
+
                         },
                 ) {
-                    PetItem(
-                        image = pet.image,
-                        gender = pet.gender,
-                        name = pet.name,
+                    Icon(
+                        Icons.Filled.Add,
+                        "Add Dog",
+                        tint = LightGreen,
                         modifier = modifier
+                            .size(44.dp)
+                            .align(Alignment.Center)
                     )
                 }
-            }
-        }
-
-        item {
-            Box(
-                modifier = modifier
-                    .height(150.dp)
-                    .width(150.dp)
-                    .clip(shape = RoundedCornerShape(12.dp))
-                    .background(color = DisabledGreen)
-                    .clickable {
-
-                    },
-            ) {
-                Icon(
-                    Icons.Filled.Add,
-                    "Add Dog",
-                    tint = LightGreen,
-                    modifier = modifier
-                        .size(44.dp)
-                        .align(Alignment.Center)
-                )
             }
         }
     }

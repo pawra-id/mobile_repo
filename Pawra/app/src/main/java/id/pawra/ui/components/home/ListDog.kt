@@ -79,7 +79,7 @@ fun ListDog(
                                 modifier = modifier
                                     .clip(shape = RoundedCornerShape(15.dp))
                                     .clickable {
-                                        navController.navigate(Screen.PetProfile.route)
+                                        navController.navigate(Screen.PetProfile.createRoute(data.id))
                                     },
                             ) {
                                 AsyncImage(

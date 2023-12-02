@@ -16,7 +16,7 @@ class ApiConfig {
 
     companion object {
 
-        private var BASE_URL = "https://deb8-103-162-237-58.ngrok-free.app/"
+        private var BASE_URL = "https://49fb-103-162-237-58.ngrok-free.app/"
 //        private var BASE_URL = "https://pawra-backend-api-2gso7b5r3q-et.a.run.app/"
 
         fun getApiService(context: Context): ApiService {
@@ -27,8 +27,8 @@ class ApiConfig {
                 HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE)
             }
 
-            val userPreference = Preference.getInstance(context.dataStore)
-            val user = runBlocking { userPreference.getSession().first() }
+//            val userPreference = Preference.getInstance(context.dataStore)
+//            val user = runBlocking { userPreference.getSession().first() }
 
 //            val authInterceptor = Interceptor { chain ->
 //                val req = chain.request()
