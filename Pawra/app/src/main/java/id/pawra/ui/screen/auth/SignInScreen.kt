@@ -32,7 +32,7 @@ import id.pawra.ui.navigation.Screen
 fun SignInScreen(
     modifier: Modifier = Modifier,
     viewModel: AuthViewModel = viewModel(
-        factory = ViewModelFactory(Injection.provideAuthRepository(LocalContext.current))
+        factory = ViewModelFactory(LocalContext.current)
     ),
     navController: NavController
 ) {

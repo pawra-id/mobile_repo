@@ -24,12 +24,10 @@ class Preference private constructor(private val dataStore: DataStore<Preference
             preferences[EMAIL_KEY] = user.email
             preferences[SUMMARY_KEY] = user.summary
         }
-        Log.d("Preference", "Session saved: $user")
     }
 
     fun getSession(): Flow<SessionModel> {
         return dataStore.data.map { preferences ->
-            Log.d("Preference", "Preferences: $preferences")
             SessionModel(
                 preferences[TOKEN_KEY] ?: "",
                 preferences[IS_LOGIN_KEY] ?: false,
@@ -37,13 +35,10 @@ class Preference private constructor(private val dataStore: DataStore<Preference
                 preferences[EMAIL_KEY] ?: "",
                 preferences[SUMMARY_KEY] ?: ""
             )
-        }.onEach {
-            Log.d("Preference", "Session retrieved: $it")
         }
     }
 
     suspend fun logout() {
-        Log.d("Preference", "Logging out")
         dataStore.edit { preferences ->
             preferences.clear()
         }

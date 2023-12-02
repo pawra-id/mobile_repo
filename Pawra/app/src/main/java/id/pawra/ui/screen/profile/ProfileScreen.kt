@@ -46,7 +46,7 @@ fun ProfileScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             ProfilePage(viewModel = viewModel(
-                factory = ViewModelFactory(Injection.provideAuthRepository(LocalContext.current))
+                factory = ViewModelFactory(LocalContext.current)
             ))
 
             Spacer(modifier = Modifier.height(28.dp))

@@ -35,7 +35,7 @@ import id.pawra.ui.theme.PawraTheme
 fun ProfileEditScreen(
     modifier: Modifier = Modifier,
     viewModel: AuthViewModel = viewModel(
-        factory = ViewModelFactory(Injection.provideAuthRepository(LocalContext.current))
+        factory = ViewModelFactory(LocalContext.current)
     ),
     navController: NavController
 ) {
@@ -80,7 +80,7 @@ fun ProfileEditScreen(
 fun ProfileEditScreenPreview() {
     PawraTheme {
         ProfileEditScreen(viewModel = viewModel(
-            factory = ViewModelFactory(Injection.provideAuthRepository(LocalContext.current))
+            factory = ViewModelFactory(LocalContext.current)
         ),
             navController = rememberNavController())
     }

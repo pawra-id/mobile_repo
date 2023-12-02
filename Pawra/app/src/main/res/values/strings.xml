@@ -49,7 +49,7 @@
     <string name="edit">Edit</string>
     <string name="logout">Logout\n</string>
     <string name="hi_pawra">Hi! %s</string>
-    <string name="dog_age">%.0f year</string>
+    <string name="dog_age">%d year</string>
     <string name="menu_dog_profile">Menu Dog Profile</string>
     <string name="menu_dog_activities">Menu Dog Activities</string>
     <string name="menu_dog_mental_health">Menu Dog Mental Health</string>

@@ -34,7 +34,7 @@ import id.pawra.ui.theme.White
 @Composable
 fun ProfileButton(
     viewModel: AuthViewModel = viewModel(
-        factory = ViewModelFactory(Injection.provideAuthRepository(LocalContext.current))
+        factory = ViewModelFactory(LocalContext.current)
     ),
     navController: NavController
 ){

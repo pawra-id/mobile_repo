@@ -3,6 +3,7 @@ package id.pawra.ui.screen.home
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -11,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -24,6 +26,7 @@ import id.pawra.ui.components.home.Banner
 import id.pawra.ui.components.home.NearbyVets
 import id.pawra.ui.components.home.Welcome
 import id.pawra.ui.screen.auth.AuthViewModel
+import id.pawra.ui.screen.pet.PetViewModel
 import id.pawra.ui.theme.PawraTheme
 
 @Composable
@@ -33,10 +36,15 @@ fun HomeScreen(
     navController: NavController
 ) {
     val viewModel: AuthViewModel = viewModel(
-        factory = ViewModelFactory(Injection.provideAuthRepository(LocalContext.current))
+        factory = ViewModelFactory(LocalContext.current)
+    )
+
+    val petViewModel: PetViewModel = viewModel(
+        factory = ViewModelFactory(LocalContext.current)
     )
 
     viewModel.getSession()
+    petViewModel.getDog()
 
     val sessionState by viewModel.sessionState.collectAsState()
     val userInfo = (sessionState as UiState.Success<SessionModel>).data
@@ -58,7 +66,8 @@ fun HomeScreen(
         ) {
             Banner()
             ListDog(
-                navController = navController
+                navController = navController,
+                viewModel = petViewModel
             )
             NearbyVets(
                 navController = navController

@@ -66,7 +66,7 @@ fun MapAddressScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
     viewModel: MapViewModel = viewModel(
-        factory = ViewModelFactory(Injection.provideAuthRepository(LocalContext.current))
+        factory = ViewModelFactory(LocalContext.current)
     ),
 ) {
 
