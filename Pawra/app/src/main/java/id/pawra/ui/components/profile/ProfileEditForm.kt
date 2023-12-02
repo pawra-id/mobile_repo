@@ -213,7 +213,7 @@ fun ProfileEditForm(
 fun ProfileEditFormPreview() {
     PawraTheme {
         ProfileEditForm(viewModel = viewModel(
-            factory = ViewModelFactory(Injection.provideAuthRepository(LocalContext.current))
+            factory = ViewModelFactory(LocalContext.current)
         ),
             showDialog = {  }
             ,navController = rememberNavController())

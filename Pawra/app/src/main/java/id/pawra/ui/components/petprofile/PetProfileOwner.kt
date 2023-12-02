@@ -99,7 +99,7 @@ fun PetProfileOwner(
 fun PetProfileOwnerPreview() {
     PawraTheme {
         PetProfileOwner(viewModel = viewModel(
-            factory = ViewModelFactory(Injection.provideAuthRepository(LocalContext.current))
+            factory = ViewModelFactory(LocalContext.current)
         ))
     }
 }

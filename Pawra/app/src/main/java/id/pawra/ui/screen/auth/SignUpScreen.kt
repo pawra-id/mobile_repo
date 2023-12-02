@@ -31,7 +31,7 @@ import id.pawra.ui.components.signup.SignUpHeader
 fun SignUpScreen(
     modifier: Modifier = Modifier,
     viewModel: AuthViewModel = viewModel(
-        factory = ViewModelFactory(Injection.provideAuthRepository(LocalContext.current))
+        factory = ViewModelFactory(LocalContext.current)
     ),
     navController: NavController
 ) {
@@ -76,7 +76,7 @@ fun SignUpScreen(
                             isLoading = false
                             ResultDialog(
                                 success = true,
-                                message = userState.data.message.toString(),
+                                message = "User created successfully",
                                 setShowDialog = {
                                     showDialog = it
                                 }
