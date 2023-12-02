@@ -132,7 +132,7 @@ fun ListDog(
                 .clip(shape = RoundedCornerShape(15.dp))
                 .background(color = DisabledGreen)
                 .clickable {
-
+                    navController.navigate(Screen.PetAdd.route)
                 },
         ) {
             Icon(
