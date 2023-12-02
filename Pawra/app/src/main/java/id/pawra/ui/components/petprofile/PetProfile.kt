@@ -101,7 +101,7 @@ fun PetProfile(
                 ) {
                     Image(
                         painter = rememberImagePainter(pet.image),
-                        contentDescription = null,
+                        contentDescription = "Dog Image",
                         modifier = Modifier
                             .fillMaxSize()
                             .clip(CircleShape)

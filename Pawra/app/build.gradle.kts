@@ -93,7 +93,7 @@ dependencies {
     implementation("com.google.maps.android:maps-compose:2.8.0")
 
     implementation("com.google.maps.android:maps-ktx:3.2.1")
-    implementation("com.google.maps.android:maps-utils-ktx:3.2.1")
+    implementation("com.google.maps.android:maps-utils-ktx:3.4.0")
 
     implementation("com.google.accompanist:accompanist-permissions:0.32.0")
     implementation("com.google.android.libraries.places:places:3.3.0")

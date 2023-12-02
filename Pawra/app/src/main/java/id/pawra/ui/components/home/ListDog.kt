@@ -5,7 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -25,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -161,6 +159,25 @@ fun ListDog(
             else -> {}
         }
 
+        Box(
+            modifier = modifier
+                .height(90.dp)
+                .width(90.dp)
+                .clip(shape = RoundedCornerShape(15.dp))
+                .background(color = DisabledGreen)
+                .clickable {
+                    navController.navigate(Screen.PetAdd.route)
+                },
+        ) {
+            Icon(
+                Icons.Filled.Add,
+                "Add Dog",
+                tint = LightGreen,
+                modifier = modifier
+                    .size(44.dp)
+                    .align(Alignment.Center)
+            )
+        }
     }
 }
 

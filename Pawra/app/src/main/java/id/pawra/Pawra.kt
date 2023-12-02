@@ -25,6 +25,7 @@ import id.pawra.ui.screen.auth.SignUpScreen
 import id.pawra.ui.screen.explore.ExploreScreen
 import id.pawra.ui.screen.home.HomeScreen
 import id.pawra.ui.screen.pet.PetActivitiesScreen
+import id.pawra.ui.screen.pet.PetAddScreen
 import id.pawra.ui.screen.pet.PetMentalHealthScreen
 import id.pawra.ui.screen.pet.PetProfileScreen
 import id.pawra.ui.screen.pet.PetScreen
@@ -44,7 +45,7 @@ fun Pawra(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screen.SplashScreen.route,
+        startDestination = Screen.Home.route,
         modifier = modifier
     ) {
         composable(Screen.SplashScreen.route) {
@@ -96,6 +97,12 @@ fun Pawra(
 
         composable(Screen.MapAddress.route) {
             MapAddressScreen(
+                navController = navController
+            )
+        }
+
+        composable(Screen.PetAdd.route) {
+            PetAddScreen(
                 navController = navController
             )
         }
