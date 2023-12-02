@@ -38,7 +38,7 @@ fun PetProfileOwner(
     viewModel: AuthViewModel,
 ) {
     viewModel.getSession()
-    val sessionState by viewModel.sessionState.collectAsState()
+    val userInfo by viewModel.sessionState.collectAsState()
 
     Box(
         modifier = modifier
@@ -53,43 +53,31 @@ fun PetProfileOwner(
             modifier = Modifier
                 .padding(8.dp)
         ) {
-            when (sessionState) {
-                is UiState.Success -> {
-                    val userInfo = (sessionState as UiState.Success<SessionModel>).data
+            Text(
+                text = userInfo.name,
+                color = Black,
+                fontFamily = Poppins,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 13.sp,
+            )
 
-                    Text(
-                        text = userInfo.name,
-                        color = Black,
-                        fontFamily = Poppins,
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 13.sp,
-                    )
+            Text(
+                text = "Owner",
+                color = DarkBlue,
+                fontFamily = Poppins,
+                fontWeight = FontWeight.Normal,
+                fontSize = 11.sp,
+            )
 
-                    Text(
-                        text = "Owner",
-                        color = DarkBlue,
-                        fontFamily = Poppins,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 11.sp,
-                    )
+            Text(
+                text = userInfo.email,
+                color = Gray,
+                fontFamily = Poppins,
+                fontWeight = FontWeight.Normal,
+                fontSize = 10.sp,
+            )
 
-                    Text(
-                        text = userInfo.email,
-                        color = Gray,
-                        fontFamily = Poppins,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 10.sp,
-                    )
-                }
-                is UiState.Error -> {
 
-                    Text(text = "Error: ${(sessionState as UiState.Error).errorMessage}")
-                }
-
-                else -> {
-                    Text(text = "Loading...")
-                }
-            }
         }
     }
 }

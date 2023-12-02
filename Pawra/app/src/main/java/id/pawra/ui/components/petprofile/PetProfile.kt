@@ -40,6 +40,7 @@ import coil.compose.rememberImagePainter
 import id.pawra.data.ViewModelFactory
 import id.pawra.data.local.preference.PetData
 import id.pawra.data.local.preference.SessionModel
+import id.pawra.data.remote.response.PetResponseItem
 import id.pawra.di.Injection
 import id.pawra.ui.common.UiState
 import id.pawra.ui.screen.auth.AuthViewModel
@@ -57,13 +58,26 @@ import id.pawra.ui.theme.Poppins
 
 @Composable
 fun PetProfile(
-    image: String,
-    pet: PetData,
+    pet: PetResponseItem,
     viewModel: AuthViewModel,
     modifier: Modifier = Modifier
 ) {
     viewModel.getSession()
-    val sessionState by viewModel.sessionState.collectAsState()
+    val userInfo by viewModel.sessionState.collectAsState()
+
+    val petData = PetData(
+        pet.image ?: "",
+        pet.name ?: "",
+        pet.breed ?: "",
+        pet.neutered ?: false,
+        pet.age ?: 0,
+        pet.height ?: 0,
+        pet.gender ?: "",
+        pet.weight ?: 0,
+        pet.color ?: "",
+        "",
+        pet.description ?: ""
+    )
 
     Column(
         modifier = modifier
@@ -85,8 +99,8 @@ fun PetProfile(
                         .border(2.dp, DarkGreen, CircleShape)
                         .size(110.dp)
                 ) {
-                    Image(
-                        painter = rememberImagePainter(pet.image),
+                    AsyncImage(
+                        model = pet.image,
                         contentDescription = "Dog Image",
                         modifier = Modifier
                             .fillMaxSize()
@@ -126,7 +140,7 @@ fun PetProfile(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = pet.gender,
+                        text = petData.gender,
                         fontFamily = Poppins,
                         fontSize = 11.sp,
                         color = DarkBlue,
@@ -165,7 +179,7 @@ fun PetProfile(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = pet.age.toString(),
+                        text = petData.age.toString(),
                         fontFamily = Poppins,
                         fontSize = 11.sp,
                         color = Orange,
@@ -206,7 +220,7 @@ fun PetProfile(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = pet.neutred.toYesNo(),
+                        text = petData.neutred.toYesNo(),
                         fontFamily = Poppins,
                         fontSize = 11.sp,
                         color = DarkGreen,
@@ -223,7 +237,7 @@ fun PetProfile(
         ){
             Column {
                 Text(
-                    text = pet.name,
+                    text = petData.name,
                     color = Black,
                     fontFamily = Poppins,
                     fontWeight = FontWeight.SemiBold,
@@ -231,7 +245,7 @@ fun PetProfile(
                 )
 
                 Text(
-                    text = pet.breed,
+                    text = petData.breed,
                     color = Gray,
                     fontFamily = Poppins,
                     fontWeight = FontWeight.Normal,
@@ -247,16 +261,16 @@ fun PetProfile(
             horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             item {
-                InfoBox("Color", pet.primaryColor)
+                InfoBox("Color", petData.primaryColor)
             }
             item {
-                InfoBox("Weight", "${pet.weight} kg")
+                InfoBox("Weight", "${petData.weight} kg")
             }
             item {
-                InfoBox("Height", "${pet.height} cm")
+                InfoBox("Height", "${petData.height} cm")
             }
             item {
-                InfoBox("Microchip ID", pet.microchipId ?: "")
+                InfoBox("Microchip ID", petData.microchipId ?: "")
             }
         }
 
@@ -284,7 +298,7 @@ fun PetProfile(
                 Spacer(modifier = Modifier.height(2.dp))
 
                 Text(
-                    text = pet.summary ?: "",
+                    text = petData.summary ?: "",
                     color = Black,
                     fontFamily = Poppins,
                     fontWeight = FontWeight.Medium,
@@ -306,58 +320,45 @@ fun PetProfile(
                 modifier = Modifier
                     .padding(15.dp)
             ) {
-                when (sessionState) {
-                    is UiState.Success -> {
-                        val userInfo = (sessionState as UiState.Success<SessionModel>).data
 
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(10.dp)
-                        ) {
-                            AsyncImage(
-                                model = image,
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .width(60.dp)
-                                    .height(60.dp)
-                                    .clip(CircleShape),
-                                contentScale = ContentScale.Crop
-                            )
 
-                            Column{
-                                Text(
-                                    text = userInfo.name,
-                                    color = Black,
-                                    fontFamily = Poppins,
-                                    fontWeight = FontWeight.SemiBold,
-                                    fontSize = 14.sp,
-                                )
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    AsyncImage(
+                        model = userInfo.image,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .width(60.dp)
+                            .height(60.dp)
+                            .clip(CircleShape),
+                        contentScale = ContentScale.Crop
+                    )
 
-                                Text(
-                                    text = "Owner",
-                                    color = DarkBlue,
-                                    fontFamily = Poppins,
-                                    fontWeight = FontWeight.Medium,
-                                    fontSize = 13.sp,
-                                )
+                    Column{
+                        Text(
+                            text = userInfo.name,
+                            color = Black,
+                            fontFamily = Poppins,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 14.sp,
+                        )
 
-                                Text(
-                                    text = userInfo.email,
-                                    color = Gray,
-                                    fontFamily = Poppins,
-                                    fontWeight = FontWeight.Medium,
-                                    fontSize = 12.sp,
-                                )
-                            }
-                        }
-                    }
+                        Text(
+                            text = "Owner",
+                            color = DarkBlue,
+                            fontFamily = Poppins,
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 13.sp,
+                        )
 
-                    is UiState.Error -> {
-
-                        Text(text = "Error: ${(sessionState as UiState.Error).errorMessage}")
-                    }
-
-                    else -> {
-                        Text(text = "Loading...")
+                        Text(
+                            text = userInfo.email,
+                            color = Gray,
+                            fontFamily = Poppins,
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 12.sp,
+                        )
                     }
                 }
             }
@@ -371,22 +372,8 @@ fun PetProfile(
 @Preview(showBackground = true)
 fun PetProfilePreview() {
     PawraTheme {
-        val petData = PetData(
-            "https://static.vecteezy.com/system/resources/previews/005/857/332/non_2x/funny-portrait-of-cute-corgi-dog-outdoors-free-photo.jpg",
-            "Max",
-            "Golden Retrivier",
-            true,
-            1,
-            24,
-            "Male",
-            75,
-            "White, Gold",
-            "123456",
-            "A playful and friendly Corgi."
-        )
         PetProfile(
-            image = "https://dicoding-web-img.sgp1.cdn.digitaloceanspaces.com/small/avatar/dos:5121efa9bf4f08285ea0d098ce7756aa20230924195603.png",
-            pet = petData,
+            pet = PetResponseItem(id=1),
             viewModel = viewModel(
             factory = ViewModelFactory(LocalContext.current)
         ))

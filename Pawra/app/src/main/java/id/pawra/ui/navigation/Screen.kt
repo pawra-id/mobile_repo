@@ -16,7 +16,9 @@ sealed class Screen(val route: String) {
     data object EditProfile : Screen("edit_profile")
 
     // Pet Navigation
-    data object PetProfile : Screen("pet_profile")
+    data object PetProfile : Screen("pet_profile/{petId}"){
+        fun createRoute(petId: Int) = "pet_profile/$petId"
+    }
     data object PetAdd : Screen("pet_add")
     data object PetActivities : Screen("pet_activities")
     data object PetMentalHealth : Screen("pet_mental_health")

@@ -77,7 +77,7 @@ fun ListDog(
                                 modifier = modifier
                                     .clip(shape = RoundedCornerShape(15.dp))
                                     .clickable {
-                                        navController.navigate(Screen.PetProfile.route)
+                                        navController.navigate(Screen.PetProfile.createRoute(data.id))
                                     },
                             ) {
                                 AsyncImage(
@@ -137,7 +137,7 @@ fun ListDog(
                                 .clip(shape = RoundedCornerShape(15.dp))
                                 .background(color = DisabledGreen)
                                 .clickable {
-
+                                    navController.navigate(Screen.PetAdd.route)
                                 },
                         ) {
                             Icon(
@@ -157,26 +157,6 @@ fun ListDog(
             }
 
             else -> {}
-        }
-
-        Box(
-            modifier = modifier
-                .height(90.dp)
-                .width(90.dp)
-                .clip(shape = RoundedCornerShape(15.dp))
-                .background(color = DisabledGreen)
-                .clickable {
-                    navController.navigate(Screen.PetAdd.route)
-                },
-        ) {
-            Icon(
-                Icons.Filled.Add,
-                "Add Dog",
-                tint = LightGreen,
-                modifier = modifier
-                    .size(44.dp)
-                    .align(Alignment.Center)
-            )
         }
     }
 }

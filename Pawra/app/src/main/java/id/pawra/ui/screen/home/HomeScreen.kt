@@ -46,8 +46,7 @@ fun HomeScreen(
     viewModel.getSession()
     petViewModel.getDog()
 
-    val sessionState by viewModel.sessionState.collectAsState()
-    val userInfo = (sessionState as UiState.Success<SessionModel>).data
+    val userInfo by viewModel.sessionState.collectAsState()
 
     Column(
         modifier = modifier
