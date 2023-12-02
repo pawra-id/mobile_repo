@@ -51,7 +51,7 @@ fun ProfilePage(
             is UiState.Success -> {
                 val userInfo = (sessionState as UiState.Success<SessionModel>).data
                 Text(
-                    text = userInfo.name,
+                    text = userInfo.name.toString(),
                     modifier = Modifier.fillMaxWidth(),
                     color = DarkGreen,
                     fontFamily = Poppins,
@@ -61,7 +61,7 @@ fun ProfilePage(
                 )
 
                 Text(
-                    text = userInfo.email,
+                    text = userInfo.email.toString(),
                     modifier = Modifier.padding(top = 7.dp),
                     color = Gray,
                     fontFamily = Poppins,
@@ -71,7 +71,7 @@ fun ProfilePage(
                 )
 
                 Text(
-                    text = userInfo.summary,
+                    text = userInfo.summary.toString(),
                     modifier = Modifier.padding(top = 22.dp),
                     color = Black,
                     fontFamily = Poppins,
@@ -98,7 +98,7 @@ fun ProfilePage(
 fun ProfilePagePreview() {
     PawraTheme {
         ProfilePage(viewModel = viewModel(
-            factory = ViewModelFactory(Injection.provideAuthRepository(LocalContext.current))
+            factory = ViewModelFactory(LocalContext.current)
         ))
     }
 } 

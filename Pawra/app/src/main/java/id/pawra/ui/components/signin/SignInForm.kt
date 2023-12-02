@@ -68,15 +68,15 @@ fun SignInForm(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = stringResource(R.string.email),
+            text = stringResource(R.string.name),
             color = Gray,
             fontSize = 14.sp,
             modifier = modifier
                 .fillMaxWidth())
         OutlinedTextField(
-            value = state.email,
+            value = state.name,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-            onValueChange = { viewModel.onEventSignIn(SignInFormEvent.EmailChanged(it)) },
+            onValueChange = { viewModel.onEventSignIn(SignInFormEvent.NameChanged(it)) },
             singleLine = true,
             shape = RoundedCornerShape(10.dp),
             modifier = modifier
@@ -88,15 +88,15 @@ fun SignInForm(
                 fontFamily = Poppins
             ),
             supportingText = {
-                if (state.emailError != null) {
+                if (state.nameError != null) {
                     Text(
-                        text = state.emailError,
+                        text = state.nameError,
                         color = Red,
                         modifier = Modifier.align(Alignment.End)
                     )
                 }
             },
-            isError = state.emailError != null
+            isError = state.nameError != null
         )
         Text(
             text = stringResource(R.string.password),
@@ -191,7 +191,7 @@ fun SignInForm(
 fun SignInFormPreview() {
     PawraTheme {
         SignInForm(viewModel = viewModel(
-            factory = ViewModelFactory(Injection.provideAuthRepository(LocalContext.current))
+            factory = ViewModelFactory(LocalContext.current)
         ),
             showDialog = {  }
             ,navController = rememberNavController())

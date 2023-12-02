@@ -4,20 +4,20 @@ import com.google.gson.annotations.SerializedName
 
 data class SignInResponse(
 
-    @field:SerializedName("loginResult")
-    val loginResult: SignInResult? = null,
+    @field:SerializedName("user")
+    val user: User? = null,
 
-    @field:SerializedName("error")
-    val error: Boolean? = null,
+    @field:SerializedName("access_token")
+    val accessToken: String? = null,
 
-    @field:SerializedName("message")
-    val message: String? = null
+    @field:SerializedName("token_type")
+    val tokenType: String? = null
 )
 
-data class SignInResult(
+data class User(
 
-    @field:SerializedName("name")
-    val name: String? = null,
+    @field:SerializedName("username")
+    val username: String? = null,
 
     @field:SerializedName("email")
     val email: String? = null,
@@ -25,9 +25,21 @@ data class SignInResult(
     @field:SerializedName("summary")
     val summary: String? = null,
 
-    @field:SerializedName("userId")
-    val userId: String? = null,
+    @field:SerializedName("id")
+    val id: Int? = null,
 
-    @field:SerializedName("token")
-    val token: String? = null
+    @field:SerializedName("password")
+    val password: String? = null,
+
+    @field:SerializedName("image")
+    val image: String? = null,
+
+    @field:SerializedName("address")
+    val address: String? = null,
+
+    @field:SerializedName("updated_at")
+    val updatedAt: String? = null,
+
+    @field:SerializedName("created_at")
+    val createdAt: String? = null
 )

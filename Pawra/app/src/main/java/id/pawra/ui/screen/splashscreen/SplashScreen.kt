@@ -49,7 +49,7 @@ fun SplashScreen(navController: NavController) {
         Animatable(0.5f)
     }
     val viewModel: AuthViewModel = viewModel(
-        factory = ViewModelFactory(Injection.provideAuthRepository(LocalContext.current))
+        factory = ViewModelFactory(LocalContext.current)
     )
 
     viewModel.getSession()

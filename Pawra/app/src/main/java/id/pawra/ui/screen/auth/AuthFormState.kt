@@ -14,8 +14,8 @@ data class SignUpFormState(
 )
 
 data class SignInFormState(
-    val email: String = "",
-    val emailError: String? = null,
+    val name: String = "",
+    val nameError: String? = null,
     val password: String = "",
     val passwordError: String? = null,
 )

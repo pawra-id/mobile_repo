@@ -176,6 +176,9 @@ fun Vets(
                         .clip(shape = RoundedCornerShape(15.dp))
                         .background(White)
                         .border(1.dp, LightGray, RoundedCornerShape(15.dp))
+                        .clickable {
+                            navController.navigate(Screen.VetProfile.route)
+                        }
                         .fillMaxWidth()
                         .padding(horizontal = 10.dp, vertical = 15.dp),
                     horizontalArrangement = Arrangement.spacedBy(20.dp)

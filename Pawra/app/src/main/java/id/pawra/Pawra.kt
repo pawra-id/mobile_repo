@@ -30,6 +30,7 @@ import id.pawra.ui.screen.profile.ProfileEditScreen
 import id.pawra.ui.screen.profile.ProfileScreen
 import id.pawra.ui.screen.splashscreen.SplashScreen
 import id.pawra.ui.screen.vet.MapAddressScreen
+import id.pawra.ui.screen.vet.VetProfileScreen
 import id.pawra.ui.screen.vet.VetScreen
 import id.pawra.ui.theme.PawraTheme
 
@@ -86,6 +87,12 @@ fun Pawra(
 
         composable(Screen.MapAddress.route) {
             MapAddressScreen(
+                navController = navController
+            )
+        }
+
+        composable(Screen.VetProfile.route) {
+            VetProfileScreen(
                 navController = navController
             )
         }

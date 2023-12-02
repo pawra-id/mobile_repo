@@ -1,61 +1,56 @@
-package id.pawra.data.auth
+package id.pawra.data.repository
 
-import com.google.gson.Gson
 import id.pawra.data.local.preference.Preference
 import id.pawra.data.local.preference.SessionModel
 import id.pawra.data.remote.response.SignInResponse
-import id.pawra.data.remote.response.SignInResult
 import id.pawra.data.remote.response.SignUpResponse
 import id.pawra.data.remote.retrofit.ApiService
 import id.pawra.ui.common.UiState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import org.json.JSONObject
 import retrofit2.HttpException
+
 
 class AuthRepository private constructor(
     private val apiService: ApiService,
     private val preference: Preference
 ) {
 
-    suspend fun signIn(email: String, password: String): Flow<UiState<SignInResponse>> = flow {
+    suspend fun signIn(username: String, password: String): Flow<UiState<SignInResponse>> = flow {
         emit(UiState.Loading)
         try {
-            val response = apiService.signIn(email, password)
-            val loginResult = response.loginResult
-
-            if (loginResult != null) {
-                saveSession(loginResult)
-                emit(UiState.Success(response))
-            } else {
-                emit(UiState.Error("Failed to retrieve login result"))
-            }
-        } catch (e: HttpException) {
-            val jsonInString = e.response()?.errorBody()?.string()
-            val errorBody = Gson().fromJson(jsonInString, SignInResponse::class.java)
-            emit(UiState.Error(errorBody.message.toString()))
-        }
-    }
-
-
-    suspend fun signUp(name: String, email: String, password: String): Flow<UiState<SignUpResponse>> = flow {
-        emit(UiState.Loading)
-        try {
-            val response = apiService.signUp(name, email, password)
+            val response = apiService.signIn(username, password)
+            saveSession(response)
             emit(UiState.Success(response))
         } catch (e: HttpException) {
-            val jsonInString = e.response()?.errorBody()?.string()
-            val errorBody = Gson().fromJson(jsonInString, SignUpResponse::class.java)
-            emit(UiState.Error(errorBody.message.toString()))
+            emit(UiState.Error(e.response()?.errorBody()?.string().toString()))
         }
     }
 
-    private suspend fun saveSession(loginResult: SignInResult) {
+
+    suspend fun signUp(username: String, email: String, password: String): Flow<UiState<SignUpResponse>> = flow {
+        emit(UiState.Loading)
+        try {
+            val userData = mutableMapOf<String, String>()
+            userData["username"] = username
+            userData["email"] = email
+            userData["password"] = password
+            val response = apiService.signUp(userData)
+            emit(UiState.Success(response))
+        } catch (e: HttpException) {
+            emit(UiState.Error(e.response()?.errorBody()?.string().toString()))
+        }
+    }
+
+    private suspend fun saveSession(response: SignInResponse) {
+        val user = response.user
         val sessionModel = SessionModel(
-            token = loginResult.token ?: "",
+            token = response.accessToken ?: "",
             isLogin = true,
-            name = loginResult.name ?: "",
-            email = loginResult.email ?: "defaultemail@gmail.com",
-            summary = loginResult.summary ?: ("I love dogs and all kind of pets.\n" +
+            name = user?.username ?: "",
+            email = user?.email ?: "defaultemail@gmail.com",
+            summary = user?.summary ?: ("I love dogs and all kind of pets.\n" +
                     "I have one dog, his name is Max. \n" +
                     "He’s been with me for a year.\n" +
                     "Playing catch is our favorite activity")

@@ -6,19 +6,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import id.pawra.data.auth.AuthRepository
+import id.pawra.data.repository.AuthRepository
 import id.pawra.data.local.preference.SessionModel
 import id.pawra.data.remote.response.SignInResponse
 import id.pawra.data.remote.response.SignUpResponse
 import id.pawra.ui.common.UiState
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import kotlin.reflect.KProperty
 
 class AuthViewModel(
     private val authRepository: AuthRepository,
@@ -41,9 +38,9 @@ class AuthViewModel(
     val sessionState: StateFlow<UiState<SessionModel>>
         get() = _sessionState
 
-    private fun signIn(email: String, password: String) {
+    private fun signIn(username: String, password: String) {
         viewModelScope.launch {
-            authRepository.signIn(email, password)
+            authRepository.signIn(username, password)
                 .catch {
                     _signInState.value = UiState.Error(it.message.toString())
                 }
@@ -133,18 +130,20 @@ class AuthViewModel(
             is SignUpFormEvent.Submit -> {
                 submitDataSignUp()
             }
+
+            else -> {}
         }
     }
 
     fun onEventSignIn(event: SignInFormEvent) {
         when(event) {
-            is SignInFormEvent.EmailChanged -> {
+            is SignInFormEvent.NameChanged -> {
                 stateSignIn = stateSignIn.copy(
-                    email = event.email
+                    name = event.name
                 )
-                val emailResult = validateEmail.execute(stateSignIn.email)
+                val nameResult = validateName.execute(stateSignIn.name)
                 stateSignIn = stateSignIn.copy(
-                    emailError = emailResult.errorMessage
+                    nameError = nameResult.errorMessage
                 )
             }
             is SignInFormEvent.PasswordChanged -> {
@@ -159,6 +158,8 @@ class AuthViewModel(
             is SignInFormEvent.Submit -> {
                 submitDataSignIn()
             }
+
+            else -> {}
         }
     }
 
@@ -199,23 +200,23 @@ class AuthViewModel(
     }
 
     private fun submitDataSignIn() {
-        val emailResult = validateEmail.execute(stateSignIn.email)
+        val nameResult = validateName.execute(stateSignIn.name)
         val passwordResult = validatePassword.execute(stateSignIn.password)
 
         val hasError = listOf(
-            emailResult,
+            nameResult,
             passwordResult,
         ).any { !it.successful }
 
         if(hasError) {
             stateSignIn = stateSignIn.copy(
-                emailError = emailResult.errorMessage,
+                nameError = nameResult.errorMessage,
                 passwordError = passwordResult.errorMessage,
             )
             showDialog = false
         } else {
             signIn(
-                stateSignIn.email,
+                stateSignIn.name,
                 stateSignIn.password
             )
             showDialog = true

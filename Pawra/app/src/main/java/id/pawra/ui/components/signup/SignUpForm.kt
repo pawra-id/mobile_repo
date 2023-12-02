@@ -341,7 +341,7 @@ fun TermAndServiceText(
 fun SignUpFormPreview() {
     PawraTheme {
         SignUpForm(viewModel = viewModel(
-            factory = ViewModelFactory(Injection.provideAuthRepository(LocalContext.current))),
+            factory = ViewModelFactory(LocalContext.current)),
             showDialog = {  })
     }
 }
