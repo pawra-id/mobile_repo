@@ -6,4 +6,5 @@ data class SessionModel(
     val name: String,
     val email: String,
     val summary: String,
+    val image: String,
 )

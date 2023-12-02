@@ -9,10 +9,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import id.pawra.ui.components.onboarding.Onboarding
 import id.pawra.ui.navigation.AddButton
 import id.pawra.ui.navigation.BottomNavigation
@@ -70,8 +72,15 @@ fun Pawra(
             HomeNav(navController = navController)
         }
 
-        composable(Screen.PetProfile.route) {
-            PetNav(navController = navController)
+        composable(
+            Screen.PetProfile.route,
+            listOf(navArgument("petId") { type = NavType.IntType })
+        ) {
+            val petId = it.arguments?.getInt("petId") ?: 0
+            PetNav(
+                navController = navController,
+                petId = petId
+            )
         }
 
         composable(Screen.EditProfile.route) {
@@ -162,7 +171,8 @@ fun HomeNav(
 fun PetNav(
     modifier: Modifier = Modifier,
     navPetController: NavHostController = rememberNavController(),
-    navController: NavHostController
+    navController: NavHostController,
+    petId: Int
 ){
     val navBackStackEntry by navPetController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -180,7 +190,13 @@ fun PetNav(
             modifier = modifier.padding(paddingValues)
         ) {
             composable(Screen.PetProfile.route) {
-                PetProfileScreen(navController = navController)
+                PetProfileScreen(
+                    navController = navController,
+                    petId = petId,
+                    navigateBack = {
+                        navController.navigateUp()
+                    }
+                )
             }
 
             composable(Screen.PetActivities.route) {

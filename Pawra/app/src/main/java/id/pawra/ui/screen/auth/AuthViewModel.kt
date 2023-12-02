@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 class AuthViewModel(
@@ -34,8 +35,8 @@ class AuthViewModel(
     val signUpState: StateFlow<UiState<SignUpResponse>>
         get() = _signUpState
 
-    private val _sessionState: MutableStateFlow<UiState<SessionModel>> = MutableStateFlow(UiState.None)
-    val sessionState: StateFlow<UiState<SessionModel>>
+    private val _sessionState: MutableStateFlow<SessionModel> = MutableStateFlow(SessionModel("", false, "", "", "", ""))
+    val sessionState: StateFlow<SessionModel>
         get() = _sessionState
 
     private fun signIn(username: String, password: String) {
@@ -64,24 +65,14 @@ class AuthViewModel(
 
     fun getSession() {
         viewModelScope.launch {
-            try {
-                val sessionModel = authRepository.getSession().first()
-                Log.d("AuthViewModel", "Session Model: $sessionModel")
-                _sessionState.value = UiState.Success(sessionModel)
-            } catch (e: Exception) {
-                _sessionState.value = UiState.Error(e.message.toString())
-            }
+            _sessionState.value = authRepository.getSession().first()
         }
     }
 
     fun logout() {
         viewModelScope.launch {
-            try {
-                authRepository.logout()
-                _sessionState.value = UiState.Success(SessionModel("", false, "", "", ""))
-            } catch (e: Exception) {
-                _sessionState.value = UiState.Error(e.message.toString())
-            }
+            authRepository.logout()
+            _sessionState.value = SessionModel("", false, "", "", "", "")
         }
     }
 

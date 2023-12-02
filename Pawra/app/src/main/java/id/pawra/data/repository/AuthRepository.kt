@@ -53,7 +53,8 @@ class AuthRepository private constructor(
             summary = user?.summary ?: ("I love dogs and all kind of pets.\n" +
                     "I have one dog, his name is Max. \n" +
                     "He’s been with me for a year.\n" +
-                    "Playing catch is our favorite activity")
+                    "Playing catch is our favorite activity"),
+            image = user?.image ?: ""
         )
         preference.saveSession(sessionModel)
     }
