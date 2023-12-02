@@ -99,8 +99,8 @@ fun PetProfile(
                         .border(2.dp, DarkGreen, CircleShape)
                         .size(110.dp)
                 ) {
-                    Image(
-                        painter = rememberImagePainter(pet.image),
+                    AsyncImage(
+                        model = pet.image,
                         contentDescription = "Dog Image",
                         modifier = Modifier
                             .fillMaxSize()
