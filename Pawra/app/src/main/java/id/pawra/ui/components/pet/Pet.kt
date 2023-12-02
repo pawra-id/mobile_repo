@@ -111,7 +111,7 @@ fun Pet(
                     .clip(shape = RoundedCornerShape(12.dp))
                     .background(color = DisabledGreen)
                     .clickable {
-
+                        navController.navigate(Screen.PetAdd.route)
                     },
             ) {
                 Icon(
