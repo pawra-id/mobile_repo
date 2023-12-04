@@ -5,11 +5,8 @@ import id.pawra.data.local.preference.SessionModel
 import id.pawra.data.remote.response.SignInResponse
 import id.pawra.data.remote.response.SignUpResponse
 import id.pawra.data.remote.retrofit.ApiService
-import id.pawra.ui.common.UiState
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import org.json.JSONObject
-import retrofit2.HttpException
+import kotlinx.coroutines.flow.flowOf
 
 
 class AuthRepository private constructor(
@@ -17,30 +14,20 @@ class AuthRepository private constructor(
     private val preference: Preference
 ) {
 
-    suspend fun signIn(username: String, password: String): Flow<UiState<SignInResponse>> = flow {
-        emit(UiState.Loading)
-        try {
-            val response = apiService.signIn(username, password)
-            saveSession(response)
-            emit(UiState.Success(response))
-        } catch (e: HttpException) {
-            emit(UiState.Error(e.response()?.errorBody()?.string().toString()))
-        }
+    suspend fun signIn(username: String, password: String): Flow<SignInResponse> {
+        val response = apiService.signIn(username, password)
+        saveSession(response)
+        return flowOf(response)
     }
 
 
-    suspend fun signUp(username: String, email: String, password: String): Flow<UiState<SignUpResponse>> = flow {
-        emit(UiState.Loading)
-        try {
-            val userData = mutableMapOf<String, String>()
-            userData["username"] = username
-            userData["email"] = email
-            userData["password"] = password
-            val response = apiService.signUp(userData)
-            emit(UiState.Success(response))
-        } catch (e: HttpException) {
-            emit(UiState.Error(e.response()?.errorBody()?.string().toString()))
-        }
+    suspend fun signUp(username: String, email: String, password: String): Flow<SignUpResponse> {
+        val userData = mutableMapOf<String, Any>()
+        userData["username"] = username
+        userData["email"] = email
+        userData["password"] = password
+
+        return flowOf(apiService.signUp(userData))
     }
 
     private suspend fun saveSession(response: SignInResponse) {

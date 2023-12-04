@@ -49,10 +49,7 @@ fun PetProfileScreen(
                 when (petDetailState) {
                     is UiState.Success -> {
                         PetProfile(
-                            pet = petDetailState.data,
-                            viewModel = viewModel(
-                                factory = ViewModelFactory(LocalContext.current)
-                            )
+                            pet = petDetailState.data
                         )
                     }
                     is UiState.Error -> {
