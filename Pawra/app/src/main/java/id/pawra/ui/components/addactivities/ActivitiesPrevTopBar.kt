@@ -1,4 +1,4 @@
-package id.pawra.ui.components.addpet
+package id.pawra.ui.components.addactivities
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -22,7 +22,7 @@ import id.pawra.ui.theme.DisabledGreen
 import id.pawra.ui.theme.PawraTheme
 
 @Composable
-fun PetAddTopBar(
+fun ActivitiesPrevTopBar(
     modifier: Modifier = Modifier,
     navController: NavController
 ) {
@@ -50,8 +50,8 @@ fun PetAddTopBar(
 
 @Composable
 @Preview(showBackground = true)
-fun PetAddTopBarPreview() {
+fun ActivitiesPrevTopBarPreview() {
     PawraTheme {
-        PetAddTopBar(navController = rememberNavController())
+        ActivitiesPrevTopBar(navController = rememberNavController())
     }
 }

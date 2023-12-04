@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import id.pawra.ui.theme.DarkGreen
@@ -21,7 +22,7 @@ import id.pawra.ui.theme.PawraTheme
 
 @Composable
 fun AddButton(
-    navHomeController: NavHostController,
+    navController: NavController,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -32,7 +33,9 @@ fun AddButton(
         horizontalAlignment = Alignment.End
     ){
         FloatingActionButton(
-            onClick = { navHomeController.navigate(Screen.EditProfile.route) },
+            onClick = {
+                navController.navigate(Screen.PetActivitiesAdd.route)
+                      },
             shape = CircleShape,
             containerColor = LightGreen,
             contentColor = DarkGreen,
@@ -47,7 +50,7 @@ fun AddButton(
 fun AddButtonPreview() {
     PawraTheme {
         AddButton(
-            navHomeController = rememberNavController()
+            navController = rememberNavController()
         )
     }
 }

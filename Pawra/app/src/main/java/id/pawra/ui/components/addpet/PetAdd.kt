@@ -192,7 +192,7 @@ fun PetAdd(
                         fontSize = 14.sp
                     )
                 },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 onValueChange = { name = it },
                 singleLine = true,
                 shape = RoundedCornerShape(10.dp),
@@ -243,7 +243,7 @@ fun PetAdd(
                         fontSize = 14.sp
                     )
                 },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 onValueChange = { breed = it },
                 singleLine = true,
                 shape = RoundedCornerShape(10.dp),
@@ -328,7 +328,7 @@ fun PetAdd(
                         )
                     },
                     isError = false,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     singleLine = true,
                     shape = RoundedCornerShape(10.dp),
                     textStyle = TextStyle.Default.copy(
@@ -412,7 +412,7 @@ fun PetAdd(
                             )
                         },
                         isError = false,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         singleLine = true,
                         shape = RoundedCornerShape(10.dp),
                         textStyle = TextStyle.Default.copy(
@@ -567,7 +567,7 @@ fun PetAdd(
                             )
                         },
                         isError = false,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         singleLine = true,
                         shape = RoundedCornerShape(10.dp),
                         textStyle = TextStyle.Default.copy(
@@ -619,7 +619,7 @@ fun PetAdd(
                         fontSize = 14.sp
                     )
                 },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 onValueChange = { color = it },
                 singleLine = true,
                 shape = RoundedCornerShape(10.dp),
@@ -670,7 +670,7 @@ fun PetAdd(
                         fontSize = 14.sp
                     )
                 },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 onValueChange = { microchipId = it },
                 singleLine = true,
                 shape = RoundedCornerShape(10.dp),
@@ -721,7 +721,7 @@ fun PetAdd(
                         fontSize = 14.sp
                     )
                 },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 onValueChange = {summary = it },
                 singleLine = false,
                 shape = RoundedCornerShape(10.dp),
