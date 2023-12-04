@@ -10,17 +10,25 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberImagePainter
 import id.pawra.R
 import id.pawra.ui.theme.PawraTheme
 
 @Composable
-fun ProfileImage () {
-
+fun ProfileImage (
+    image: String
+) {
+    val imageUri = rememberSaveable { mutableStateOf(image) }
+    val painter = rememberImagePainter(
+        imageUri.value.ifEmpty { R.drawable.ic_user }
+    )
     Column(
         modifier = Modifier
             .padding(8.dp)
@@ -42,7 +50,7 @@ fun ProfileImage () {
                     .size(130.dp)
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.ic_user),
+                    painter = painter,
                     contentDescription = null,
                     modifier = Modifier
                         .wrapContentSize()
@@ -57,6 +65,8 @@ fun ProfileImage () {
 @Preview(showBackground = true)
 fun ProfileImagePreview() {
     PawraTheme {
-        ProfileImage()
+        ProfileImage(
+            image = ""
+        )
     }
 }

@@ -85,6 +85,12 @@ fun Pawra(
             )
         }
 
+        composable(Screen.Profile.route) {
+            ProfileScreen(
+                navController = navController
+            )
+        }
+
         composable(Screen.EditProfile.route) {
             ProfileEditScreen(
                 navController = navController
@@ -174,7 +180,6 @@ fun HomeNav(
 
             composable(Screen.Profile.route) {
                 ProfileScreen(
-                    navHomeController = navHomeController,
                     navController = navController
                 )
             }

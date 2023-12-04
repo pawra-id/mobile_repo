@@ -1,5 +1,6 @@
 package id.pawra.ui.components.profile
 
+import android.net.Uri
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,8 +16,10 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -39,6 +42,8 @@ import androidx.navigation.compose.rememberNavController
 import id.pawra.R
 import id.pawra.data.ViewModelFactory
 import id.pawra.di.Injection
+import id.pawra.ui.components.addpet.uriToFile
+import id.pawra.ui.navigation.Screen
 import id.pawra.ui.screen.auth.AuthViewModel
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkGreen
@@ -46,6 +51,10 @@ import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.LightGray
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileEditForm(
@@ -54,6 +63,11 @@ fun ProfileEditForm(
     showDialog: (Boolean) -> Unit,
     navController: NavController
 ) {
+    val context = LocalContext.current
+
+    viewModel.getSession()
+    val userInfo by viewModel.sessionState.collectAsState()
+
     Column(
         modifier = modifier
             .padding(horizontal = 30.dp, vertical = 5.dp)
@@ -61,11 +75,17 @@ fun ProfileEditForm(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        var name by rememberSaveable { mutableStateOf("default name") }
-        var email by rememberSaveable { mutableStateOf("default email") }
-        var bio by rememberSaveable { mutableStateOf("default summary") }
+        var name by rememberSaveable { mutableStateOf(userInfo.name) }
+        var email by rememberSaveable { mutableStateOf(userInfo.email) }
+        var bio by rememberSaveable { mutableStateOf(userInfo.summary) }
+        var imageUri by rememberSaveable { mutableStateOf("") }
+        var isImageUpdate by rememberSaveable { mutableStateOf(false) }
 
-        ProfileEditImage()
+        ProfileEditImage(
+            userInfo.image,
+            updateImage = { imageUri = it },
+            isImageUpdate = { isImageUpdate = it }
+        )
 
         Text(
             text = stringResource(R.string.name),
@@ -187,8 +207,33 @@ fun ProfileEditForm(
 
         Button(
             onClick = {
+                var multipartBody: MultipartBody.Part? = null
+                if (isImageUpdate) {
+                    val imageFile = uriToFile(Uri.parse(imageUri), context)
+                    val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
+                    multipartBody = MultipartBody.Part.createFormData(
+                        "file",
+                        imageFile.name,
+                        requestImageFile
+                    )
+                }
 
-                showDialog(true)},
+                viewModel.updateProfile(
+                    id = userInfo.id,
+                    token = userInfo.token,
+                    name = name,
+                    email = email,
+                    summary = bio,
+                    imageUrl = imageUri,
+                    file = multipartBody
+                )
+
+                showDialog(true)
+                navController.navigate(Screen.Profile.route){
+                    popUpTo(Screen.EditProfile.route){
+                        inclusive = true
+                    }
+                }},
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
                 .fillMaxWidth()

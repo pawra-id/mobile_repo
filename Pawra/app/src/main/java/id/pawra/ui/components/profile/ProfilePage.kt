@@ -45,10 +45,12 @@ fun ProfilePage(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        ProfileImage()
+        ProfileImage(
+            image = userInfo.image
+        )
 
         Text(
-            text = userInfo.name.toString(),
+            text = userInfo.name,
             modifier = Modifier.fillMaxWidth(),
             color = DarkGreen,
             fontFamily = Poppins,
@@ -58,7 +60,7 @@ fun ProfilePage(
         )
 
         Text(
-            text = userInfo.email.toString(),
+            text = userInfo.email,
             modifier = Modifier.padding(top = 7.dp),
             color = Gray,
             fontFamily = Poppins,
@@ -68,7 +70,7 @@ fun ProfilePage(
         )
 
         Text(
-            text = userInfo.summary.toString(),
+            text = userInfo.summary,
             modifier = Modifier.padding(top = 22.dp),
             color = Black,
             fontFamily = Poppins,

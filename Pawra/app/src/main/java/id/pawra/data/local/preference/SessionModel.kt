@@ -1,6 +1,7 @@
 package id.pawra.data.local.preference
 
 data class SessionModel(
+    val id: Int,
     val token: String,
     val isLogin: Boolean = false,
     val name: String,
