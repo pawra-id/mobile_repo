@@ -38,9 +38,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import id.pawra.R
 import id.pawra.ui.common.NoRippleTheme
 import id.pawra.ui.components.general.SearchBar
+import id.pawra.ui.navigation.Screen
 import id.pawra.ui.theme.DarkGreen
 import id.pawra.ui.theme.DisabledGreen
 import id.pawra.ui.theme.LightGray
@@ -52,6 +55,7 @@ import id.pawra.ui.theme.White
 
 @Composable
 fun PetActivities(
+    navController: NavController,
     modifier: Modifier = Modifier
 ) {
     val query by remember { mutableStateOf("") }
@@ -90,7 +94,9 @@ fun PetActivities(
             ) {}
 
             IconButton(
-                onClick = { /* do something */ },
+                onClick = {
+                    navController.navigate(Screen.PetActivitiesAdd.route)
+                },
                 modifier = modifier
                     .background(LightGreen, RoundedCornerShape(10.dp))
                     .size(56.dp)
@@ -232,7 +238,7 @@ fun PetActivities(
 fun PetActivitiesPreview() {
     PawraTheme {
         PetActivities(
-            Modifier
+            navController = rememberNavController()
         )
     }
 }

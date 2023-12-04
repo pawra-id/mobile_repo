@@ -1,6 +1,5 @@
 package id.pawra.ui.components.petprofile
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -36,13 +35,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import coil.compose.rememberImagePainter
 import id.pawra.data.ViewModelFactory
 import id.pawra.data.local.preference.PetData
-import id.pawra.data.local.preference.SessionModel
 import id.pawra.data.remote.response.PetResponseItem
-import id.pawra.di.Injection
-import id.pawra.ui.common.UiState
 import id.pawra.ui.screen.auth.AuthViewModel
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkBlue

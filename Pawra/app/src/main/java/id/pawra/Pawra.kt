@@ -24,6 +24,7 @@ import id.pawra.ui.screen.auth.SignInScreen
 import id.pawra.ui.screen.auth.SignUpScreen
 import id.pawra.ui.screen.explore.ExploreScreen
 import id.pawra.ui.screen.home.HomeScreen
+import id.pawra.ui.screen.pet.ActivitiesAddScreen
 import id.pawra.ui.screen.pet.PetActivitiesScreen
 import id.pawra.ui.screen.pet.PetAddScreen
 import id.pawra.ui.screen.pet.PetMentalHealthScreen
@@ -107,6 +108,12 @@ fun Pawra(
             )
         }
 
+        composable(Screen.PetActivitiesAdd.route) {
+            ActivitiesAddScreen(
+                navController = navController
+            )
+        }
+
         composable(Screen.VetProfile.route) {
             VetProfileScreen(
                 navController = navController
@@ -131,7 +138,9 @@ fun HomeNav(
             BottomNavigation(navHomeController = navHomeController)
         },
         floatingActionButton = {
-            AddButton(navHomeController = navHomeController)
+            AddButton(
+                navController = navController
+            )
         },
         modifier = modifier
     ) { paddingValues ->

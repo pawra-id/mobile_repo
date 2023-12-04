@@ -21,6 +21,7 @@ sealed class Screen(val route: String) {
     }
     data object PetAdd : Screen("pet_add")
     data object PetActivities : Screen("pet_activities")
+    data object PetActivitiesAdd : Screen("pet_activities_add")
     data object PetMentalHealth : Screen("pet_mental_health")
 
     // Vet Navigation

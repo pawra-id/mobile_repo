@@ -23,7 +23,7 @@ fun PetActivitiesScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         PetActivitiesTopBar(navController = navController)
-        PetActivities()
+        PetActivities(navController = navController)
     }
 
 }
