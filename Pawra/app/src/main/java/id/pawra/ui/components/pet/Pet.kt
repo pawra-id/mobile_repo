@@ -1,5 +1,6 @@
 package id.pawra.ui.components.pet
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -24,6 +25,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,7 +38,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
+import id.pawra.R
 import id.pawra.data.ViewModelFactory
 import id.pawra.ui.common.UiState
 import id.pawra.ui.components.loading.LoadingBox
@@ -140,6 +144,9 @@ fun PetItem(
     name: String,
     modifier: Modifier = Modifier
 ) {
+
+    val painter = rememberAsyncImagePainter(image.ifEmpty { R.drawable.ic_pet })
+
     Column(
         modifier = modifier
     ) {
@@ -147,8 +154,8 @@ fun PetItem(
             modifier = modifier
                 .clip(shape = RoundedCornerShape(15.dp))
         ) {
-            AsyncImage(
-                model = image,
+            Image(
+                painter = painter,
                 contentDescription = name,
                 modifier = modifier
                     .fillMaxSize()

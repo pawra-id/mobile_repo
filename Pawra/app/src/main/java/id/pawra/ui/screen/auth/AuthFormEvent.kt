@@ -18,3 +18,10 @@ sealed class SignInFormEvent {
 
     data object Submit: SignInFormEvent()
 }
+
+sealed class UpdateProfileFormEvent {
+    data class NameChanged(val name: String) : UpdateProfileFormEvent()
+    data class EmailChanged(val email: String) : UpdateProfileFormEvent()
+
+    data object Update: UpdateProfileFormEvent()
+}

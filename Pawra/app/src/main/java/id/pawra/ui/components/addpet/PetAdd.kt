@@ -62,10 +62,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import id.pawra.R
 import id.pawra.data.ViewModelFactory
-import id.pawra.data.local.preference.PetData
 import id.pawra.ui.screen.pet.PetViewModel
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkGreen
@@ -95,8 +94,7 @@ fun PetAdd(
 ) {
 
     val imageUri = rememberSaveable { mutableStateOf("") }
-    val painter = rememberImagePainter(
-        imageUri.value.ifEmpty { R.drawable.ic_pet }
+    val painter = rememberAsyncImagePainter(imageUri.value.ifEmpty { R.drawable.ic_pet }
     )
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -791,7 +789,7 @@ fun PetAdd(
     }
 }
 
-private val FILENAME_FORMAT = "yyyyMMdd_HHmmss"
+private const val FILENAME_FORMAT = "yyyyMMdd_HHmmss"
 private val timeStamp: String = SimpleDateFormat(FILENAME_FORMAT, Locale.US).format(Date())
 
 private fun createCustomTempFile(context: Context): File {

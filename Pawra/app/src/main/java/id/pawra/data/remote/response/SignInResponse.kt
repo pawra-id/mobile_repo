@@ -11,7 +11,9 @@ data class SignInResponse(
     val accessToken: String? = null,
 
     @field:SerializedName("token_type")
-    val tokenType: String? = null
+    val tokenType: String? = null,
+
+    val error: String? = null
 )
 
 data class User(
