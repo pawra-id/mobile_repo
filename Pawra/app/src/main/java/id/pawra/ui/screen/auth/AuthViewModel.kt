@@ -1,6 +1,5 @@
 package id.pawra.ui.screen.auth
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -15,7 +14,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 class AuthViewModel(
@@ -41,24 +39,26 @@ class AuthViewModel(
 
     private fun signIn(username: String, password: String) {
         viewModelScope.launch {
+            _signInState.value = UiState.Loading
             authRepository.signIn(username, password)
                 .catch {
                     _signInState.value = UiState.Error(it.message.toString())
                 }
-                .collect { users ->
-                    _signInState.value = users
+                .collect { user ->
+                    _signInState.value = UiState.Success(user)
                 }
         }
     }
 
     private fun signUp(name: String, email: String, password: String) {
         viewModelScope.launch {
+            _signInState.value = UiState.Loading
             authRepository.signUp(name, email, password)
                 .catch {
                     _signUpState.value = UiState.Error(it.message.toString())
                 }
-                .collect { users ->
-                    _signUpState.value = users
+                .collect { user ->
+                    _signUpState.value = UiState.Success(user)
                 }
         }
     }

@@ -1,5 +1,6 @@
 package id.pawra.ui.components.addpet
 
+import android.content.Context
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -49,6 +50,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -57,10 +59,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
 import id.pawra.R
+import id.pawra.data.ViewModelFactory
+import id.pawra.data.local.preference.PetData
+import id.pawra.ui.screen.pet.PetViewModel
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkGreen
 import id.pawra.ui.theme.DisabledGreen
@@ -69,12 +75,23 @@ import id.pawra.ui.theme.LightGray
 import id.pawra.ui.theme.LightGreen
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PetAdd(
+    navController: NavController,
     modifier: Modifier = Modifier,
-    navController: NavController
+    showDialog: (Boolean) -> Unit,
+    petViewModel: PetViewModel
 ) {
 
     val imageUri = rememberSaveable { mutableStateOf("") }
@@ -93,13 +110,15 @@ fun PetAdd(
     var height by rememberSaveable { mutableStateOf("") }
     var weight by rememberSaveable { mutableStateOf("") }
     var color by rememberSaveable { mutableStateOf("") }
-    var microchip_id by rememberSaveable { mutableStateOf("") }
+    var microchipId by rememberSaveable { mutableStateOf("") }
     var summary by rememberSaveable { mutableStateOf("") }
 
     var isExpanded by remember { mutableStateOf(false) }
     var gender by remember { mutableStateOf("Male") }
 
     var isChecked by remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -643,7 +662,7 @@ fun PetAdd(
                 }
         ) {
             OutlinedTextField(
-                value = microchip_id,
+                value = microchipId,
                 placeholder = {
                     Text(
                         text = stringResource(R.string.input_dog_microchipid),
@@ -654,7 +673,7 @@ fun PetAdd(
                     )
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                onValueChange = { microchip_id = it },
+                onValueChange = { microchipId = it },
                 singleLine = true,
                 shape = RoundedCornerShape(10.dp),
                 modifier = modifier.fillMaxWidth(),
@@ -727,7 +746,31 @@ fun PetAdd(
         Spacer(modifier = Modifier.height(20.dp))
 
         Button(
-            onClick = {},
+            onClick = {
+                val imageFile = uriToFile(Uri.parse(imageUri.value), context)
+                val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
+                val multipartBody = MultipartBody.Part.createFormData(
+                    "file",
+                    imageFile.name,
+                    requestImageFile
+                )
+
+                petViewModel.addDog(
+                    name,
+                    breed,
+                    isChecked,
+                    age.toInt(),
+                    height.toInt(),
+                    gender,
+                    weight.toInt(),
+                    color,
+                    microchipId,
+                    summary,
+                    multipartBody
+                )
+
+                showDialog(true)
+            },
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
                 .fillMaxWidth()
@@ -748,12 +791,37 @@ fun PetAdd(
     }
 }
 
+private val FILENAME_FORMAT = "yyyyMMdd_HHmmss"
+private val timeStamp: String = SimpleDateFormat(FILENAME_FORMAT, Locale.US).format(Date())
+
+private fun createCustomTempFile(context: Context): File {
+    val filesDir = context.externalCacheDir
+    return File.createTempFile(timeStamp, ".jpg", filesDir)
+}
+
+fun uriToFile(imageUri: Uri, context: Context): File {
+    val myFile = createCustomTempFile(context)
+    val inputStream = context.contentResolver.openInputStream(imageUri) as InputStream
+    val outputStream = FileOutputStream(myFile)
+    val buffer = ByteArray(1024)
+    var length: Int
+    while (inputStream.read(buffer).also { length = it } > 0) outputStream.write(buffer, 0, length)
+    outputStream.close()
+    inputStream.close()
+    return myFile
+}
+
+
 @Composable
 @Preview(showBackground = true)
 fun PetAddPreview() {
     PawraTheme {
         PetAdd(
-            navController = rememberNavController()
+            navController = rememberNavController(),
+            petViewModel = viewModel(
+                factory = ViewModelFactory(LocalContext.current)
+            ),
+            showDialog = {}
         )
     }
 }
