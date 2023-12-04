@@ -1,5 +1,4 @@
 package id.pawra.ui.components.petprofile
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -54,8 +53,10 @@ import id.pawra.ui.theme.Poppins
 @Composable
 fun PetProfile(
     pet: PetResponseItem,
-    viewModel: AuthViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: AuthViewModel = viewModel(
+        factory = ViewModelFactory(LocalContext.current)
+    )
 ) {
     viewModel.getSession()
     val userInfo by viewModel.sessionState.collectAsState()

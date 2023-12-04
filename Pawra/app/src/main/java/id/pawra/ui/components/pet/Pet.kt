@@ -21,6 +21,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,6 +39,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import id.pawra.data.ViewModelFactory
 import id.pawra.ui.common.UiState
+import id.pawra.ui.components.loading.LoadingBox
 import id.pawra.ui.navigation.Screen
 import id.pawra.ui.screen.pet.PetViewModel
 import id.pawra.ui.theme.DarkBlue
@@ -53,8 +58,19 @@ fun Pet(
         factory = ViewModelFactory(LocalContext.current)
     )
 ) {
-
     petViewModel.getDog()
+
+    var isLoading by remember { mutableStateOf(false) }
+
+    if (isLoading) {
+        Column (
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = modifier.fillMaxSize()
+        ) {
+            LoadingBox()
+        }
+    }
 
     petViewModel.petState.collectAsState().value.let { petState ->
         LazyVerticalGrid(
@@ -65,6 +81,7 @@ fun Pet(
         ) {
             when (petState) {
                 is UiState.Success -> {
+                    isLoading = false
                     items(petState.data, key = { it.id }) { data ->
                         Box(
                             modifier = modifier
@@ -84,8 +101,8 @@ fun Pet(
                         }
                     }
                 }
-                is UiState.Error -> {
-
+                is UiState.Loading -> {
+                    isLoading = true
                 }
 
                 else -> {}

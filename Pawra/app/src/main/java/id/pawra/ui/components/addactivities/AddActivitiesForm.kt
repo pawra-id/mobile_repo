@@ -39,6 +39,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import id.pawra.R
 import id.pawra.data.local.preference.ChipsModel
+import id.pawra.ui.navigation.Screen
 import id.pawra.ui.theme.DarkGreen
 import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.PawraTheme
@@ -218,7 +219,9 @@ fun AddActivitiesForm (
         Spacer(modifier = Modifier.height(18.dp))
 
         Button(
-            onClick = {},
+            onClick = {
+                navController.navigate(Screen.PetActivitiesAdd.route)
+            },
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
                 .fillMaxWidth()
