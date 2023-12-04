@@ -1,6 +1,5 @@
 package id.pawra.ui.components.petprofile
 
-import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -26,6 +25,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,13 +38,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
+import id.pawra.R
 import id.pawra.data.ViewModelFactory
 import id.pawra.data.local.preference.PetData
-import id.pawra.data.local.preference.SessionModel
 import id.pawra.data.remote.response.PetResponseItem
-import id.pawra.di.Injection
-import id.pawra.ui.common.UiState
 import id.pawra.ui.screen.auth.AuthViewModel
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkBlue
@@ -82,6 +81,9 @@ fun PetProfile(
         pet.description ?: ""
     )
 
+    val painter = rememberAsyncImagePainter(pet.image?.ifEmpty { R.drawable.ic_pet })
+    val painterOwner = rememberAsyncImagePainter(userInfo.image.ifEmpty { R.drawable.ic_user })
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -102,8 +104,8 @@ fun PetProfile(
                         .border(2.dp, DarkGreen, CircleShape)
                         .size(110.dp)
                 ) {
-                    AsyncImage(
-                        model = pet.image,
+                    Image(
+                        painter = painter,
                         contentDescription = "Dog Image",
                         modifier = Modifier
                             .fillMaxSize()
@@ -328,8 +330,8 @@ fun PetProfile(
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    AsyncImage(
-                        model = userInfo.image,
+                    Image(
+                        painter = painterOwner,
                         contentDescription = null,
                         modifier = Modifier
                             .width(60.dp)

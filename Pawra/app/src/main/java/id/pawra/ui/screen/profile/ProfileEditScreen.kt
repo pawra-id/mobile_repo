@@ -7,6 +7,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,9 +24,12 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import id.pawra.data.ViewModelFactory
 import id.pawra.di.Injection
+import id.pawra.ui.common.UiState
+import id.pawra.ui.components.dialog.ResultDialog
 import id.pawra.ui.components.loading.LoadingBox
 import id.pawra.ui.components.profile.ProfileEditForm
 import id.pawra.ui.components.profile.ProfileEditTopBar
+import id.pawra.ui.navigation.Screen
 import id.pawra.ui.screen.auth.AuthViewModel
 import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.PawraTheme
@@ -43,7 +47,8 @@ fun ProfileEditScreen(
         ProfileEditTopBar()
         Spacer(modifier = Modifier.height(16.dp))
         Box(modifier = modifier) {
-            val isLoading by remember { mutableStateOf(false) }
+            var isLoading by remember { mutableStateOf(false) }
+            var showDialog by remember { mutableStateOf(false) }
 
             if (isLoading) {
                 Column(
@@ -62,11 +67,44 @@ fun ProfileEditScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top,
             ) {
-                var showDialog by remember { mutableStateOf(false) }
-
                 ProfileEditForm(viewModel = viewModel,
                     showDialog = { showDialog = it },
                     navController = navController)
+            }
+
+            viewModel.updateProfileState.collectAsState().value.let { userState ->
+                when (userState) {
+                    is UiState.Loading -> {
+                        isLoading = true
+                    }
+                    is UiState.Success -> {
+                        if(showDialog) {
+                            isLoading = false
+                            ResultDialog(
+                                success = true,
+                                message = "Update successfully",
+                                setShowDialog = {
+                                    showDialog = it
+                                }
+                            )
+                        }
+                    }
+                    is UiState.Error -> {
+                        if(showDialog) {
+                            isLoading = false
+                            ResultDialog(
+                                success = false,
+                                message = userState.errorMessage,
+                                setShowDialog = {
+                                    showDialog = it
+                                }
+                            )
+                        }
+                    }
+
+                    else -> {}
+                }
+
             }
         }
 

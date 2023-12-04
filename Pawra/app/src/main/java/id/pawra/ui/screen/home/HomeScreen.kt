@@ -33,19 +33,15 @@ import id.pawra.ui.theme.PawraTheme
 fun HomeScreen(
     modifier: Modifier = Modifier,
     navHomeController: NavController,
-    navController: NavController
+    navController: NavController,
+    viewModel: AuthViewModel = viewModel(
+        factory = ViewModelFactory(LocalContext.current)
+    ),
+    petViewModel: PetViewModel = viewModel(
+        factory = ViewModelFactory(LocalContext.current)
+    )
 ) {
-    val viewModel: AuthViewModel = viewModel(
-        factory = ViewModelFactory(LocalContext.current)
-    )
-
-    val petViewModel: PetViewModel = viewModel(
-        factory = ViewModelFactory(LocalContext.current)
-    )
-
     viewModel.getSession()
-    petViewModel.getDog()
-
     val userInfo by viewModel.sessionState.collectAsState()
 
     Column(
@@ -54,7 +50,7 @@ fun HomeScreen(
     ) {
         Row {
             Welcome(
-                image = "https://dicoding-web-img.sgp1.cdn.digitaloceanspaces.com/small/avatar/dos:5121efa9bf4f08285ea0d098ce7756aa20230924195603.png",
+                image = userInfo.image,
                 name = userInfo.name
             )
         }

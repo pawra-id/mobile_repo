@@ -1,5 +1,6 @@
 package id.pawra.ui.components.home
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -11,14 +12,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,11 +35,10 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
 import id.pawra.R
 import id.pawra.data.ViewModelFactory
 import id.pawra.ui.common.UiState
-import id.pawra.ui.components.dialog.ResultDialog
 import id.pawra.ui.navigation.Screen
 import id.pawra.ui.screen.pet.PetViewModel
 import id.pawra.ui.theme.Black
@@ -49,7 +51,6 @@ import id.pawra.ui.theme.DisabledPink
 import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.LightGreen
 import id.pawra.ui.theme.PawraTheme
-import androidx.compose.foundation.lazy.items
 
 @Composable
 fun ListDog(
@@ -57,6 +58,7 @@ fun ListDog(
     navController: NavController,
     viewModel: PetViewModel
 ) {
+    viewModel.getDog()
     viewModel.petState.collectAsState().value.let { petState ->
         when (petState) {
             is UiState.Success -> {
@@ -72,6 +74,9 @@ fun ListDog(
                     horizontalArrangement = Arrangement.spacedBy(15.dp)
                 ) {
                     items(petState.data, key = { it.id }) { data ->
+
+                        val painter = rememberAsyncImagePainter(data.image?.ifEmpty { R.drawable.ic_pet })
+
                         Column {
                             Box(
                                 modifier = modifier
@@ -80,8 +85,8 @@ fun ListDog(
                                         navController.navigate(Screen.PetProfile.createRoute(data.id))
                                     },
                             ) {
-                                AsyncImage(
-                                    model = data.image,
+                                Image(
+                                    painter = painter,
                                     contentDescription = data.name,
                                     modifier = modifier
                                         .size(90.dp)

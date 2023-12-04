@@ -19,3 +19,10 @@ data class SignInFormState(
     val password: String = "",
     val passwordError: String? = null,
 )
+
+data class UpdateProfileFormState(
+    var name: String = "",
+    var nameError: String? = null,
+    var email: String = "",
+    var emailError: String? = null,
+)

@@ -23,14 +23,17 @@ import id.pawra.di.Injection
 import id.pawra.ui.components.profile.ProfileButton
 import id.pawra.ui.components.profile.ProfilePage
 import id.pawra.ui.components.profile.ProfileTopBar
+import id.pawra.ui.screen.auth.AuthViewModel
 import id.pawra.ui.theme.PawraTheme
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ProfileScreen(
     modifier: Modifier = Modifier,
-    navHomeController: NavController,
-    navController: NavController
+    navController: NavController,
+    viewModel: AuthViewModel = viewModel(
+        factory = ViewModelFactory(LocalContext.current)
+    )
 ) {
     Column {
         ProfileTopBar()
@@ -45,9 +48,7 @@ fun ProfileScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            ProfilePage(viewModel = viewModel(
-                factory = ViewModelFactory(LocalContext.current)
-            ))
+            ProfilePage(viewModel = viewModel)
 
             Spacer(modifier = Modifier.height(28.dp))
 
@@ -64,7 +65,6 @@ fun ProfileScreen(
 fun ProfileScreenPreview() {
     PawraTheme {
         ProfileScreen(
-            navHomeController = rememberNavController(),
             navController = rememberNavController()
         )
     }

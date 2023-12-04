@@ -7,6 +7,7 @@ import id.pawra.data.remote.response.SignUpResponse
 import id.pawra.data.remote.retrofit.ApiService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
+import okhttp3.MultipartBody
 
 
 class AuthRepository private constructor(
@@ -15,9 +16,13 @@ class AuthRepository private constructor(
 ) {
 
     suspend fun signIn(username: String, password: String): Flow<SignInResponse> {
-        val response = apiService.signIn(username, password)
-        saveSession(response)
-        return flowOf(response)
+        return try {
+            val response = apiService.signIn(username, password)
+            saveSession(response)
+            flowOf(response)
+        } catch (e: Exception) {
+            flowOf(SignInResponse(error = e.message))
+        }
     }
 
 
@@ -30,9 +35,45 @@ class AuthRepository private constructor(
         return flowOf(apiService.signUp(userData))
     }
 
+    suspend fun updateProfile(
+        id: Int,
+        token: String,
+        username: String = "",
+        email: String = "",
+        summary: String = "",
+        address: String = "",
+        image: String = ""
+    ): Flow<SignUpResponse> {
+        val userData = mutableMapOf<String, Any>()
+        userData["username"] = username
+        userData["email"] = email
+        userData["summary"] = summary
+        userData["address"] = address
+        userData["image"] = image
+
+        val response = apiService.updateProfile("Bearer $token", id, userData)
+        val sessionModel = SessionModel(
+            id = id,
+            token = token,
+            isLogin = true,
+            name = username,
+            email = email,
+            summary = summary,
+            image = image
+        )
+        preference.saveSession(sessionModel)
+
+        return flowOf(response)
+    }
+
+    suspend fun postProfileImage(user: SessionModel, file: MultipartBody.Part): Flow<String> {
+        return flowOf(apiService.postProfileImage("Bearer ${user.token}", file))
+    }
+
     private suspend fun saveSession(response: SignInResponse) {
         val user = response.user
         val sessionModel = SessionModel(
+            id = user?.id ?: 0,
             token = response.accessToken ?: "",
             isLogin = true,
             name = user?.username ?: "",

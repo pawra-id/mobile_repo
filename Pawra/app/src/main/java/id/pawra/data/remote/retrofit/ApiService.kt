@@ -14,6 +14,7 @@ import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
 
@@ -29,6 +30,20 @@ interface ApiService {
         @Field("username") username: String,
         @Field("password") password: String
     ): SignInResponse
+
+    @PUT("users/{id}")
+    suspend fun updateProfile(
+        @Header("Authorization") authHeader: String,
+        @Path("id") id: Int,
+        @Body body: MutableMap<String, Any>
+    ): SignUpResponse
+
+    @Multipart
+    @POST("users/image")
+    suspend fun postProfileImage(
+        @Header("Authorization") authHeader: String,
+        @Part file: MultipartBody.Part
+    ): String
 
     @GET("dogs")
     suspend fun getDogs(@Header("Authorization") authHeader: String): List<PetResponseItem>

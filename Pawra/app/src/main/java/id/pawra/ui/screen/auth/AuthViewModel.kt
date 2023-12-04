@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
 
 class AuthViewModel(
     private val authRepository: AuthRepository,
@@ -33,7 +34,11 @@ class AuthViewModel(
     val signUpState: StateFlow<UiState<SignUpResponse>>
         get() = _signUpState
 
-    private val _sessionState: MutableStateFlow<SessionModel> = MutableStateFlow(SessionModel("", false, "", "", "", ""))
+    private val _updateProfileState: MutableStateFlow<UiState<SignUpResponse>> = MutableStateFlow(UiState.None)
+    val updateProfileState: StateFlow<UiState<SignUpResponse>>
+        get() = _updateProfileState
+
+    private val _sessionState: MutableStateFlow<SessionModel> = MutableStateFlow(SessionModel(0, "", false, "", "", "", ""))
     val sessionState: StateFlow<SessionModel>
         get() = _sessionState
 
@@ -63,6 +68,45 @@ class AuthViewModel(
         }
     }
 
+    fun updateProfile(
+        id: Int,
+        token: String,
+        name: String,
+        email: String,
+        summary: String,
+        imageUrl: String,
+        file: MultipartBody.Part? = null
+    ) {
+        viewModelScope.launch {
+            val user = authRepository.getSession().first()
+            var image = imageUrl
+            if (file != null) {
+                authRepository.postProfileImage(user, file)
+                    .catch {
+                        _updateProfileState.value = UiState.Error(it.message.toString())
+                    }
+                    .collect { result ->
+                        image = result
+                    }
+            }
+
+            authRepository.updateProfile(
+                id = id,
+                token = token,
+                username = name,
+                email = email,
+                summary = summary,
+                image = image
+            )
+                .catch {
+                    _updateProfileState.value = UiState.Error(it.message.toString())
+                }
+                .collect { dogDetail ->
+                    _updateProfileState.value = UiState.Success(dogDetail)
+                }
+        }
+    }
+
     fun getSession() {
         viewModelScope.launch {
             _sessionState.value = authRepository.getSession().first()
@@ -72,12 +116,14 @@ class AuthViewModel(
     fun logout() {
         viewModelScope.launch {
             authRepository.logout()
-            _sessionState.value = SessionModel("", false, "", "", "", "")
+            _sessionState.value = SessionModel(0, "", false, "", "", "", "")
         }
     }
 
     var stateSignIn by mutableStateOf(SignInFormState())
     var stateSignUp by mutableStateOf(SignUpFormState())
+
+    var stateUpdateProfile by mutableStateOf(UpdateProfileFormState())
 
     var showDialog by mutableStateOf(false)
 
@@ -121,8 +167,6 @@ class AuthViewModel(
             is SignUpFormEvent.Submit -> {
                 submitDataSignUp()
             }
-
-            else -> {}
         }
     }
 
@@ -149,8 +193,29 @@ class AuthViewModel(
             is SignInFormEvent.Submit -> {
                 submitDataSignIn()
             }
+        }
+    }
 
-            else -> {}
+    // TODO: validation form
+    fun onEventUpdateProfile(event: UpdateProfileFormEvent) {
+        when(event) {
+            is UpdateProfileFormEvent.NameChanged -> {
+                stateUpdateProfile = stateUpdateProfile.copy(name = event.name)
+                val nameResult = validateName.execute(stateUpdateProfile.name)
+                stateUpdateProfile = stateUpdateProfile.copy(
+                    nameError = nameResult.errorMessage
+                )
+            }
+            is UpdateProfileFormEvent.EmailChanged -> {
+                stateUpdateProfile = stateUpdateProfile.copy(email = event.email)
+                val nameResult = validateEmail.execute(stateUpdateProfile.email)
+                stateUpdateProfile = stateUpdateProfile.copy(
+                    emailError = nameResult.errorMessage
+                )
+            }
+            is UpdateProfileFormEvent.Update -> {
+                updateDataProfile()
+            }
         }
     }
 
@@ -210,6 +275,26 @@ class AuthViewModel(
                 stateSignIn.name,
                 stateSignIn.password
             )
+            showDialog = true
+        }
+    }
+
+    private fun updateDataProfile() {
+        val nameResult = validateName.execute(stateUpdateProfile.name)
+        val emailResult = validateEmail.execute(stateUpdateProfile.email)
+
+        val hasError = listOf(
+            nameResult,
+            emailResult,
+        ).any { !it.successful }
+
+        if(hasError) {
+            stateUpdateProfile = stateUpdateProfile.copy(
+                nameError = nameResult.errorMessage,
+                emailError = emailResult.errorMessage,
+            )
+            showDialog = false
+        } else {
             showDialog = true
         }
     }
