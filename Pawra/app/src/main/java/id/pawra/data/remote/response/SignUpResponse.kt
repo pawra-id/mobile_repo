@@ -26,5 +26,7 @@ data class SignUpResponse(
     val updatedAt: String? = null,
 
     @field:SerializedName("created_at")
-    val createdAt: String? = null
+    val createdAt: String? = null,
+
+    val error: String? = null
 )

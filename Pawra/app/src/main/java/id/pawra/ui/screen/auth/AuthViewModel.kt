@@ -46,24 +46,24 @@ class AuthViewModel(
         viewModelScope.launch {
             _signInState.value = UiState.Loading
             authRepository.signIn(username, password)
-                .catch {
-                    _signInState.value = UiState.Error(it.message.toString())
-                }
                 .collect { user ->
-                    _signInState.value = UiState.Success(user)
+                    when {
+                        user.error != null -> _signInState.value = UiState.Error(user.error)
+                        else -> _signInState.value = UiState.Success(user)
+                    }
                 }
         }
     }
 
     private fun signUp(name: String, email: String, password: String) {
         viewModelScope.launch {
-            _signInState.value = UiState.Loading
+            _signUpState.value = UiState.Loading
             authRepository.signUp(name, email, password)
-                .catch {
-                    _signUpState.value = UiState.Error(it.message.toString())
-                }
                 .collect { user ->
-                    _signUpState.value = UiState.Success(user)
+                    when {
+                        user.error != null -> _signUpState.value = UiState.Error(user.error)
+                        else -> _signUpState.value = UiState.Success(user)
+                    }
                 }
         }
     }
@@ -82,9 +82,6 @@ class AuthViewModel(
             var image = imageUrl
             if (file != null) {
                 authRepository.postProfileImage(user, file)
-                    .catch {
-                        _updateProfileState.value = UiState.Error(it.message.toString())
-                    }
                     .collect { result ->
                         image = result
                     }
@@ -97,13 +94,12 @@ class AuthViewModel(
                 email = email,
                 summary = summary,
                 image = image
-            )
-                .catch {
-                    _updateProfileState.value = UiState.Error(it.message.toString())
+            ).collect { userDetail ->
+                when {
+                    userDetail.error != null -> _signUpState.value = UiState.Error(userDetail.error)
+                    else -> _signUpState.value = UiState.Success(userDetail)
                 }
-                .collect { dogDetail ->
-                    _updateProfileState.value = UiState.Success(dogDetail)
-                }
+            }
         }
     }
 

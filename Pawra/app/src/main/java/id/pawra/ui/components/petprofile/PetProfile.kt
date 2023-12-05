@@ -41,6 +41,7 @@ import id.pawra.R
 import id.pawra.data.ViewModelFactory
 import id.pawra.data.local.preference.PetData
 import id.pawra.data.remote.response.PetResponseItem
+import id.pawra.ui.components.petprofile.InfoBox
 import id.pawra.ui.screen.auth.AuthViewModel
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkBlue

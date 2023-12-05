@@ -1,5 +1,6 @@
 package id.pawra.ui.screen.pet
 
+import PetProfile
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
@@ -17,10 +18,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import id.pawra.data.ViewModelFactory
-import id.pawra.data.local.preference.PetData
-import id.pawra.di.Injection
 import id.pawra.ui.common.UiState
-import id.pawra.ui.components.petprofile.PetProfile
 import id.pawra.ui.components.petprofile.PetProfileTopBar
 import id.pawra.ui.theme.PawraTheme
 
