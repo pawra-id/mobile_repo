@@ -69,10 +69,10 @@ fun SharedMental(
                 Text(
                     text = gender,
                     fontSize = 11.sp,
-                    color = if (gender == "Male") DarkBlue else DarkPink,
+                    color = if (gender == "male") DarkBlue else DarkPink,
                     modifier = modifier
                         .clip(shape = RoundedCornerShape(15.dp))
-                        .background(if (gender == "Male") DisabledBlue else DisabledPink)
+                        .background(if (gender == "male") DisabledBlue else DisabledPink)
                         .padding(vertical = 2.dp, horizontal = 10.dp)
                 )
             }

@@ -102,10 +102,10 @@ fun ListDog(
                                     Text(
                                         text = data.gender ?: "",
                                         fontSize = 11.sp,
-                                        color = if (data.gender == "Male") DarkBlue else DarkPink,
+                                        color = if (data.gender == "male") DarkBlue else DarkPink,
                                         modifier = modifier
                                             .clip(shape = RoundedCornerShape(15.dp))
-                                            .background(color = if (data.gender == "Male") DisabledBlue else DisabledPink)
+                                            .background(color = if (data.gender == "male") DisabledBlue else DisabledPink)
                                             .padding(vertical = 2.dp, horizontal = 10.dp)
                                     )
                                 }

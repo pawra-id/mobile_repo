@@ -44,7 +44,7 @@ fun AnalyzeHistory(
     modifier: Modifier = Modifier
 ) {
     val name = "Max"
-    val gender = "Male"
+    val gender = "male"
 
     Column(
         modifier = modifier
@@ -89,11 +89,11 @@ fun AnalyzeHistory(
                     Text(
                         text = gender,
                         fontSize = 11.sp,
-                        color = if (gender == "Male") DarkBlue else DarkPink,
+                        color = if (gender == "male") DarkBlue else DarkPink,
                         modifier = modifier
                             .clip(shape = RoundedCornerShape(15.dp))
                             .background(
-                                color = if (gender == "Male") DisabledBlue else DisabledPink
+                                color = if (gender == "male") DisabledBlue else DisabledPink
                             )
                             .padding(vertical = 2.dp, horizontal = 10.dp)
                     )
