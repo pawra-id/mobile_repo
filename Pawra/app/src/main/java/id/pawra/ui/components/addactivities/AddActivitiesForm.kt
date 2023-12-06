@@ -50,19 +50,20 @@ import id.pawra.ui.theme.Poppins
 @Composable
 fun AddActivitiesForm (
     modifier: Modifier = Modifier,
+    petId: Int,
     navController: NavController
 ){
+    var isExpanded by remember { mutableStateOf(false) }
+
+    var selectdog by remember { mutableStateOf("Max") }
+
+    var activity by rememberSaveable { mutableStateOf("") }
+
+    val selectedItems = mutableStateListOf<String>()
+    var tagsInput by remember { mutableStateOf("") }
+    var selectedTags by remember { mutableStateOf(listOf<String>()) }
+
     Column{
-        var isExpanded by remember { mutableStateOf(false) }
-        var selectdog by remember { mutableStateOf("Max") }
-
-        var activity by rememberSaveable { mutableStateOf("") }
-
-        val selectedItems = mutableStateListOf<String>()
-        var tagsInput by remember { mutableStateOf("") }
-        var selectedTags by remember { mutableStateOf(listOf<String>()) }
-
-
         Text(
             text = stringResource(R.string.select_dog),
             color = Gray,
@@ -246,6 +247,9 @@ fun AddActivitiesForm (
 @Preview(showBackground = true)
 fun AddActivitiesFormPreview() {
     PawraTheme {
-        AddActivitiesForm(navController = rememberNavController())
+        AddActivitiesForm(
+            navController = rememberNavController(),
+            petId = 0
+        )
     }
 }

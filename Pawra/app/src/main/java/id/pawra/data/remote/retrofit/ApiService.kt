@@ -1,5 +1,6 @@
 package id.pawra.data.remote.retrofit
 
+import id.pawra.data.remote.response.ActivitiesResponseItem
 import id.pawra.data.remote.response.PetResponseItem
 import id.pawra.data.remote.response.SignInResponse
 import id.pawra.data.remote.response.SignUpResponse
@@ -36,7 +37,7 @@ interface ApiService {
     ): SignUpResponse
 
     @Multipart
-    @POST("users/image")
+    @POST("users/image/")
     suspend fun postProfileImage(
         @Header("Authorization") authHeader: String,
         @Part file: MultipartBody.Part
@@ -58,9 +59,12 @@ interface ApiService {
     ): PetResponseItem
 
     @Multipart
-    @POST("dogs/image")
+    @POST("dogs/image/")
     suspend fun postDogImage(
         @Header("Authorization") authHeader: String,
         @Part file: MultipartBody.Part
     ): String
+
+    @GET("activities/")
+    suspend fun getActivities(@Header("Authorization") authHeader: String): List<ActivitiesResponseItem>
 }

@@ -1,4 +1,4 @@
-package id.pawra.ui.screen.pet
+package id.pawra.ui.screen.pet.activities
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,6 +23,7 @@ import id.pawra.ui.theme.PawraTheme
 @Composable
 fun ActivitiesAddScreen(
     modifier: Modifier = Modifier,
+    petId: Int,
     navController: NavController
 ) {
     Column {
@@ -38,7 +39,10 @@ fun ActivitiesAddScreen(
         ) {
             AddActivitiesTitle()
             Spacer(modifier = Modifier.height(15.dp))
-            AddActivitiesForm(navController = rememberNavController())
+            AddActivitiesForm(
+                navController = rememberNavController(),
+                petId = petId
+            )
         }
     }
 }
@@ -48,7 +52,8 @@ fun ActivitiesAddScreen(
 fun ActivitiesAddScreenPreview() {
     PawraTheme {
         ActivitiesAddScreen(
-            navController = rememberNavController()
+            navController = rememberNavController(),
+            petId = 0
         )
     }
 }

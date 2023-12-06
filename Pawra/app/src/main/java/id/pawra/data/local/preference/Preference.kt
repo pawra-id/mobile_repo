@@ -1,6 +1,7 @@
 package id.pawra.data.local.preference
 
 import android.content.Context
+import android.provider.Telephony.Carriers.PASSWORD
 import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -26,6 +27,7 @@ class Preference private constructor(private val dataStore: DataStore<Preference
             preferences[EMAIL_KEY] = user.email
             preferences[SUMMARY_KEY] = user.summary
             preferences[IMAGE] = user.image
+            preferences[PASSWORD] = user.password
         }
     }
 
@@ -39,6 +41,7 @@ class Preference private constructor(private val dataStore: DataStore<Preference
                 preferences[EMAIL_KEY] ?: "",
                 preferences[SUMMARY_KEY] ?: "",
                 preferences[IMAGE] ?: "",
+                preferences[PASSWORD] ?: "",
             )
         }
     }
@@ -60,6 +63,7 @@ class Preference private constructor(private val dataStore: DataStore<Preference
         private val EMAIL_KEY = stringPreferencesKey("email")
         private val SUMMARY_KEY = stringPreferencesKey("summary")
         private val IMAGE = stringPreferencesKey("image")
+        private val PASSWORD = stringPreferencesKey("password")
 
         fun getInstance(dataStore: DataStore<Preferences>): Preference {
             return INSTANCE ?: synchronized(this) {

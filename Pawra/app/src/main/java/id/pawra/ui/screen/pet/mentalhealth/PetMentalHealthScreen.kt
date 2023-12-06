@@ -1,4 +1,4 @@
-package id.pawra.ui.screen.pet
+package id.pawra.ui.screen.pet.mentalhealth
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,12 +8,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import id.pawra.ui.components.petactivities.PetActivities
-import id.pawra.ui.components.petactivities.PetActivitiesTopBar
+import id.pawra.ui.components.mentalhealth.Analyze
+import id.pawra.ui.components.mentalhealth.AnalyzeHistory
+import id.pawra.ui.components.mentalhealth.MentalHealthTopBar
 import id.pawra.ui.theme.PawraTheme
 
 @Composable
-fun PetActivitiesScreen(
+fun PetMentalHealthScreen(
     modifier: Modifier = Modifier,
     navController: NavController
 ) {
@@ -22,16 +23,16 @@ fun PetActivitiesScreen(
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        PetActivitiesTopBar(navController = navController)
-        PetActivities(navController = navController)
+        MentalHealthTopBar()
+        Analyze()
+        AnalyzeHistory(navController = rememberNavController())
     }
-
 }
 
 @Composable
 @Preview(showBackground = true)
-fun PetActivitiesScreenPreview() {
+fun PetMentalHealthScreenPreview() {
     PawraTheme {
-        PetActivitiesScreen(navController = rememberNavController())
+        PetMentalHealthScreen(navController = rememberNavController())
     }
 }
