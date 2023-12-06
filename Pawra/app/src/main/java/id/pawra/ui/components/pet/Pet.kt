@@ -43,6 +43,7 @@ import coil.compose.rememberImagePainter
 import id.pawra.R
 import id.pawra.data.ViewModelFactory
 import id.pawra.ui.common.UiState
+import id.pawra.ui.components.dialog.ResultDialog
 import id.pawra.ui.components.loading.LoadingBox
 import id.pawra.ui.navigation.Screen
 import id.pawra.ui.screen.pet.PetViewModel
@@ -65,6 +66,7 @@ fun Pet(
     petViewModel.getDog()
 
     var isLoading by remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(true) }
 
     if (isLoading) {
         Column (
@@ -77,15 +79,15 @@ fun Pet(
     }
 
     petViewModel.petState.collectAsState().value.let { petState ->
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
-        ) {
-            when (petState) {
-                is UiState.Success -> {
-                    isLoading = false
+        when (petState) {
+            is UiState.Success -> {
+                isLoading = false
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                ) {
                     items(petState.data, key = { it.id }) { data ->
                         Box(
                             modifier = modifier
@@ -103,36 +105,50 @@ fun Pet(
                                 modifier = modifier
                             )
                         }
+
+                    }
+
+                    item {
+                        Box(
+                            modifier = modifier
+                                .height(150.dp)
+                                .width(150.dp)
+                                .clip(shape = RoundedCornerShape(12.dp))
+                                .background(color = DisabledGreen)
+                                .clickable {
+                                    navController.navigate(Screen.PetAdd.route)
+                                },
+                        ) {
+                            Icon(
+                                Icons.Filled.Add,
+                                "Add Dog",
+                                tint = LightGreen,
+                                modifier = modifier
+                                    .size(44.dp)
+                                    .align(Alignment.Center)
+                            )
+                        }
                     }
                 }
-                is UiState.Loading -> {
-                    isLoading = true
-                }
-
-                else -> {}
             }
 
-            item {
-                Box(
-                    modifier = modifier
-                        .height(150.dp)
-                        .width(150.dp)
-                        .clip(shape = RoundedCornerShape(12.dp))
-                        .background(color = DisabledGreen)
-                        .clickable {
-                            navController.navigate(Screen.PetAdd.route)
-                        },
-                ) {
-                    Icon(
-                        Icons.Filled.Add,
-                        "Add Dog",
-                        tint = LightGreen,
-                        modifier = modifier
-                            .size(44.dp)
-                            .align(Alignment.Center)
+            is UiState.Loading -> {
+                isLoading = true
+            }
+
+            is UiState.Error -> {
+                if (showDialog) {
+                    isLoading = false
+                    ResultDialog(
+                        success = false,
+                        message = petState.errorMessage,
+                        setShowDialog = {
+                            showDialog = it
+                        }
                     )
                 }
             }
+            else -> {}
         }
     }
 }

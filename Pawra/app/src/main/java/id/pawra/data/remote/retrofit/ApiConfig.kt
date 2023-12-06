@@ -2,11 +2,6 @@ package id.pawra.data.remote.retrofit
 
 import android.content.Context
 import id.pawra.BuildConfig.DEBUG
-import id.pawra.data.local.preference.Preference
-import id.pawra.data.local.preference.dataStore
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -16,8 +11,8 @@ class ApiConfig {
 
     companion object {
 
-//        private var BASE_URL = "https://1326-103-162-237-58.ngrok-free.app"
-        private var BASE_URL = "https://pawra-backend-api-2gso7b5r3q-et.a.run.app/"
+        private var BASE_URL = "https://1326-103-162-237-58.ngrok-free.app"
+//        private var BASE_URL = "https://pawra-backend-api-2gso7b5r3q-et.a.run.app"
 
         fun getApiService(context: Context): ApiService {
 
@@ -41,6 +36,7 @@ class ApiConfig {
             val client = OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)
 //                .addInterceptor(authInterceptor)
+//                .addInterceptor(ChuckerInterceptor(context))
                 .build()
             val retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
