@@ -97,4 +97,7 @@ dependencies {
 
     implementation("com.google.accompanist:accompanist-permissions:0.32.0")
     implementation("com.google.android.libraries.places:places:3.3.0")
+
+    debugImplementation("com.github.chuckerteam.chucker:library:4.0.0")
+    releaseImplementation("com.github.chuckerteam.chucker:library-no-op:4.0.0")
 }

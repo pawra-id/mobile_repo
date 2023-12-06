@@ -19,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -41,8 +40,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import id.pawra.R
 import id.pawra.data.ViewModelFactory
-import id.pawra.di.Injection
-import id.pawra.ui.components.addpet.uriToFile
+import id.pawra.ui.common.uriToFile
 import id.pawra.ui.navigation.Screen
 import id.pawra.ui.screen.auth.AuthViewModel
 import id.pawra.ui.theme.Black
