@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -21,14 +20,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
-import id.pawra.R
+import id.pawra.ui.navigation.Screen
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkBlue
 import id.pawra.ui.theme.DarkGreen
@@ -41,6 +41,7 @@ import id.pawra.ui.theme.PawraTheme
 
 @Composable
 fun AnalyzeHistory(
+    navController: NavController,
     modifier: Modifier = Modifier
 ) {
     val name = "Max"
@@ -67,7 +68,9 @@ fun AnalyzeHistory(
                     bottom = 10.dp
                 )
                 .height(90.dp)
-                .clickable { }
+                .clickable {
+                    navController.navigate(Screen.PetMentalHealthResult.route)
+                }
         ) {
             Box(
                 modifier = modifier
@@ -165,6 +168,6 @@ fun AnalyzeHistory(
 @Preview(showBackground = true)
 fun AnalyzeHistoryPreview() {
     PawraTheme {
-        AnalyzeHistory()
+        AnalyzeHistory(navController = rememberNavController())
     }
 }

@@ -26,6 +26,7 @@ import id.pawra.ui.screen.explore.ExploreScreen
 import id.pawra.ui.screen.home.HomeScreen
 import id.pawra.ui.screen.pet.ActivitiesAddScreen
 import id.pawra.ui.screen.pet.ActivitiesPrevScreen
+import id.pawra.ui.screen.pet.MentalHealthResultScreen
 import id.pawra.ui.screen.pet.PetActivitiesScreen
 import id.pawra.ui.screen.pet.PetAddScreen
 import id.pawra.ui.screen.pet.PetMentalHealthScreen
@@ -129,6 +130,12 @@ fun Pawra(
 
         composable(Screen.VetProfile.route) {
             VetProfileScreen(
+                navController = navController
+            )
+        }
+
+        composable(Screen.PetMentalHealthResult.route) {
+            MentalHealthResultScreen(
                 navController = navController
             )
         }

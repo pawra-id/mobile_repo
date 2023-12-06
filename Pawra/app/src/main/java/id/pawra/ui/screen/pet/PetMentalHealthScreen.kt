@@ -32,7 +32,7 @@ fun PetMentalHealthScreen(
     ) {
         MentalHealthTopBar()
         Analyze()
-        AnalyzeHistory()
+        AnalyzeHistory(navController = rememberNavController())
     }
 }
 

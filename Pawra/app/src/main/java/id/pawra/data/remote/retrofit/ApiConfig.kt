@@ -16,8 +16,8 @@ class ApiConfig {
 
     companion object {
 
-        private var BASE_URL = "https://1f47-103-162-237-58.ngrok-free.app"
-//        private var BASE_URL = "https://pawra-backend-api-2gso7b5r3q-et.a.run.app/"
+//        private var BASE_URL = "https://1326-103-162-237-58.ngrok-free.app"
+        private var BASE_URL = "https://pawra-backend-api-2gso7b5r3q-et.a.run.app/"
 
         fun getApiService(context: Context): ApiService {
 

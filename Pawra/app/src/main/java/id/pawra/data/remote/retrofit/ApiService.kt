@@ -19,7 +19,7 @@ import retrofit2.http.Part
 import retrofit2.http.Path
 
 interface ApiService {
-    @POST("users")
+    @POST("users/")
     suspend fun signUp(
         @Body body: MutableMap<String, Any>
     ): SignUpResponse
@@ -45,7 +45,7 @@ interface ApiService {
         @Part file: MultipartBody.Part
     ): String
 
-    @GET("dogs")
+    @GET("dogs/")
     suspend fun getDogs(@Header("Authorization") authHeader: String): List<PetResponseItem>
 
     @GET("dogs/{id}")
@@ -54,7 +54,7 @@ interface ApiService {
         @Path("id") id: Int
     ): PetResponseItem
 
-    @POST("dogs")
+    @POST("dogs/")
     suspend fun addDog(
         @Header("Authorization") authHeader: String,
         @Body body: MutableMap<String, Any>
