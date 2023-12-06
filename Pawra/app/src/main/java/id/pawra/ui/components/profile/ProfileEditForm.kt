@@ -40,7 +40,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import id.pawra.R
 import id.pawra.data.ViewModelFactory
-import id.pawra.ui.common.uriToFile
+import id.pawra.utils.uriToFile
 import id.pawra.ui.navigation.Screen
 import id.pawra.ui.screen.auth.AuthViewModel
 import id.pawra.ui.theme.Black
@@ -223,6 +223,7 @@ fun ProfileEditForm(
                     email = email,
                     summary = bio,
                     imageUrl = imageUri,
+                    password = userInfo.password,
                     file = multipartBody
                 )
 

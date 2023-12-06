@@ -1,4 +1,4 @@
-package id.pawra.ui.screen.pet
+package id.pawra.ui.screen.pet.activities
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,6 +22,7 @@ import id.pawra.data.remote.response.PetResponseItem
 import id.pawra.ui.components.addactivities.ActivitiesPrevInfo
 import id.pawra.ui.components.addactivities.ActivitiesPrevTitle
 import id.pawra.ui.components.addactivities.ActivitiesPrevTopBar
+import id.pawra.ui.screen.pet.profile.PetViewModel
 import id.pawra.ui.theme.PawraTheme
 
 @Composable

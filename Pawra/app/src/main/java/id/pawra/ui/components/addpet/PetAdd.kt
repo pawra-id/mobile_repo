@@ -41,7 +41,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -62,8 +61,8 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import id.pawra.R
 import id.pawra.data.ViewModelFactory
-import id.pawra.ui.screen.pet.DogAddFormEvent
-import id.pawra.ui.screen.pet.PetViewModel
+import id.pawra.ui.screen.pet.profile.DogAddFormEvent
+import id.pawra.ui.screen.pet.profile.PetViewModel
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkGreen
 import id.pawra.ui.theme.DisabledGreen

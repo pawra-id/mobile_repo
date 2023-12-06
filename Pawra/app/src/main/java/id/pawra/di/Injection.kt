@@ -6,6 +6,7 @@ import id.pawra.data.local.preference.Preference
 import id.pawra.data.local.preference.dataStore
 import id.pawra.data.remote.retrofit.ApiConfig
 import id.pawra.data.remote.retrofit.ApiService
+import id.pawra.data.repository.ActivitiesRepository
 import id.pawra.data.repository.PetRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -25,5 +26,10 @@ object Injection {
     fun providePetRepository(context: Context): PetRepository {
         val apiService = getApiService(context)
         return PetRepository.getInstance(apiService)
+    }
+
+    fun provideActivitiesRepository(context: Context): ActivitiesRepository {
+        val apiService = getApiService(context)
+        return ActivitiesRepository.getInstance(apiService)
     }
 }

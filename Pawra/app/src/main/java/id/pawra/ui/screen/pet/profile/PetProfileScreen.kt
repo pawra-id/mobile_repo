@@ -1,4 +1,4 @@
-package id.pawra.ui.screen.pet
+package id.pawra.ui.screen.pet.profile
 
 import PetProfile
 import android.os.Build
@@ -65,6 +65,7 @@ fun PetProfileScreen(
             petViewModel.petDetailState.collectAsState().value.let { petDetailState ->
                 when (petDetailState) {
                     is UiState.Success -> {
+                        isLoading = false
                         PetProfile(
                             pet = petDetailState.data
                         )

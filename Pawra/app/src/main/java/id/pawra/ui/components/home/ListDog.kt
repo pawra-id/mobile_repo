@@ -20,8 +20,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,7 +38,7 @@ import id.pawra.R
 import id.pawra.data.ViewModelFactory
 import id.pawra.ui.common.UiState
 import id.pawra.ui.navigation.Screen
-import id.pawra.ui.screen.pet.PetViewModel
+import id.pawra.ui.screen.pet.profile.PetViewModel
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkBlue
 import id.pawra.ui.theme.DarkGreen

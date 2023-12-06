@@ -38,7 +38,7 @@ class AuthViewModel(
     val updateProfileState: StateFlow<UiState<SignUpResponse>>
         get() = _updateProfileState
 
-    private val _sessionState: MutableStateFlow<SessionModel> = MutableStateFlow(SessionModel(0, "", false, "", "", "", ""))
+    private val _sessionState: MutableStateFlow<SessionModel> = MutableStateFlow(SessionModel(0, "", false, "", "", "", "", ""))
     val sessionState: StateFlow<SessionModel>
         get() = _sessionState
 
@@ -75,6 +75,7 @@ class AuthViewModel(
         email: String,
         summary: String,
         imageUrl: String,
+        password: String,
         file: MultipartBody.Part? = null
     ) {
         viewModelScope.launch {
@@ -93,7 +94,8 @@ class AuthViewModel(
                 username = name,
                 email = email,
                 summary = summary,
-                image = image
+                image = image,
+                password = password
             ).collect { userDetail ->
                 when {
                     userDetail.error != null -> _signUpState.value = UiState.Error(userDetail.error)
@@ -112,7 +114,7 @@ class AuthViewModel(
     fun logout() {
         viewModelScope.launch {
             authRepository.logout()
-            _sessionState.value = SessionModel(0, "", false, "", "", "", "")
+            _sessionState.value = SessionModel(0, "", false, "", "", "", "", "")
         }
     }
 

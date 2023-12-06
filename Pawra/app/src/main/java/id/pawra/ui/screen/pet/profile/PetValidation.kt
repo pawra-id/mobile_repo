@@ -1,6 +1,4 @@
-package id.pawra.ui.screen.pet
-
-import android.util.Patterns
+package id.pawra.ui.screen.pet.profile
 
 class ValidateDogName {
     fun execute(name: String): ValidationResult {

@@ -24,12 +24,12 @@ import id.pawra.ui.screen.auth.SignInScreen
 import id.pawra.ui.screen.auth.SignUpScreen
 import id.pawra.ui.screen.explore.ExploreScreen
 import id.pawra.ui.screen.home.HomeScreen
-import id.pawra.ui.screen.pet.ActivitiesAddScreen
-import id.pawra.ui.screen.pet.ActivitiesPrevScreen
-import id.pawra.ui.screen.pet.PetActivitiesScreen
-import id.pawra.ui.screen.pet.PetAddScreen
-import id.pawra.ui.screen.pet.PetMentalHealthScreen
-import id.pawra.ui.screen.pet.PetProfileScreen
+import id.pawra.ui.screen.pet.activities.ActivitiesAddScreen
+import id.pawra.ui.screen.pet.activities.ActivitiesPrevScreen
+import id.pawra.ui.screen.pet.activities.PetActivitiesScreen
+import id.pawra.ui.screen.pet.profile.PetAddScreen
+import id.pawra.ui.screen.pet.mentalhealth.PetMentalHealthScreen
+import id.pawra.ui.screen.pet.profile.PetProfileScreen
 import id.pawra.ui.screen.pet.PetScreen
 import id.pawra.ui.screen.profile.ProfileEditScreen
 import id.pawra.ui.screen.profile.ProfileScreen
@@ -115,9 +115,14 @@ fun Pawra(
             )
         }
 
-        composable(Screen.PetActivitiesAdd.route) {
+        composable(
+            Screen.PetActivitiesAdd.route,
+            listOf(navArgument("petId") { type = NavType.IntType })
+        ) {
+            val petId = it.arguments?.getInt("petId") ?: 0
             ActivitiesAddScreen(
-                navController = navController
+                navController = navController,
+                petId = petId
             )
         }
 
@@ -221,7 +226,10 @@ fun PetNav(
             }
 
             composable(Screen.PetActivities.route) {
-                PetActivitiesScreen(navController = navController)
+                PetActivitiesScreen(
+                    navController = navController,
+                    petId = petId
+                )
             }
 
             composable(Screen.PetMentalHealth.route) {
