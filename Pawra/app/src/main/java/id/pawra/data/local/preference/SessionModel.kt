@@ -8,4 +8,5 @@ data class SessionModel(
     val email: String,
     val summary: String,
     val image: String,
+    val password: String
 )

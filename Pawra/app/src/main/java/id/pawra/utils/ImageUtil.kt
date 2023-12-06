@@ -1,4 +1,4 @@
-package id.pawra.ui.common
+package id.pawra.utils
 
 import android.content.Context
 import android.net.Uri

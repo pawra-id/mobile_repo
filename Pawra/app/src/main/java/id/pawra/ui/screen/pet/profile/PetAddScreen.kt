@@ -1,4 +1,4 @@
-package id.pawra.ui.screen.pet
+package id.pawra.ui.screen.pet.profile
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,7 +26,6 @@ import id.pawra.ui.components.addpet.PetAdd
 import id.pawra.ui.components.addpet.PetAddTopBar
 import id.pawra.ui.components.dialog.ResultDialog
 import id.pawra.ui.components.loading.LoadingBox
-import id.pawra.ui.navigation.Screen
 import id.pawra.ui.theme.PawraTheme
 
 @Composable

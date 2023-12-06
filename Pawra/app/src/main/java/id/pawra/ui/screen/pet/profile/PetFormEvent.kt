@@ -1,7 +1,4 @@
-package id.pawra.ui.screen.pet
-
-import id.pawra.ui.screen.auth.SignUpFormEvent
-import okhttp3.MultipartBody
+package id.pawra.ui.screen.pet.profile
 
 sealed class DogAddFormEvent {
     data class DogNameChanged(val name: String) : DogAddFormEvent()

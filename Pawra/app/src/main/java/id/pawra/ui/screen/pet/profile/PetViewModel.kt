@@ -1,4 +1,4 @@
-package id.pawra.ui.screen.pet
+package id.pawra.ui.screen.pet.profile
 
 import android.content.Context
 import android.net.Uri
@@ -12,7 +12,7 @@ import id.pawra.data.remote.response.PetResponseItem
 import id.pawra.data.repository.AuthRepository
 import id.pawra.data.repository.PetRepository
 import id.pawra.ui.common.UiState
-import id.pawra.ui.common.uriToFile
+import id.pawra.utils.uriToFile
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch

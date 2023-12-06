@@ -80,7 +80,8 @@ class AuthRepository private constructor(
         email: String = "",
         summary: String = "",
         address: String = "",
-        image: String = ""
+        image: String = "",
+        password: String = ""
     ): Flow<SignUpResponse> {
         try {
             val userData = mutableMapOf<String, Any>()
@@ -89,6 +90,7 @@ class AuthRepository private constructor(
             userData["summary"] = summary
             userData["address"] = address
             userData["image"] = image
+            userData["password"] = password
 
             val response = apiService.updateProfile("Bearer $token", id, userData)
             val sessionModel = SessionModel(
@@ -98,7 +100,8 @@ class AuthRepository private constructor(
                 name = username,
                 email = email,
                 summary = summary,
-                image = image
+                image = image,
+                password = password
             )
             preference.saveSession(sessionModel)
 
@@ -156,7 +159,8 @@ class AuthRepository private constructor(
                     "I have one dog, his name is Max. \n" +
                     "He’s been with me for a year.\n" +
                     "Playing catch is our favorite activity"),
-            image = user?.image ?: ""
+            image = user?.image ?: "",
+            password = user?.password ?: ""
         )
         preference.saveSession(sessionModel)
     }
