@@ -21,15 +21,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import id.pawra.R
+import id.pawra.ui.navigation.Screen
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.PawraTheme
 
 @Composable
 fun Blogs(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavController
 ) {
 
     val title = "Here is 5 possible reasons your dog become aggressive."
@@ -42,7 +46,9 @@ fun Blogs(
                 bottom = 10.dp
             )
             .clip(shape = RoundedCornerShape(15.dp))
-            .clickable { }
+            .clickable {
+                navController.navigate(Screen.BlogDetail.route)
+            }
     ) {
         Row(
             modifier = modifier.fillMaxWidth(),
@@ -103,6 +109,6 @@ fun Blogs(
 @Preview(showBackground = true)
 fun BlogsPreview() {
     PawraTheme {
-        Blogs()
+        Blogs(navController = rememberNavController())
     }
 }

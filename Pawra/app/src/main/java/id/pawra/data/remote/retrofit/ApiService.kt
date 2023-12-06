@@ -1,17 +1,14 @@
 package id.pawra.data.remote.retrofit
 
-import id.pawra.data.remote.response.PetResponse
 import id.pawra.data.remote.response.PetResponseItem
 import id.pawra.data.remote.response.SignInResponse
 import id.pawra.data.remote.response.SignUpResponse
 import okhttp3.MultipartBody
-import org.json.JSONObject
 import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Header
-import retrofit2.http.Headers
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT

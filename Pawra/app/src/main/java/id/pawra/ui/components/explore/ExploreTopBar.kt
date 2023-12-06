@@ -48,7 +48,7 @@ fun ExploreTopBar(
         )
 
         IconButton(
-            onClick = { /* Handle setting click */ },
+            onClick = {},
         ) {
             Icon(
                 imageVector = Icons.Filled.Settings,

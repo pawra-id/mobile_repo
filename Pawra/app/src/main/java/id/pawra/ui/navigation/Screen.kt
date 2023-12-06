@@ -12,6 +12,9 @@ sealed class Screen(val route: String) {
     data object Explore : Screen("explore")
     data object Profile : Screen("profile")
 
+    // Explore Navigation
+    data object BlogDetail : Screen("blog_detail")
+
     // Profile Navigation
     data object EditProfile : Screen("edit_profile")
 
@@ -24,7 +27,6 @@ sealed class Screen(val route: String) {
     data object PetActivitiesAdd : Screen("pet_activities_add")
     data object PetActivitiesPrev : Screen("pet_activities_prev")
     data object PetMentalHealth : Screen("pet_mental_health")
-
     data object PetMentalHealthResult : Screen("pet_mental_health_result")
 
     // Vet Navigation

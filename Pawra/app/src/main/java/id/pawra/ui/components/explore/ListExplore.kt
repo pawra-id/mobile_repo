@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import id.pawra.R
 import id.pawra.ui.theme.Black
@@ -44,7 +45,7 @@ fun ListExplore(
             }
         } else {
             (0 until 3).forEach { _ ->
-                Blogs()
+                Blogs(navController = rememberNavController())
             }
         }
     }
