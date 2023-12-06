@@ -66,7 +66,7 @@ fun Pet(
     petViewModel.getDog()
 
     var isLoading by remember { mutableStateOf(false) }
-    var showDialog by remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(true) }
 
     if (isLoading) {
         Column (
