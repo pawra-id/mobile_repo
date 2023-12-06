@@ -54,8 +54,12 @@ class PetViewModel(
             petRepository.getDog(user)
                 .collect { dogs ->
                     when {
-                        dogs.error != null -> _petState.value = UiState.Error(dogs.error)
-                        else -> _petState.value = UiState.Success(dogs.petResponse ?: listOf())
+                        dogs.error != null ->{
+                            _petState.value = UiState.Error(dogs.error)
+                        }
+                        else -> {
+                            _petState.value = UiState.Success(dogs.petResponse ?: listOf())
+                        }
                     }
                 }
         }
@@ -67,8 +71,12 @@ class PetViewModel(
             petRepository.getDetailDog(user, petId)
                 .collect { dogDetail ->
                     when {
-                        dogDetail.error != null -> _petDetailState.value = UiState.Error(dogDetail.error)
-                        else -> _petDetailState.value = UiState.Success(dogDetail)
+                        dogDetail.error != null ->{
+                            _petDetailState.value = UiState.Error(dogDetail.error)
+                        }
+                        else -> {
+                            _petDetailState.value = UiState.Success(dogDetail)
+                        }
                     }
                 }
         }
