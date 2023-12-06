@@ -5,7 +5,9 @@ import com.google.gson.annotations.SerializedName
 data class PetResponse(
 
 	@field:SerializedName("PetResponse")
-	val petResponse: List<PetResponseItem>? = null
+	val petResponse: List<PetResponseItem>? = null,
+
+	val error: String? = null
 )
 
 data class Owner(
@@ -77,5 +79,7 @@ data class PetResponseItem(
 	val age: Int? = null,
 
 	@field:SerializedName("height")
-	val height: Int? = null
+	val height: Int? = null,
+
+	val error: String? = null
 )
