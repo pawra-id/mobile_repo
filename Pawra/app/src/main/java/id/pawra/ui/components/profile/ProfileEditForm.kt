@@ -216,15 +216,16 @@ fun ProfileEditForm(
                     )
                 }
 
+                viewModel.uploadImage(userInfo.image, multipartBody)
+
                 viewModel.updateProfile(
                     id = userInfo.id,
                     token = userInfo.token,
                     name = name,
                     email = email,
                     summary = bio,
-                    imageUrl = imageUri,
-                    password = userInfo.password,
-                    file = multipartBody
+                    image = viewModel.image,
+                    password = userInfo.password
                 )
 
                 showDialog(true)

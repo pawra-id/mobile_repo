@@ -119,9 +119,11 @@ fun Pawra(
 
         composable(
             Screen.PetActivitiesAdd.route,
-            listOf(navArgument("petId") { type = NavType.IntType })
+            listOf(navArgument("petId") {
+                nullable = true
+            })
         ) {
-            val petId = it.arguments?.getInt("petId") ?: 0
+            val petId = it.arguments?.getString("petId")?.toInt() ?: 0
             ActivitiesAddScreen(
                 navController = navController,
                 petId = petId

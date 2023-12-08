@@ -28,7 +28,9 @@ data class ActivitiesResponseItem(
 	val dog: PetResponseItem? = null,
 
 	@field:SerializedName("tags")
-	val tags: List<TagsItem>? = null
+	val tags: List<TagsItem>? = null,
+
+	val error: String? = null
 )
 
 data class TagsItem(

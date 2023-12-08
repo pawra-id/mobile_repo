@@ -42,6 +42,8 @@ class AuthViewModel(
     val sessionState: StateFlow<SessionModel>
         get() = _sessionState
 
+    var image by mutableStateOf("")
+
     private fun signIn(username: String, password: String) {
         viewModelScope.launch {
             _signInState.value = UiState.Loading
@@ -74,20 +76,10 @@ class AuthViewModel(
         name: String,
         email: String,
         summary: String,
-        imageUrl: String,
+        image: String,
         password: String,
-        file: MultipartBody.Part? = null
     ) {
         viewModelScope.launch {
-            val user = authRepository.getSession().first()
-            var image = imageUrl
-            if (file != null) {
-                authRepository.postProfileImage(user, file)
-                    .collect { result ->
-                        image = result
-                    }
-            }
-
             authRepository.updateProfile(
                 id = id,
                 token = token,
@@ -101,6 +93,19 @@ class AuthViewModel(
                     userDetail.error != null -> _signUpState.value = UiState.Error(userDetail.error)
                     else -> _signUpState.value = UiState.Success(userDetail)
                 }
+            }
+        }
+    }
+
+    fun uploadImage(imageUrl: String, file: MultipartBody.Part? = null) {
+        viewModelScope.launch {
+            image = imageUrl
+            val user = authRepository.getSession().first()
+            if (file != null) {
+                authRepository.postProfileImage(user, file)
+                    .collect { result ->
+                        image = result
+                    }
             }
         }
     }
