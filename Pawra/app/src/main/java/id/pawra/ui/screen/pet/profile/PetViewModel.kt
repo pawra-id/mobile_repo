@@ -48,6 +48,12 @@ class PetViewModel(
     val petAddState: StateFlow<UiState<PetResponseItem>>
         get() = _petAddState
 
+    private val _petListState: MutableStateFlow<List<MutableMap<*, *>>> = MutableStateFlow(
+        listOf()
+    )
+    val petListState: StateFlow<List<MutableMap<*, *>>>
+        get() = _petListState
+
     fun getDog() {
         viewModelScope.launch {
             val user = authRepository.getSession().first()
@@ -82,7 +88,44 @@ class PetViewModel(
         }
     }
 
-    fun addDog(
+    fun getListDogToAddDogForm(petId: Int) {
+        viewModelScope.launch {
+            val user = authRepository.getSession().first()
+            val listDog = mutableListOf<MutableMap<*, *>>()
+            if (petId != 0){
+                petRepository.getDetailDog(user, petId)
+                    .collect { dogDetail ->
+                        when {
+                            dogDetail.error != null ->{
+                                _petListState.value = listDog
+                            }
+                            else -> {
+                                listDog.add(mutableMapOf("id" to dogDetail.id, "name" to dogDetail.name))
+                                _petListState.value = listDog
+                            }
+                        }
+                    }
+            } else {
+                petRepository.getDog(user)
+                    .collect { dogs ->
+                        when {
+                            dogs.error != null ->{
+                                _petListState.value = listDog
+                            }
+                            else -> {
+                                dogs.petResponse?.forEach{ item ->
+                                    listDog.add(mutableMapOf("id" to item.id, "name" to item.name))
+                                }
+                                _petListState.value = listDog
+                            }
+                        }
+                    }
+            }
+
+        }
+    }
+
+    private fun addDog(
         name: String,
         breed: String,
         neutred: Boolean,

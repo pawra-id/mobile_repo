@@ -90,7 +90,6 @@ class AuthRepository private constructor(
             userData["summary"] = summary
             userData["address"] = address
             userData["image"] = image
-            userData["password"] = password
 
             val response = apiService.updateProfile("Bearer $token", id, userData)
             val sessionModel = SessionModel(

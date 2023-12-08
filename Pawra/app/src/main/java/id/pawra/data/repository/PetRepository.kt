@@ -78,19 +78,19 @@ class PetRepository private constructor(
 
     suspend fun addDog(user: SessionModel, petData: PetData): Flow<PetResponseItem> {
         try {
-            val userData = mutableMapOf<String, Any>()
-            userData["name"] = petData.name
-            userData["gender"] = petData.gender
-            userData["age"] = petData.age
-            userData["breed"] = petData.breed
-            userData["neutered"] = petData.neutred
-            userData["color"] = petData.primaryColor
-            userData["weight"] = petData.weight
-            userData["height"] = petData.height
-            userData["description"] = petData.summary.toString()
-            userData["image"] = petData.image
+            val data = mutableMapOf<String, Any>()
+            data["name"] = petData.name
+            data["gender"] = petData.gender
+            data["age"] = petData.age
+            data["breed"] = petData.breed
+            data["neutered"] = petData.neutred
+            data["color"] = petData.primaryColor
+            data["weight"] = petData.weight
+            data["height"] = petData.height
+            data["description"] = petData.summary.toString()
+            data["image"] = petData.image
 
-            return flowOf(apiService.addDog("Bearer ${user.token}", userData))
+            return flowOf(apiService.addDog("Bearer ${user.token}", data))
 
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
