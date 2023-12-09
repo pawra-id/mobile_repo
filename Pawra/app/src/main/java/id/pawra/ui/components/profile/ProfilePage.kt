@@ -25,7 +25,7 @@ import id.pawra.ui.common.UiState
 import id.pawra.ui.screen.auth.AuthViewModel
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkGreen
-import id.pawra.ui.theme.MobileGray
+import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
 
@@ -33,11 +33,10 @@ import id.pawra.ui.theme.Poppins
 fun ProfilePage(
     modifier: Modifier = Modifier,
     viewModel: AuthViewModel,
-    navController: NavController
 ) {
 
     viewModel.getSession()
-    val sessionState by viewModel.sessionState.collectAsState()
+    val userInfo by viewModel.sessionState.collectAsState()
 
     Column(
         modifier = modifier
@@ -46,51 +45,40 @@ fun ProfilePage(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        ProfileImage()
+        ProfileImage(
+            image = userInfo.image
+        )
 
-        when (sessionState) {
-            is UiState.Success -> {
-                val userInfo = (sessionState as UiState.Success<SessionModel>).data
-                Text(
-                    text = userInfo.name,
-                    modifier = Modifier.fillMaxWidth(),
-                    color = DarkGreen,
-                    fontFamily = Poppins,
-                    textAlign = TextAlign.Center,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold
-                )
+        Text(
+            text = userInfo.name,
+            modifier = Modifier.fillMaxWidth(),
+            color = DarkGreen,
+            fontFamily = Poppins,
+            textAlign = TextAlign.Center,
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold
+        )
 
-                Text(
-                    text = userInfo.email,
-                    modifier = Modifier.padding(top = 7.dp),
-                    color = MobileGray,
-                    fontFamily = Poppins,
-                    fontSize = 13.sp,
-                    textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.Normal
-                )
+        Text(
+            text = userInfo.email,
+            modifier = Modifier.padding(top = 7.dp),
+            color = Gray,
+            fontFamily = Poppins,
+            fontSize = 13.sp,
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Normal
+        )
 
-                Text(
-                    text = userInfo.summary,
-                    modifier = Modifier.padding(top = 22.dp),
-                    color = Black,
-                    fontFamily = Poppins,
-                    fontSize = 13.sp,
-                    textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.Normal
-                )
-            }
+        Text(
+            text = userInfo.summary,
+            modifier = Modifier.padding(top = 22.dp),
+            color = Black,
+            fontFamily = Poppins,
+            fontSize = 13.sp,
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Normal
+        )
 
-            is UiState.Error -> {
-
-                Text(text = "Error: ${(sessionState as UiState.Error).errorMessage}")
-            }
-
-            else -> {
-                Text(text = "Loading...")
-            }
-        }
     }
 }
 
@@ -99,8 +87,7 @@ fun ProfilePage(
 fun ProfilePagePreview() {
     PawraTheme {
         ProfilePage(viewModel = viewModel(
-            factory = ViewModelFactory(Injection.provideAuthRepository(LocalContext.current))
-        ),
-            navController = rememberNavController())
+            factory = ViewModelFactory(LocalContext.current)
+        ))
     }
 } 

@@ -1,11 +1,13 @@
 package id.pawra.data.local.preference
 
 import android.content.Context
+import android.provider.Telephony.Carriers.PASSWORD
 import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
@@ -18,32 +20,33 @@ class Preference private constructor(private val dataStore: DataStore<Preference
 
     suspend fun saveSession(user: SessionModel) {
         dataStore.edit { preferences ->
+            preferences[ID] = user.id
             preferences[TOKEN_KEY] = user.token
             preferences[IS_LOGIN_KEY] = true
             preferences[NAME_KEY] = user.name
             preferences[EMAIL_KEY] = user.email
             preferences[SUMMARY_KEY] = user.summary
+            preferences[IMAGE] = user.image
+            preferences[PASSWORD] = user.password
         }
-        Log.d("Preference", "Session saved: $user")
     }
 
     fun getSession(): Flow<SessionModel> {
         return dataStore.data.map { preferences ->
-            Log.d("Preference", "Preferences: $preferences")
             SessionModel(
+                preferences[ID] ?: 0,
                 preferences[TOKEN_KEY] ?: "",
                 preferences[IS_LOGIN_KEY] ?: false,
                 preferences[NAME_KEY] ?: "",
                 preferences[EMAIL_KEY] ?: "",
-                preferences[SUMMARY_KEY] ?: ""
+                preferences[SUMMARY_KEY] ?: "",
+                preferences[IMAGE] ?: "",
+                preferences[PASSWORD] ?: "",
             )
-        }.onEach {
-            Log.d("Preference", "Session retrieved: $it")
         }
     }
 
     suspend fun logout() {
-        Log.d("Preference", "Logging out")
         dataStore.edit { preferences ->
             preferences.clear()
         }
@@ -53,11 +56,14 @@ class Preference private constructor(private val dataStore: DataStore<Preference
         @Volatile
         private var INSTANCE: Preference? = null
 
+        private val ID = intPreferencesKey("id")
         private val TOKEN_KEY = stringPreferencesKey("token")
         private val IS_LOGIN_KEY = booleanPreferencesKey("isLogin")
         private val NAME_KEY = stringPreferencesKey("name")
         private val EMAIL_KEY = stringPreferencesKey("email")
         private val SUMMARY_KEY = stringPreferencesKey("summary")
+        private val IMAGE = stringPreferencesKey("image")
+        private val PASSWORD = stringPreferencesKey("password")
 
         fun getInstance(dataStore: DataStore<Preferences>): Preference {
             return INSTANCE ?: synchronized(this) {

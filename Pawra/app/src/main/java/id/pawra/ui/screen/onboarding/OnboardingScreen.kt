@@ -43,7 +43,7 @@ import id.pawra.ui.components.signup.SignUpFooter
 import id.pawra.ui.navigation.Screen
 import id.pawra.ui.theme.BottomCardShape
 import id.pawra.ui.theme.LightGreen
-import id.pawra.ui.theme.MobileGray
+import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -131,7 +131,7 @@ fun OnBoardingPager(
                                 start = 30.dp,
                                 end = 30.dp
                             ),
-                            color = (MobileGray),
+                            color = (Gray),
                             fontFamily = Poppins,
                             fontSize = 13.sp,
                             textAlign = TextAlign.Center,
@@ -141,7 +141,7 @@ fun OnBoardingPager(
                         Text(
                             text = item[pagerState.currentPage].desc,
                             modifier = Modifier.padding(top = 5.dp, start = 30.dp, end = 30.dp),
-                            color = (MobileGray),
+                            color = (Gray),
                             fontFamily = Poppins,
                             fontSize = 13.sp,
                             textAlign = TextAlign.Center,

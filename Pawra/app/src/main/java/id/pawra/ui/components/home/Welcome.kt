@@ -1,5 +1,6 @@
 package id.pawra.ui.components.home
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,18 +15,21 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
+import coil.compose.rememberImagePainter
 import id.pawra.R
+import id.pawra.ui.theme.Black
+import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
 
@@ -35,6 +39,10 @@ fun Welcome(
     name: String,
     modifier: Modifier = Modifier
 ) {
+    val imageUri = rememberSaveable { mutableStateOf(image) }
+    val painter = rememberImagePainter(
+        imageUri.value.ifEmpty { R.drawable.ic_user }
+    )
     Row(
         modifier = modifier
             .padding(
@@ -46,8 +54,8 @@ fun Welcome(
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        AsyncImage(
-            model = image,
+        Image(
+            painter = painter,
             contentDescription = "Profile picture",
             modifier = modifier
                 .size(36.dp)
@@ -63,7 +71,7 @@ fun Welcome(
             Text(
                 text = stringResource(R.string.hi_pawra, name),
                 fontSize = 16.sp,
-                color = colorResource(id = R.color.black),
+                color = Black,
                 fontFamily = Poppins,
                 fontWeight = FontWeight.SemiBold,
                 modifier = modifier.height(20.dp)
@@ -71,7 +79,7 @@ fun Welcome(
             Text(
                 text = "Welcome Back",
                 fontSize = 10.sp,
-                color = colorResource(id = R.color.gray),
+                color = Gray,
                 fontFamily = Poppins,
                 modifier = modifier.height(14.dp)
             )
@@ -83,7 +91,7 @@ fun Welcome(
             Icon(
                 imageVector = Icons.Filled.Settings,
                 contentDescription = null,
-                tint = colorResource(id = R.color.black)
+                tint = Black
             )
         }
 
@@ -94,6 +102,6 @@ fun Welcome(
 @Preview(showBackground = true)
 fun WelcomePreview() {
     PawraTheme {
-        Welcome("a", "haris")
+        Welcome("", "")
     }
 }

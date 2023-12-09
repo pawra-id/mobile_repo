@@ -49,13 +49,12 @@ fun SplashScreen(navController: NavController) {
         Animatable(0.5f)
     }
     val viewModel: AuthViewModel = viewModel(
-        factory = ViewModelFactory(Injection.provideAuthRepository(LocalContext.current))
+        factory = ViewModelFactory(LocalContext.current)
     )
 
     viewModel.getSession()
 
     val sessionState by viewModel.sessionState.collectAsState()
-    val userInfo = (sessionState as UiState.Success<SessionModel>).data
 
     LaunchedEffect(key1 = true) {
         scale.animateTo(
@@ -68,7 +67,7 @@ fun SplashScreen(navController: NavController) {
             )
         )
         delay(3000L)
-        navController.navigate(if (userInfo.isLogin) Screen.Home.route else Screen.OnBoarding.route){
+        navController.navigate(if (sessionState.isLogin) Screen.Home.route else Screen.OnBoarding.route){
             popUpTo(Screen.SplashScreen.route) {
                 inclusive = true
             }

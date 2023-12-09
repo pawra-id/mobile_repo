@@ -22,6 +22,7 @@ import id.pawra.data.ViewModelFactory
 import id.pawra.di.Injection
 import id.pawra.ui.common.UiState
 import id.pawra.ui.components.dialog.ResultDialog
+import id.pawra.ui.components.loading.LoadingBox
 import id.pawra.ui.components.signup.SignUpFooter
 import id.pawra.ui.components.signup.SignUpForm
 import id.pawra.ui.components.signup.SignUpHeader
@@ -30,7 +31,7 @@ import id.pawra.ui.components.signup.SignUpHeader
 fun SignUpScreen(
     modifier: Modifier = Modifier,
     viewModel: AuthViewModel = viewModel(
-        factory = ViewModelFactory(Injection.provideAuthRepository(LocalContext.current))
+        factory = ViewModelFactory(LocalContext.current)
     ),
     navController: NavController
 ) {
@@ -43,7 +44,7 @@ fun SignUpScreen(
                 verticalArrangement = Arrangement.Center,
                 modifier = modifier.fillMaxSize()
             ) {
-                CircularProgressIndicator()
+                LoadingBox()
             }
         }
 
@@ -72,28 +73,24 @@ fun SignUpScreen(
                     }
                     is UiState.Success -> {
                         if(showDialog) {
+                            isLoading = false
                             ResultDialog(
                                 success = true,
-                                message = userState.data.message.toString(),
+                                message = "User created successfully",
                                 setShowDialog = {
                                     showDialog = it
-                                },
-                                setLoading = {
-                                    isLoading = it
                                 }
                             )
                         }
                     }
                     is UiState.Error -> {
                         if(showDialog) {
+                            isLoading = false
                             ResultDialog(
                                 success = false,
                                 message = userState.errorMessage,
                                 setShowDialog = {
                                     showDialog = it
-                                },
-                                setLoading = {
-                                    isLoading = it
                                 }
                             )
                         }

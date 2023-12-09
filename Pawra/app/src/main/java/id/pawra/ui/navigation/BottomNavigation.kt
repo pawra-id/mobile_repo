@@ -36,7 +36,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import id.pawra.R
+import id.pawra.ui.common.NoRippleTheme
+import id.pawra.ui.theme.DisabledGreen
+import id.pawra.ui.theme.LightGreen
 import id.pawra.ui.theme.PawraTheme
+import id.pawra.ui.theme.White
 import kotlinx.coroutines.delay
 
 @Composable
@@ -47,7 +51,7 @@ fun BottomNavigation(
     CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
         NavigationBar(
             modifier = modifier.fillMaxWidth(),
-            containerColor = colorResource(id = R.color.light_green),
+            containerColor = LightGreen,
         ) {
             val navBackStackEntry by navHomeController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry?.destination?.route
@@ -98,7 +102,7 @@ fun BottomNavigation(
                                 .width(50.dp)
                                 .height(50.dp)
                                 .background(
-                                    colorResource(id = if (selected) R.color.white else R.color.light_green),
+                                    if (selected) White else LightGreen,
                                     RoundedCornerShape(50)
                                 ),
                             contentAlignment = Alignment.Center
@@ -106,12 +110,12 @@ fun BottomNavigation(
                             Icon(
                                 painter = item.icon,
                                 contentDescription = item.title,
-                                tint = colorResource(id = if (selected) R.color.light_green else R.color.disabled_green)
+                                tint = if (selected) LightGreen else DisabledGreen
                             )
                         }
                     },
                     colors = NavigationBarItemDefaults.colors(
-                        indicatorColor = colorResource(id = R.color.light_green)
+                        indicatorColor = LightGreen
                     )
                 )
             }
@@ -148,14 +152,6 @@ private fun BackPressSample() {
         backPressState = BackPress.InitialTouch
         showToast = true
     }
-}
-
-private object NoRippleTheme : RippleTheme {
-    @Composable
-    override fun defaultColor() = Color.Unspecified
-
-    @Composable
-    override fun rippleAlpha(): RippleAlpha = RippleAlpha(0.0f,0.0f,0.0f,0.0f)
 }
 
 @Preview(showBackground = true)
