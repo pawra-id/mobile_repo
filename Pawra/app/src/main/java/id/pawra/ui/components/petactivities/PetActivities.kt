@@ -20,7 +20,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Search
@@ -30,6 +29,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -53,6 +53,7 @@ import id.pawra.data.ViewModelFactory
 import id.pawra.data.remote.response.TagsItem
 import id.pawra.ui.common.NoRippleTheme
 import id.pawra.ui.common.UiState
+import id.pawra.ui.components.dialog.ResultDialog
 import id.pawra.ui.components.general.SearchBar
 import id.pawra.ui.components.loading.LoadingBox
 import id.pawra.ui.navigation.Screen
@@ -75,10 +76,13 @@ fun PetActivities(
     petId: Int,
     modifier: Modifier = Modifier
 ) {
-    val query by remember { mutableStateOf("") }
+    val query by remember { activitiesViewModel.query }
     var activeFilter by remember { mutableStateOf(FilterActivities.Latest.name) }
 
-    activitiesViewModel.getActivities()
+    LaunchedEffect(Unit){
+        activitiesViewModel.getSpecificActivities(petId, "")
+    }
+
     var isLoading by remember { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(true) }
 
@@ -104,7 +108,7 @@ fun PetActivities(
 
             SearchBar(
                 query = query,
-                onQueryChange = {  },
+                onQueryChange = {activitiesViewModel.getSpecificActivities(petId, it)},
                 onSearch = {},
                 active = false,
                 onActiveChange = {},
@@ -174,6 +178,9 @@ fun PetActivities(
         }
         activitiesViewModel.activitiesState.collectAsState().value.let { activitiesState ->
             when (activitiesState) {
+                is UiState.Loading -> {
+                    isLoading = true
+                }
                 is UiState.Success -> {
                     isLoading = false
 
@@ -269,6 +276,19 @@ fun PetActivities(
                                 }
                             }
                         }
+                    }
+                }
+
+                is UiState.Error -> {
+                    if(showDialog) {
+                        isLoading = false
+                        ResultDialog(
+                            success = false,
+                            message = activitiesState.errorMessage,
+                            setShowDialog = {
+                                showDialog = it
+                            }
+                        )
                     }
                 }
 

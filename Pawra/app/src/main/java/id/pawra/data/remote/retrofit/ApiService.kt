@@ -15,6 +15,7 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService {
     @POST("users/")
@@ -67,6 +68,15 @@ interface ApiService {
 
     @GET("activities/")
     suspend fun getActivities(@Header("Authorization") authHeader: String): List<ActivitiesResponseItem>
+
+    @GET("activities/dog/{id}")
+    suspend fun getSpesificActivities(
+        @Header("Authorization") authHeader: String,
+        @Path("id") id: Int,
+        @Query("search") keyword: String? = "",
+        @Query("size") size: Int? = 15,
+        @Query("page") skip: Int? = 0
+    ): List<ActivitiesResponseItem>
 
     @POST("activities/")
     suspend fun addActivity(
