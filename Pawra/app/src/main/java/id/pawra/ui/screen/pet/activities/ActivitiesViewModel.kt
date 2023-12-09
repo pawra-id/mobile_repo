@@ -1,5 +1,6 @@
 package id.pawra.ui.screen.pet.activities
 
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -33,6 +34,9 @@ class ActivitiesViewModel(
     val addActivityState: StateFlow<UiState<ActivitiesResponseItem>>
         get() = _addActivityState
 
+    private val _query = mutableStateOf("")
+    val query: State<String> get() = _query
+
     fun getActivities() {
         viewModelScope.launch {
             _addActivityState.value = UiState.Loading
@@ -48,6 +52,43 @@ class ActivitiesViewModel(
                         }
                     }
                 }
+        }
+    }
+
+    fun getSpecificActivities(petId: Int, keyword: String) {
+
+        _query.value = keyword
+
+        viewModelScope.launch {
+            _addActivityState.value = UiState.Loading
+            val user = authRepository.getSession().first()
+            if (_query.value.isNotEmpty()) {
+                activitiesRepository.getSpesificActivities(user, petId, keyword)
+                    .collect { activities ->
+                        when {
+                            activities.error != null -> {
+                                _activitiesState.value = UiState.Error(activities.error)
+                            }
+                            else -> {
+                                _activitiesState.value = UiState.Success(activities.activitiesResponse ?: listOf())
+                            }
+                        }
+                    }
+            } else {
+                activitiesRepository.getSpesificActivities(user, petId)
+                    .collect { activities ->
+                        when {
+                            activities.error != null -> {
+                                _activitiesState.value = UiState.Error(activities.error)
+                            }
+
+                            else -> {
+                                _activitiesState.value =
+                                    UiState.Success(activities.activitiesResponse ?: listOf())
+                            }
+                        }
+                    }
+            }
         }
     }
 

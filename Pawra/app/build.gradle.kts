@@ -99,4 +99,7 @@ dependencies {
 
     implementation("com.google.accompanist:accompanist-permissions:0.32.0")
     implementation("com.google.android.libraries.places:places:3.3.0")
+
+    implementation("androidx.paging:paging-compose:3.2.1")
+    implementation("androidx.paging:paging-runtime-ktx:3.2.1")
 }
