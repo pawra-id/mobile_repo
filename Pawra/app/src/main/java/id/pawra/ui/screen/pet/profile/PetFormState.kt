@@ -1,6 +1,5 @@
 package id.pawra.ui.screen.pet.profile
 
-import okhttp3.MultipartBody
 
 data class DogAddFormState(
     val name: String = "",
@@ -35,7 +34,7 @@ data class DogUpdateFormState(
     val yearError: String? = null,
     val height: String = "",
     val heightError: String? = null,
-    val sex: Boolean = false,
+    val sex: String = "Male",
     val weight: String = "",
     val weightError: String? = null,
     val color: String = "",
@@ -44,4 +43,6 @@ data class DogUpdateFormState(
     val microchipIdError: String? = null,
     val summary: String = "",
     val summaryError: String? = null,
+    var file: String = "",
+    val fileError: String? = null,
 )

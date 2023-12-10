@@ -3,7 +3,6 @@ package id.pawra.ui.components.petprofile
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -24,25 +23,34 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import id.pawra.data.ViewModelFactory
+import id.pawra.ui.components.dialog.ConfirmationDialog
+import id.pawra.ui.components.dialog.ResultDialog
+import id.pawra.ui.navigation.Screen
+import id.pawra.ui.screen.pet.profile.PetViewModel
 import id.pawra.ui.theme.DarkGreen
 import id.pawra.ui.theme.DisabledGreen
 import id.pawra.ui.theme.LightGreen
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Red
-import id.pawra.ui.theme.White
 
 @Composable
 fun PetProfileTopBar(
     modifier: Modifier = Modifier,
-    navController: NavController
+    navController: NavController,
+    onDeleteClick: () -> Unit
 ) {
     var displayMenu by remember { mutableStateOf(false)}
+    var showDeleteConfirmation by remember { mutableStateOf(false) }
+    var showResultDialog by remember { mutableStateOf(false) }
 
     Box(
         contentAlignment = Alignment.CenterStart,
@@ -111,7 +119,7 @@ fun PetProfileTopBar(
                             color = DarkGreen
                         ) },
                         onClick = {
-                            /* Handle edit! */
+                            navController.navigate(Screen.PetUpdate.route)
                             displayMenu = false
                         },
                         leadingIcon = {
@@ -127,7 +135,7 @@ fun PetProfileTopBar(
                             color = Red
                         ) },
                         onClick = {
-                            /* Handle edit! */
+                            showDeleteConfirmation = true
                             displayMenu = false
                         },
                         leadingIcon = {
@@ -142,12 +150,41 @@ fun PetProfileTopBar(
 
         }
     }
+    if (showDeleteConfirmation) {
+        ConfirmationDialog(
+            headText = "Delete Confirmation",
+            warn = true,
+            message = "Are you sure you want to delete this?",
+            setShowDialog = { showDeleteConfirmation = it },
+            action = {
+                onDeleteClick()
+                showResultDialog = true
+            }
+        )
+    }
+
+    if (showResultDialog) {
+        ResultDialog(
+            success = true,
+            message = "Successful deletion",
+            setShowDialog = { showResultDialog = it },
+        )
+    }
 }
 
 @Composable
 @Preview(showBackground = true)
-fun PetProfileTopBarPreview() {
+fun PetProfileTopBarPreview(
+    petViewModel: PetViewModel = viewModel(
+        factory = ViewModelFactory(LocalContext.current)
+    )
+) {
     PawraTheme {
-        PetProfileTopBar(navController = rememberNavController())
+        PetProfileTopBar(
+            navController = rememberNavController(),
+            onDeleteClick = ({
+                petViewModel.deleteDogId()
+            })
+        )
     }
 }

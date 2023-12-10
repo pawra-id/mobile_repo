@@ -6,6 +6,7 @@ import id.pawra.data.remote.response.SignInResponse
 import id.pawra.data.remote.response.SignUpResponse
 import okhttp3.MultipartBody
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -51,6 +52,19 @@ interface ApiService {
     suspend fun getDetailDog(
         @Header("Authorization") authHeader: String,
         @Path("id") id: Int
+    ): PetResponseItem
+
+    @DELETE("dogs/{id}")
+    suspend fun deleteDog(
+        @Header("Authorization") authHeader: String,
+        @Path("id") id: Int
+    ): PetResponseItem
+
+    @PUT("dogs/{id}")
+    suspend fun updateDog(
+        @Header("Authorization") authHeader: String,
+        @Path("id") id: Int,
+        @Body body: MutableMap<String, Any>
     ): PetResponseItem
 
     @POST("dogs/")
