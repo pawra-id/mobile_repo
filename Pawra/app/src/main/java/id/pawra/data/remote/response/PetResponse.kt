@@ -4,8 +4,20 @@ import com.google.gson.annotations.SerializedName
 
 data class PetResponse(
 
-	@field:SerializedName("PetResponse")
-	val petResponse: List<PetResponseItem>? = null,
+	@field:SerializedName("items")
+	val items: List<PetResponseItem>? = null,
+
+	@field:SerializedName("total")
+	val total: Int? = null,
+
+	@field:SerializedName("pages")
+	val pages: Int? = null,
+
+	@field:SerializedName("size")
+	val size: Int? = null,
+
+	@field:SerializedName("page")
+	val page: Int? = null,
 
 	val error: String? = null
 )

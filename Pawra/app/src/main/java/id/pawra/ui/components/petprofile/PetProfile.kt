@@ -60,22 +60,6 @@ fun PetProfile(
         factory = ViewModelFactory(LocalContext.current)
     )
 ) {
-
-
-    val petData = PetData(
-        pet.image ?: "",
-        pet.name ?: "",
-        pet.breed ?: "",
-        pet.neutered ?: false,
-        pet.age ?: 0,
-        pet.height ?: 0,
-        pet.gender ?: "",
-        pet.weight ?: 0,
-        pet.color ?: "",
-        "",
-        pet.description ?: ""
-    )
-
     val painter = rememberAsyncImagePainter(pet.image?.ifEmpty { R.drawable.ic_pet })
 
     Column(
@@ -139,7 +123,7 @@ fun PetProfile(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = petData.gender,
+                        text = pet.gender ?: "",
                         fontFamily = Poppins,
                         fontSize = 11.sp,
                         color = DarkBlue,
@@ -178,7 +162,7 @@ fun PetProfile(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = petData.age.toString(),
+                        text = pet.age.toString(),
                         fontFamily = Poppins,
                         fontSize = 11.sp,
                         color = Orange,
@@ -219,7 +203,7 @@ fun PetProfile(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = petData.neutred.toYesNo(),
+                        text = pet.neutered?.toYesNo() ?: "",
                         fontFamily = Poppins,
                         fontSize = 11.sp,
                         color = DarkGreen,
@@ -236,7 +220,7 @@ fun PetProfile(
         ){
             Column {
                 Text(
-                    text = petData.name,
+                    text = pet.name ?: "",
                     color = Black,
                     fontFamily = Poppins,
                     fontWeight = FontWeight.SemiBold,
@@ -244,7 +228,7 @@ fun PetProfile(
                 )
 
                 Text(
-                    text = petData.breed,
+                    text = pet.breed ?: "",
                     color = Gray,
                     fontFamily = Poppins,
                     fontWeight = FontWeight.Normal,
@@ -260,16 +244,17 @@ fun PetProfile(
             horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             item {
-                InfoBox("Color", petData.primaryColor)
+                InfoBox("Color", pet.color ?: "")
             }
             item {
-                InfoBox("Weight", "${petData.weight} kg")
+                InfoBox("Weight", "${pet.weight} kg")
             }
             item {
-                InfoBox("Height", "${petData.height} cm")
+                InfoBox("Height", "${pet.height} cm")
             }
+            // TODO: microchip not provide
             item {
-                InfoBox("Microchip ID", petData.microchipId ?: "")
+                InfoBox("Microchip ID", "")
             }
         }
 
@@ -297,7 +282,7 @@ fun PetProfile(
                 Spacer(modifier = Modifier.height(2.dp))
 
                 Text(
-                    text = petData.summary ?: "",
+                    text = pet.description ?: "",
                     color = Black,
                     fontFamily = Poppins,
                     fontWeight = FontWeight.Medium,
@@ -306,65 +291,7 @@ fun PetProfile(
             }
         }
 
-        Box(
-            modifier = Modifier
-                .padding(horizontal = 22.dp)
-                .fillMaxWidth()
-                .heightIn(min = 80.dp, max = 100.dp)
-                .clip(shape = RoundedCornerShape(10.dp))
-                .background(DisabledBlue),
-            contentAlignment = Alignment.CenterStart
-        ) {
-            Column(
-                modifier = Modifier
-                    .padding(15.dp)
-            ) {
-                viewModel.getSession()
-                viewModel.sessionState.collectAsState().value.let { userInfo ->
-                    val painterOwner = rememberAsyncImagePainter(userInfo.image.ifEmpty { R.drawable.ic_user })
-
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        Image(
-                            painter = painterOwner,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .width(60.dp)
-                                .height(60.dp)
-                                .clip(CircleShape),
-                            contentScale = ContentScale.Crop
-                        )
-
-                        Column{
-                            Text(
-                                text = userInfo.name,
-                                color = Black,
-                                fontFamily = Poppins,
-                                fontWeight = FontWeight.SemiBold,
-                                fontSize = 14.sp,
-                            )
-
-                            Text(
-                                text = "Owner",
-                                color = DarkBlue,
-                                fontFamily = Poppins,
-                                fontWeight = FontWeight.Medium,
-                                fontSize = 13.sp,
-                            )
-
-                            Text(
-                                text = userInfo.email,
-                                color = Gray,
-                                fontFamily = Poppins,
-                                fontWeight = FontWeight.Medium,
-                                fontSize = 12.sp,
-                            )
-                        }
-                    }
-                }
-            }
-        }
+        PetProfileOwner(owner = pet.owner!!)
 
         Spacer(modifier = Modifier.height(30.dp))
     }
