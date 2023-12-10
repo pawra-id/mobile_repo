@@ -48,12 +48,7 @@ fun MenuSearch(
 
     Column(
         modifier = modifier
-            .padding(
-                start = 22.dp,
-                end = 22.dp,
-                top = 10.dp,
-                bottom = 10.dp
-            )
+            .padding(horizontal = 22.dp, vertical = 10.dp)
             .fillMaxWidth(),
     ) {
         CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {

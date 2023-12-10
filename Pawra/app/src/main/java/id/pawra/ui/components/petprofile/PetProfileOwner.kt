@@ -10,7 +10,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,9 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import id.pawra.data.ViewModelFactory
-import id.pawra.data.local.preference.SessionModel
-import id.pawra.di.Injection
-import id.pawra.ui.common.UiState
 import id.pawra.ui.screen.auth.AuthViewModel
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkBlue
@@ -38,48 +34,49 @@ fun PetProfileOwner(
     viewModel: AuthViewModel,
 ) {
     viewModel.getSession()
-    val userInfo by viewModel.sessionState.collectAsState()
+    viewModel.sessionState.collectAsState().value.let { userInfo ->
+        Box(
+            modifier = modifier
+                .width(306.dp)
+                .heightIn(min = 81.dp, max = 135.dp)
+                .background(DisabledBlue)
+                .clip(shape = RoundedCornerShape(10.dp))
+                .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 8.dp),
+            contentAlignment = Alignment.CenterStart
+        ){
+            Column(
+                modifier = Modifier
+                    .padding(8.dp)
+            ) {
+                Text(
+                    text = userInfo.name,
+                    color = Black,
+                    fontFamily = Poppins,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 13.sp,
+                )
 
-    Box(
-        modifier = modifier
-            .width(306.dp)
-            .heightIn(min = 81.dp, max = 135.dp)
-            .background(DisabledBlue)
-            .clip(shape = RoundedCornerShape(10.dp))
-            .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 8.dp),
-        contentAlignment = Alignment.CenterStart
-    ){
-        Column(
-            modifier = Modifier
-                .padding(8.dp)
-        ) {
-            Text(
-                text = userInfo.name,
-                color = Black,
-                fontFamily = Poppins,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 13.sp,
-            )
+                Text(
+                    text = "Owner",
+                    color = DarkBlue,
+                    fontFamily = Poppins,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 11.sp,
+                )
 
-            Text(
-                text = "Owner",
-                color = DarkBlue,
-                fontFamily = Poppins,
-                fontWeight = FontWeight.Normal,
-                fontSize = 11.sp,
-            )
-
-            Text(
-                text = userInfo.email,
-                color = Gray,
-                fontFamily = Poppins,
-                fontWeight = FontWeight.Normal,
-                fontSize = 10.sp,
-            )
+                Text(
+                    text = userInfo.email,
+                    color = Gray,
+                    fontFamily = Poppins,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 10.sp,
+                )
 
 
+            }
         }
     }
+
 }
 
 @Composable

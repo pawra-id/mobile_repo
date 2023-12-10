@@ -54,13 +54,8 @@ fun Banner(
     Row(
         modifier = modifier
             .horizontalScroll( rememberScrollState(),true)
-            .fillMaxWidth()
-            .padding(
-                start = 22.dp,
-                end = 22.dp,
-                top = 10.dp,
-                bottom = 10.dp
-            ),
+            .padding(horizontal = 22.dp, vertical = 10.dp)
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Box(

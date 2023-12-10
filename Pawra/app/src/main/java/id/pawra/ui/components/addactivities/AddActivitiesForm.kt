@@ -32,6 +32,7 @@ import androidx.compose.material3.InputChipDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -87,11 +88,14 @@ fun AddActivitiesForm (
     val state = activitiesViewModel.stateAddActivity
     var listDog = listOf<MutableMap<*,*>>()
 
-    petViewModel.getListDogToAddDogForm(petId)
+    LaunchedEffect(Unit){
+        petViewModel.getListDogToAddDogForm(petId)
+    }
+
     petViewModel.petListState.collectAsState(initial = emptyList()).value.let { dogList ->
         if (dogList.isNotEmpty()) {
             listDog = dogList
-            if (petId != 0) {
+            LaunchedEffect(Unit){
                 state.dog = dogList[0]["name"].toString()
                 state.dogId = dogList[0]["id"] as Int
             }

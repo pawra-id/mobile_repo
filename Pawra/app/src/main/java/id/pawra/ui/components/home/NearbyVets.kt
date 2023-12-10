@@ -77,13 +77,8 @@ fun NearbyVets(
 
     Column(
         modifier = modifier
-            .padding(
-                start = 22.dp,
-                end = 22.dp,
-                top = 10.dp,
-                bottom = 10.dp
-            )
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(horizontal = 22.dp, vertical = 10.dp),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically

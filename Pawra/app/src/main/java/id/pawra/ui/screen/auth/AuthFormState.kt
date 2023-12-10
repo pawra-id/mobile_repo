@@ -25,4 +25,6 @@ data class UpdateProfileFormState(
     var nameError: String? = null,
     var email: String = "",
     var emailError: String? = null,
+    var summary: String = "",
+    var summaryError: String? = null,
 )

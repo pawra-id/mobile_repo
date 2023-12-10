@@ -11,11 +11,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,20 +40,21 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import id.pawra.R
 import id.pawra.data.ViewModelFactory
-import id.pawra.utils.uriToFile
-import id.pawra.ui.navigation.Screen
 import id.pawra.ui.screen.auth.AuthViewModel
+import id.pawra.ui.screen.auth.SignInFormEvent
+import id.pawra.ui.screen.auth.UpdateProfileFormEvent
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkGreen
 import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.LightGray
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
+import id.pawra.ui.theme.Red
+import id.pawra.utils.uriToFile
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileEditForm(
     modifier: Modifier = Modifier,
@@ -61,10 +62,20 @@ fun ProfileEditForm(
     showDialog: (Boolean) -> Unit,
     navController: NavController
 ) {
+    val state = viewModel.stateUpdateProfile
     val context = LocalContext.current
 
+    var imageUri by rememberSaveable { mutableStateOf("") }
+    var isImageUpdate by rememberSaveable { mutableStateOf(false) }
+
     viewModel.getSession()
-    val userInfo by viewModel.sessionState.collectAsState()
+    val userInfo = viewModel.sessionState.collectAsState().value
+
+    LaunchedEffect(Unit){
+        state.name =  userInfo.name
+        state.email = userInfo.email
+        state.summary = userInfo.summary
+    }
 
     Column(
         modifier = modifier
@@ -72,12 +83,6 @@ fun ProfileEditForm(
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
-        var name by rememberSaveable { mutableStateOf(userInfo.name) }
-        var email by rememberSaveable { mutableStateOf(userInfo.email) }
-        var bio by rememberSaveable { mutableStateOf(userInfo.summary) }
-        var imageUri by rememberSaveable { mutableStateOf("") }
-        var isImageUpdate by rememberSaveable { mutableStateOf(false) }
 
         ProfileEditImage(
             userInfo.image,
@@ -91,37 +96,36 @@ fun ProfileEditForm(
             fontSize = 14.sp,
             modifier = modifier
                 .fillMaxWidth())
-        Box(
+
+        OutlinedTextField(
+            value = state.name,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+            onValueChange = { viewModel.onEventUpdateProfile(UpdateProfileFormEvent.NameChanged(it)) },
+            singleLine = true,
+            shape = RoundedCornerShape(10.dp),
             modifier = modifier
-                .fillMaxWidth()
                 .padding(bottom = 15.dp)
-                .drawBehind {
-                    drawRoundRect(
-                        color = (LightGray),
-                        size = Size(size.width, size.height),
-                        cornerRadius = CornerRadius(10.dp.toPx(), 10.dp.toPx())
+                .fillMaxWidth(),
+            textStyle = TextStyle.Default.copy(
+                fontSize = 16.sp,
+                color = (Black),
+                fontFamily = Poppins
+            ),
+            colors = OutlinedTextFieldDefaults.colors(
+                cursorColor = Color.Black,
+                focusedBorderColor = (DarkGreen),
+                unfocusedBorderColor = (DarkGreen),
+            ),
+            supportingText = {
+                if (state.nameError != null) {
+                    Text(
+                        text = state.nameError ?: "",
+                        color = Red,
                     )
                 }
-        ) {
-            OutlinedTextField(
-                value = name,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                onValueChange = { name = it },
-                singleLine = true,
-                shape = RoundedCornerShape(10.dp),
-                modifier = modifier.fillMaxWidth(),
-                textStyle = TextStyle.Default.copy(
-                    fontSize = 16.sp,
-                    color = (Black),
-                    fontFamily = Poppins
-                ),
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = (DarkGreen),
-                    unfocusedBorderColor = (DarkGreen),
-                    cursorColor = Color.Black,
-                )
-            )
-        }
+            },
+            isError = state.nameError != null
+        )
 
         Text(
             text = stringResource(R.string.email),
@@ -129,38 +133,36 @@ fun ProfileEditForm(
             fontSize = 14.sp,
             modifier = modifier
                 .fillMaxWidth())
-        Box(
+
+        OutlinedTextField(
+            value = state.email,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            onValueChange = { viewModel.onEventUpdateProfile(UpdateProfileFormEvent.EmailChanged(it)) },
+            singleLine = true,
+            shape = RoundedCornerShape(10.dp),
             modifier = modifier
                 .fillMaxWidth()
-                .padding(bottom = 15.dp)
-                .drawBehind {
-                    drawRoundRect(
-                        color = (LightGray),
-                        size = Size(size.width, size.height),
-                        cornerRadius = CornerRadius(10.dp.toPx(), 10.dp.toPx())
+                .padding(bottom = 15.dp),
+            textStyle = TextStyle.Default.copy(
+                fontSize = 16.sp,
+                color = (Black),
+                fontFamily = Poppins
+            ),
+            colors = OutlinedTextFieldDefaults.colors(
+                cursorColor = Color.Black,
+                focusedBorderColor = (DarkGreen),
+                unfocusedBorderColor = (DarkGreen),
+            ),
+            supportingText = {
+                if (state.emailError != null) {
+                    Text(
+                        text = state.emailError ?: "",
+                        color = Red,
                     )
                 }
-        ) {
-            OutlinedTextField(
-                value = email,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                onValueChange = { email = it },
-                singleLine = true,
-                shape = RoundedCornerShape(10.dp),
-                modifier = modifier
-                    .fillMaxWidth(),
-                textStyle = TextStyle.Default.copy(
-                    fontSize = 16.sp,
-                    color = (Black),
-                    fontFamily = Poppins
-                ),
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = (DarkGreen),
-                    unfocusedBorderColor = (DarkGreen),
-                    cursorColor = Color.Black,
-                )
-            )
-        }
+            },
+            isError = state.emailError != null
+        )
 
         Text(
             text = stringResource(R.string.summary),
@@ -168,40 +170,38 @@ fun ProfileEditForm(
             fontSize = 14.sp,
             modifier = modifier
                 .fillMaxWidth())
-        Box(
+
+        OutlinedTextField(
+            value = state.summary,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+            onValueChange = { viewModel.onEventUpdateProfile(UpdateProfileFormEvent.SummaryChanged(it)) },
+            singleLine = false,
+            maxLines = 5,
+            shape = RoundedCornerShape(10.dp),
             modifier = modifier
                 .fillMaxWidth()
                 .padding(bottom = 15.dp)
-                .drawBehind {
-                    drawRoundRect(
-                        color = (LightGray),
-                        size = Size(size.width, size.height),
-                        cornerRadius = CornerRadius(10.dp.toPx(), 10.dp.toPx())
+                .size(120.dp),
+            textStyle = TextStyle.Default.copy(
+                fontSize = 16.sp,
+                color = (Black),
+                fontFamily = Poppins
+            ),
+            colors = OutlinedTextFieldDefaults.colors(
+                cursorColor = Color.Black,
+                focusedBorderColor = (DarkGreen),
+                unfocusedBorderColor = (DarkGreen),
+            ),
+            supportingText = {
+                if (state.summaryError != null) {
+                    Text(
+                        text = state.summaryError ?: "",
+                        color = Red,
                     )
                 }
-        ) {
-            OutlinedTextField(
-                value = bio,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                onValueChange = { bio = it },
-                singleLine = false,
-                maxLines = 5,
-                shape = RoundedCornerShape(10.dp),
-                modifier = modifier
-                    .fillMaxWidth()
-                    .size(120.dp),
-                textStyle = TextStyle.Default.copy(
-                    fontSize = 16.sp,
-                    color = (Black),
-                    fontFamily = Poppins
-                ),
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = (DarkGreen),
-                    unfocusedBorderColor = (DarkGreen),
-                    cursorColor = Color.Black,
-                )
-            )
-        }
+            },
+            isError = state.summaryError != null
+        )
 
         Button(
             onClick = {
@@ -215,25 +215,19 @@ fun ProfileEditForm(
                         requestImageFile
                     )
                 }
-
-                viewModel.uploadImage(userInfo.image, multipartBody)
-
-                viewModel.updateProfile(
-                    id = userInfo.id,
-                    token = userInfo.token,
-                    name = name,
-                    email = email,
-                    summary = bio,
-                    image = viewModel.image,
-                    password = userInfo.password
+                viewModel.updateDataProfile(
+                    userInfo.id,
+                    userInfo.token,
+                    state.name,
+                    state.email,
+                    state.summary,
+                    userInfo.password,
+                    imageUri,
+                    multipartBody
                 )
-
-                showDialog(true)
-                navController.navigate(Screen.Profile.route){
-                    popUpTo(Screen.EditProfile.route){
-                        inclusive = true
-                    }
-                }},
+                showDialog(viewModel.showDialog)
+                viewModel.getSession()
+            },
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
                 .fillMaxWidth()
@@ -250,6 +244,7 @@ fun ProfileEditForm(
             )
         }
     }
+
 }
 
 @Composable

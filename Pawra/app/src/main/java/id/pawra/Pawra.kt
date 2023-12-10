@@ -130,9 +130,14 @@ fun Pawra(
             )
         }
 
-        composable(Screen.PetActivitiesPrev.route) {
+        composable(
+            Screen.PetActivitiesPrev.route,
+            listOf(navArgument("activityId") { type = NavType.IntType })
+        ) {
+            val activityId = it.arguments?.getInt("activityId") ?: 0
             ActivitiesPrevScreen(
-                navController = navController
+                navController = navController,
+                activityId = activityId
             )
         }
 

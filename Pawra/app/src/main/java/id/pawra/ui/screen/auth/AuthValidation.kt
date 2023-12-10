@@ -87,6 +87,21 @@ class ValidateTerms {
     }
 }
 
+class ValidateSummary {
+    fun execute(summary: String): ValidationResult {
+        if(summary.isBlank()) {
+            return ValidationResult(
+                successful = false,
+                errorMessage = "The summary can't be blank"
+            )
+        }
+
+        return ValidationResult(
+            successful = true
+        )
+    }
+}
+
 data class ValidationResult(
     val successful: Boolean,
     val errorMessage: String? = null

@@ -1,3 +1,5 @@
+package id.pawra.ui.components.petprofile
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -22,9 +24,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,13 +34,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import id.pawra.R
 import id.pawra.data.ViewModelFactory
 import id.pawra.data.local.preference.PetData
 import id.pawra.data.remote.response.PetResponseItem
-import id.pawra.ui.components.petprofile.InfoBox
 import id.pawra.ui.screen.auth.AuthViewModel
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkBlue
@@ -63,8 +60,7 @@ fun PetProfile(
         factory = ViewModelFactory(LocalContext.current)
     )
 ) {
-    viewModel.getSession()
-    val userInfo by viewModel.sessionState.collectAsState()
+
 
     val petData = PetData(
         pet.image ?: "",
@@ -81,7 +77,6 @@ fun PetProfile(
     )
 
     val painter = rememberAsyncImagePainter(pet.image?.ifEmpty { R.drawable.ic_pet })
-    val painterOwner = rememberAsyncImagePainter(userInfo.image.ifEmpty { R.drawable.ic_user })
 
     Column(
         modifier = modifier
@@ -204,7 +199,7 @@ fun PetProfile(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "Neutred",
+                        text = "Neutered",
                         fontFamily = Poppins,
                         fontSize = 11.sp,
                         color = Black,
@@ -324,45 +319,48 @@ fun PetProfile(
                 modifier = Modifier
                     .padding(15.dp)
             ) {
+                viewModel.getSession()
+                viewModel.sessionState.collectAsState().value.let { userInfo ->
+                    val painterOwner = rememberAsyncImagePainter(userInfo.image.ifEmpty { R.drawable.ic_user })
 
-
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    Image(
-                        painter = painterOwner,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .width(60.dp)
-                            .height(60.dp)
-                            .clip(CircleShape),
-                        contentScale = ContentScale.Crop
-                    )
-
-                    Column{
-                        Text(
-                            text = userInfo.name,
-                            color = Black,
-                            fontFamily = Poppins,
-                            fontWeight = FontWeight.SemiBold,
-                            fontSize = 14.sp,
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        Image(
+                            painter = painterOwner,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .width(60.dp)
+                                .height(60.dp)
+                                .clip(CircleShape),
+                            contentScale = ContentScale.Crop
                         )
 
-                        Text(
-                            text = "Owner",
-                            color = DarkBlue,
-                            fontFamily = Poppins,
-                            fontWeight = FontWeight.Medium,
-                            fontSize = 13.sp,
-                        )
+                        Column{
+                            Text(
+                                text = userInfo.name,
+                                color = Black,
+                                fontFamily = Poppins,
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 14.sp,
+                            )
 
-                        Text(
-                            text = userInfo.email,
-                            color = Gray,
-                            fontFamily = Poppins,
-                            fontWeight = FontWeight.Medium,
-                            fontSize = 12.sp,
-                        )
+                            Text(
+                                text = "Owner",
+                                color = DarkBlue,
+                                fontFamily = Poppins,
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 13.sp,
+                            )
+
+                            Text(
+                                text = userInfo.email,
+                                color = Gray,
+                                fontFamily = Poppins,
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 12.sp,
+                            )
+                        }
                     }
                 }
             }
