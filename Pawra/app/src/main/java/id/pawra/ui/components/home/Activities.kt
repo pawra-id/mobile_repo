@@ -62,6 +62,7 @@ fun Activities(
             }
             .fillMaxWidth()
             .padding(horizontal = 10.dp, vertical = 15.dp),
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         AsyncImage(
             model = data.dog?.image,
@@ -74,7 +75,7 @@ fun Activities(
         )
 
         Column(
-            modifier = modifier.padding(start = 10.dp, bottom = 10.dp)
+            modifier = modifier
         ) {
             Text(
                 text = DateConverter.convertStringToDate(data.createdAt ?: ""),

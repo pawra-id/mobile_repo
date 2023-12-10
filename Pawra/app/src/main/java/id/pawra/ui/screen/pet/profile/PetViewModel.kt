@@ -64,7 +64,7 @@ class PetViewModel(
                             _petState.value = UiState.Error(dogs.error)
                         }
                         else -> {
-                            _petState.value = UiState.Success(dogs.petResponse ?: listOf())
+                            _petState.value = UiState.Success(dogs.items ?: listOf())
                         }
                     }
                 }
@@ -113,7 +113,7 @@ class PetViewModel(
                                 _petListState.value = listDog
                             }
                             else -> {
-                                dogs.petResponse?.forEach{ item ->
+                                dogs.items?.forEach{ item ->
                                     listDog.add(mutableMapOf("id" to item.id, "name" to item.name))
                                 }
                                 _petListState.value = listDog

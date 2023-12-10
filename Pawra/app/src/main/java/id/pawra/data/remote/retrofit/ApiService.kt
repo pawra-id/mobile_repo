@@ -1,9 +1,13 @@
 package id.pawra.data.remote.retrofit
 
+import id.pawra.data.remote.response.ActivitiesResponse
 import id.pawra.data.remote.response.ActivitiesResponseItem
+import id.pawra.data.remote.response.PetResponse
 import id.pawra.data.remote.response.PetResponseItem
 import id.pawra.data.remote.response.SignInResponse
 import id.pawra.data.remote.response.SignUpResponse
+import id.pawra.data.remote.response.VetResponse
+import id.pawra.data.remote.response.VetResponseItem
 import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.Field
@@ -45,7 +49,12 @@ interface ApiService {
     ): String
 
     @GET("dogs/")
-    suspend fun getDogs(@Header("Authorization") authHeader: String): List<PetResponseItem>
+    suspend fun getDogs(
+        @Header("Authorization") authHeader: String,
+        @Query("search") keyword: String? = "",
+        @Query("size") size: Int? = 15,
+        @Query("page") skip: Int? = 1
+    ): PetResponse
 
     @GET("dogs/{id}")
     suspend fun getDetailDog(
@@ -71,20 +80,20 @@ interface ApiService {
         @Header("Authorization") authHeader: String,
         @Query("search") keyword: String? = "",
         @Query("size") size: Int? = 15,
-        @Query("page") skip: Int? = 0
-    ): List<ActivitiesResponseItem>
+        @Query("page") skip: Int? = 1
+    ): ActivitiesResponse
 
     @GET("activities/dog/{id}")
-    suspend fun getSpesificActivities(
+    suspend fun getSpecificActivities(
         @Header("Authorization") authHeader: String,
         @Path("id") id: Int,
         @Query("search") keyword: String? = "",
         @Query("size") size: Int? = 15,
-        @Query("page") skip: Int? = 0
+        @Query("page") skip: Int? = 1
     ): List<ActivitiesResponseItem>
 
     @GET("activities/{id}")
-    suspend fun getDetailActivitiy(
+    suspend fun getDetailActivity(
         @Header("Authorization") authHeader: String,
         @Path("id") id: Int
     ): ActivitiesResponseItem
@@ -94,4 +103,18 @@ interface ApiService {
         @Header("Authorization") authHeader: String,
         @Body body: MutableMap<String, Any>
     ): ActivitiesResponseItem
+
+    @GET("vets/")
+    suspend fun getVets(
+        @Header("Authorization") authHeader: String,
+        @Query("search") keyword: String? = "",
+        @Query("size") size: Int? = 15,
+        @Query("page") skip: Int? = 1
+    ): VetResponse
+
+    @GET("vets/{id}")
+    suspend fun getDetailVet(
+        @Header("Authorization") authHeader: String,
+        @Path("id") id: Int
+    ): VetResponseItem
 }

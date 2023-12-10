@@ -4,8 +4,6 @@ import id.pawra.data.local.preference.PetData
 import id.pawra.data.local.preference.SessionModel
 import id.pawra.data.remote.response.PetResponse
 import id.pawra.data.remote.response.PetResponseItem
-import id.pawra.data.remote.response.SignInResponse
-import id.pawra.data.remote.response.SignUpResponse
 import id.pawra.data.remote.retrofit.ApiService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -20,11 +18,7 @@ class PetRepository private constructor(
     suspend fun getDog(user: SessionModel): Flow<PetResponse> {
         try {
             val response = apiService.getDogs("Bearer ${user.token}")
-            return flowOf(
-                PetResponse(
-                    petResponse = response
-                )
-            )
+            return flowOf(response)
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
             val errorMessage = try {

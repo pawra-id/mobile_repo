@@ -29,7 +29,6 @@ fun ListExplore(
         factory = ViewModelFactory(LocalContext.current)
     )
 ) {
-    activitiesViewModel.getActivities()
 
     var isLoading by remember { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(true) }
