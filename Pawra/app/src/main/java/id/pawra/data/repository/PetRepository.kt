@@ -8,6 +8,7 @@ import id.pawra.data.remote.response.SignInResponse
 import id.pawra.data.remote.response.SignUpResponse
 import id.pawra.data.remote.retrofit.ApiService
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import okhttp3.MultipartBody
 import org.json.JSONException
@@ -134,6 +135,78 @@ class PetRepository private constructor(
         } catch (e: Exception) {
             return flowOf(
                 e.message ?: ""
+            )
+        }
+    }
+
+    suspend fun updateDog(user: SessionModel, petId: Int, petData: PetData): Flow<PetResponseItem> {
+        try {
+            val data = mutableMapOf<String, Any>()
+            data["image"] = petData.image
+            data["name"] = petData.name
+            data["breed"] = petData.breed
+            data["neutred"] = petData.neutred
+            data["age"] = petData.age
+            data["height"] = petData.height
+            data["gender"] = petData.gender
+            data["weight"] = petData.weight
+            data["primaryColor"] = petData.primaryColor
+            data["summary"] = petData.summary.toString()
+
+            return flow {
+                val response = apiService.updateDog("Bearer ${user.token}", petId, data)
+                emit(response)
+            }
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorMessage = try {
+                val jsonError = errorBody?.let { JSONObject(it) }
+                jsonError?.optString("detail") ?: "Unknown error"
+            } catch (jsonException: JSONException) {
+                "Error parsing JSON"
+            }
+            return flowOf(
+                PetResponseItem(
+                    id = 0,
+                    error = errorMessage
+                )
+            )
+
+        } catch (e: Exception) {
+            return flowOf(
+                PetResponseItem(
+                    id = 0,
+                    error = e.message
+                )
+            )
+        }
+    }
+
+    suspend fun deleteDog(user: SessionModel, petId: Int): Flow<PetResponseItem> {
+        try {
+            return flowOf(apiService.deleteDog("Bearer ${user.token}", petId))
+
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorMessage = try {
+                val jsonError = errorBody?.let { JSONObject(it) }
+                jsonError?.optString("detail") ?: "Unknown error"
+            } catch (jsonException: JSONException) {
+                "Error parsing JSON"
+            }
+            return flowOf(
+                PetResponseItem(
+                    id = 0,
+                    error = errorMessage
+                )
+            )
+
+        } catch (e: Exception) {
+            return flowOf(
+                PetResponseItem(
+                    id = 0,
+                    error = e.message
+                )
             )
         }
     }

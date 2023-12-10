@@ -3,6 +3,7 @@ package id.pawra.ui.screen.pet.profile
 import android.content.Context
 import android.net.Uri
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -54,6 +55,13 @@ class PetViewModel(
     val petListState: StateFlow<List<MutableMap<*, *>>>
         get() = _petListState
 
+    private val _petUpdateState: MutableStateFlow<UiState<PetResponseItem?>> = MutableStateFlow(UiState.None)
+    val petUpdateState : StateFlow<UiState<PetResponseItem?>>
+        get() = _petUpdateState
+
+    private var petId by mutableIntStateOf(0)
+    private var showResultDialog by mutableStateOf(false)
+
     fun getDog() {
         viewModelScope.launch {
             val user = authRepository.getSession().first()
@@ -82,6 +90,7 @@ class PetViewModel(
                         }
                         else -> {
                             _petDetailState.value = UiState.Success(dogDetail)
+                            this@PetViewModel.petId = dogDetail.id
                         }
                     }
                 }
@@ -311,6 +320,227 @@ class PetViewModel(
                 multipartBody
             )
             showDialog = true
+        }
+    }
+
+    fun updateDog(
+        petId: Int,
+        name: String,
+        breed: String,
+        neutred: Boolean,
+        age: Int,
+        height: Int,
+        gender: String,
+        weight: Int,
+        primaryColor: String,
+        microchipId: String,
+        summary: String,
+        file: MultipartBody.Part
+    ) {
+        viewModelScope.launch {
+            _petUpdateState.value = UiState.Loading
+            try {
+                val user = authRepository.getSession().first()
+
+                val result = petRepository.postDogImage(user, file).first()
+
+                val petData = PetData(
+                    name = name,
+                    image = result,
+                    breed = breed,
+                    neutred = neutred,
+                    age = age,
+                    height = height,
+                    gender = gender,
+                    weight = weight,
+                    primaryColor = primaryColor,
+                    microchipId = microchipId,
+                    summary = summary
+                )
+                val updatedPet = petRepository.updateDog(user = user, petId = petId, petData = petData).first()
+
+                _petUpdateState.value = UiState.Success(updatedPet)
+            } catch (e: Exception) {
+                _petUpdateState.value = UiState.Error(e.message ?: "Unknown error")
+            }
+        }
+    }
+
+    var updateDogValidationState by mutableStateOf(DogUpdateFormState())
+    fun onEventUpdateDog(event: DogUpdateFormEvent, context: Context) {
+        when(event) {
+            is DogUpdateFormEvent.DogNameChanged -> {
+                updateDogValidationState = updateDogValidationState.copy(name = event.name)
+                val nameResult = validateDogName.execute(updateDogValidationState.name)
+                updateDogValidationState = updateDogValidationState.copy(
+                    nameError = nameResult.errorMessage
+                )
+            }
+            is DogUpdateFormEvent.DogBreedChanged -> {
+                updateDogValidationState = updateDogValidationState.copy(breed = event.breed)
+                val breedResult = validateDogBreed.execute(updateDogValidationState.breed)
+                updateDogValidationState = updateDogValidationState.copy(
+                    breedError = breedResult.errorMessage
+                )
+            }
+            is DogUpdateFormEvent.DogYearChanged -> {
+                updateDogValidationState = updateDogValidationState.copy(year = event.year)
+                val yearResult = validateDogYear.execute(updateDogValidationState.year)
+                updateDogValidationState = updateDogValidationState.copy(
+                    yearError = yearResult.errorMessage
+                )
+            }
+            is DogUpdateFormEvent.DogHeightChanged -> {
+                updateDogValidationState = updateDogValidationState.copy(height = event.height)
+                val heightResult = validateDogHeight.execute(updateDogValidationState.height)
+                updateDogValidationState = updateDogValidationState.copy(
+                    heightError = heightResult.errorMessage
+                )
+            }
+            is DogUpdateFormEvent.DogWeightChanged -> {
+                updateDogValidationState = updateDogValidationState.copy(weight = event.weight)
+                val weightResult = validateDogWeight.execute(updateDogValidationState.weight)
+                updateDogValidationState = updateDogValidationState.copy(
+                    weightError = weightResult.errorMessage
+                )
+            }
+            is DogUpdateFormEvent.DogColorChanged -> {
+                updateDogValidationState = updateDogValidationState.copy(color = event.color)
+                val colorResult = validateDogColor.execute(updateDogValidationState.color)
+                updateDogValidationState = updateDogValidationState.copy(
+                    colorError = colorResult.errorMessage
+                )
+            }
+            is DogUpdateFormEvent.DogMicrochipIdChanged -> {
+                updateDogValidationState = updateDogValidationState.copy(microchipId = event.microchipId)
+                val microchipIdResult = validateDogMicrochipId.execute(updateDogValidationState.microchipId)
+                updateDogValidationState = updateDogValidationState.copy(
+                    microchipIdError = microchipIdResult.errorMessage
+                )
+            }
+            is DogUpdateFormEvent.DogSummaryChanged -> {
+                addDogValidationState = addDogValidationState.copy(summary = event.summary)
+                val summaryResult = validateDogSummary.execute(addDogValidationState.summary)
+                addDogValidationState = addDogValidationState.copy(
+                    summaryError = summaryResult.errorMessage
+                )
+            }
+            is DogUpdateFormEvent.DogSexChanged -> {
+                updateDogValidationState = updateDogValidationState.copy(sex = event.sex)
+            }
+            is DogUpdateFormEvent.DogNeuteredChanged -> {
+                updateDogValidationState = updateDogValidationState.copy(neutered = event.neutered)
+            }
+            is DogUpdateFormEvent.DogImageChanged -> {
+                updateDogValidationState = updateDogValidationState.copy(file = event.file)
+                val fileResult = validateDogImage.execute(updateDogValidationState.file)
+                updateDogValidationState = updateDogValidationState.copy(
+                    fileError = fileResult.errorMessage
+                )
+            }
+            is DogUpdateFormEvent.Submit -> {
+
+                submitDataUpdateDog(context)
+            }
+        }
+    }
+
+    private fun submitDataUpdateDog(context: Context) {
+        val nameResult = validateDogName.execute(updateDogValidationState.name)
+        val breedResult = validateDogBreed.execute(updateDogValidationState.breed)
+        val yearResult = validateDogYear.execute(updateDogValidationState.year)
+        val heightResult = validateDogHeight.execute(updateDogValidationState.height)
+        val weightResult = validateDogWeight.execute(updateDogValidationState.weight)
+        val colorResult = validateDogColor.execute(updateDogValidationState.color)
+        val microchipIdResult = validateDogMicrochipId.execute(updateDogValidationState.microchipId)
+        val summaryResult = validateDogSummary.execute(updateDogValidationState.summary)
+        val fileResult = validateDogImage.execute(updateDogValidationState.file)
+
+        val hasError = listOf(
+            nameResult,
+            breedResult,
+            yearResult,
+            heightResult,
+            weightResult,
+            colorResult,
+            microchipIdResult,
+            summaryResult,
+            fileResult
+        ).any { !it.successful }
+
+        if(hasError) {
+            updateDogValidationState = updateDogValidationState.copy(
+                nameError = nameResult.errorMessage,
+                breedError = breedResult.errorMessage,
+                yearError = yearResult.errorMessage,
+                heightError = heightResult.errorMessage,
+                weightError = weightResult.errorMessage,
+                colorError = colorResult.errorMessage,
+                microchipIdError = microchipIdResult.errorMessage,
+                summaryError = summaryResult.errorMessage,
+                fileError = fileResult.errorMessage
+            )
+            showDialog = false
+        } else {
+            val imageFile = uriToFile(Uri.parse(updateDogValidationState.file), context)
+            val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
+            val multipartBody = MultipartBody.Part.createFormData(
+                "file",
+                imageFile.name,
+                requestImageFile
+            )
+
+//            updateDog(
+//                updateDogValidationState.petId,
+//                updateDogValidationState.name,
+//                updateDogValidationState.breed,
+//                updateDogValidationState.neutered,
+//                updateDogValidationState.year.toInt(),
+//                updateDogValidationState.height.toInt(),
+//                updateDogValidationState.sex,
+//                updateDogValidationState.weight.toInt(),
+//                updateDogValidationState.color,
+//                updateDogValidationState.microchipId,
+//                updateDogValidationState.summary,
+//                multipartBody
+//            )
+//            showDialog = true
+        }
+    }
+
+    fun deleteDogId(){
+        deleteDog(petId)
+    }
+
+    private fun deleteDog(petId: Int) {
+        viewModelScope.launch {
+            val user = authRepository.getSession().first()
+            try {
+                petRepository.deleteDog(user, petId)
+                    .collect { result ->
+                        handleDelete(result, result.error, _petDetailState)
+                        if (result.error == null) {
+                            showResultDialog = true
+                        }
+                    }
+            } catch (e: Exception) {
+                _petDetailState.value = UiState.Error(e.message ?: "Terjadi kesalahan yang tidak diketahui")
+            }
+        }
+    }
+
+    private fun handleDelete(
+        result: PetResponseItem,
+        error: String?,
+        stateFlow: MutableStateFlow<UiState<PetResponseItem>>
+    ) {
+        when {
+            error != null -> {
+                stateFlow.value = UiState.Error(error)
+            }
+            else -> {
+                stateFlow.value = UiState.Success(result)
+            }
         }
     }
 }

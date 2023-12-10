@@ -83,7 +83,9 @@ fun ResultDialog(
                 Button(
                     modifier = Modifier.width(100.dp).height(40.dp),
                     shape = RoundedCornerShape(10.dp),
-                    onClick = { setShowDialog(false) },
+                    onClick = {
+                        setShowDialog(false)
+                              },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = if (success) DarkGreen else Red
                     )
