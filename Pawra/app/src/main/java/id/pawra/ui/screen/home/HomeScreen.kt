@@ -1,29 +1,44 @@
 package id.pawra.ui.screen.home
 
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import id.pawra.data.ViewModelFactory
+import id.pawra.ui.common.UiState
 import id.pawra.ui.components.home.Activities
-import id.pawra.ui.components.home.ListDog
 import id.pawra.ui.components.home.Banner
+import id.pawra.ui.components.home.ListDog
 import id.pawra.ui.components.home.NearbyVets
 import id.pawra.ui.components.home.Welcome
 import id.pawra.ui.screen.auth.AuthViewModel
+import id.pawra.ui.screen.pet.activities.ActivitiesViewModel
 import id.pawra.ui.screen.pet.profile.PetViewModel
+import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.PawraTheme
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
@@ -34,39 +49,86 @@ fun HomeScreen(
     ),
     petViewModel: PetViewModel = viewModel(
         factory = ViewModelFactory(LocalContext.current)
+    ),
+    activitiesViewModel: ActivitiesViewModel = viewModel(
+        factory = ViewModelFactory(LocalContext.current)
     )
 ) {
     viewModel.getSession()
-    val userInfo by viewModel.sessionState.collectAsState()
+    LaunchedEffect(Unit) {
+        activitiesViewModel.getActivities()
+    }
 
     Column(
         modifier = modifier
             .fillMaxSize()
     ) {
         Row {
-            Welcome(
-                image = userInfo.image,
-                name = userInfo.name
-            )
+            viewModel.sessionState.collectAsState().value.let { userInfo ->
+                Welcome(
+                    image = userInfo.image,
+                    name = userInfo.name
+                )
+            }
         }
-        Column(
+        LazyColumn(
             modifier = modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
         ) {
-            Banner()
-            ListDog(
+            item { Banner() }
+            item { ListDog(
                 navController = navController,
                 viewModel = petViewModel
-            )
-            NearbyVets(
+            ) }
+
+            item { NearbyVets(
                 navController = navController
-            )
-            Activities()
+            ) }
+
+            item {
+                Row(
+                    modifier = modifier
+                        .padding(start = 22.dp, end = 22.dp, top = 10.dp)
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Last Activities",
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Black,
+                        modifier = modifier.weight(1f)
+                    )
+                }
+
+                activitiesViewModel.activitiesState.collectAsState().value.let { activitiesState ->
+                    when (activitiesState) {
+                        is UiState.Success -> {
+                            Column(
+                                modifier = modifier.padding(horizontal = 22.dp, vertical = 10.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.spacedBy(10.dp)
+                            ){
+                                for (item in activitiesState.data) {
+                                    key(item) {
+                                        Activities(
+                                            data = item,
+                                            navController = navController,
+                                        )
+                                    }
+                                }
+                            }
+                        }
+
+                        else -> {}
+                    }
+                }
+            }
         }
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(showBackground = true)
 fun HomeScreenPreview() {

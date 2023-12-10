@@ -43,23 +43,23 @@ fun ProfileEditScreen(
     ),
     navController: NavController
 ) {
+    var isLoading by remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(false) }
+
+    if (isLoading) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top,
+            modifier = modifier.fillMaxSize()
+        ) {
+            LoadingBox()
+        }
+    }
+
     Column {
         ProfileEditTopBar()
         Spacer(modifier = Modifier.height(16.dp))
         Box(modifier = modifier) {
-            var isLoading by remember { mutableStateOf(false) }
-            var showDialog by remember { mutableStateOf(false) }
-
-            if (isLoading) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Top,
-                    modifier = modifier.fillMaxSize()
-                ) {
-                    LoadingBox()
-                }
-            }
-
             Column(
                 modifier = modifier
                     .fillMaxSize()
@@ -71,44 +71,43 @@ fun ProfileEditScreen(
                     showDialog = { showDialog = it },
                     navController = navController)
             }
+        }
+        Spacer(modifier = Modifier.height(30.dp))
+    }
 
-            viewModel.updateProfileState.collectAsState().value.let { userState ->
-                when (userState) {
-                    is UiState.Loading -> {
-                        isLoading = true
-                    }
-                    is UiState.Success -> {
-                        if(showDialog) {
-                            isLoading = false
-                            ResultDialog(
-                                success = true,
-                                message = "Update successfully",
-                                setShowDialog = {
-                                    showDialog = it
-                                }
-                            )
-                        }
-                    }
-                    is UiState.Error -> {
-                        if(showDialog) {
-                            isLoading = false
-                            ResultDialog(
-                                success = false,
-                                message = userState.errorMessage,
-                                setShowDialog = {
-                                    showDialog = it
-                                }
-                            )
-                        }
-                    }
-
-                    else -> {}
-                }
-
+    viewModel.updateProfileState.collectAsState().value.let { userState ->
+        when (userState) {
+            is UiState.Loading -> {
+                isLoading = true
             }
+            is UiState.Success -> {
+                if(showDialog) {
+                    isLoading = false
+                    ResultDialog(
+                        success = true,
+                        message = "Update successfully",
+                        setShowDialog = {
+                            showDialog = it
+                        }
+                    )
+                }
+            }
+            is UiState.Error -> {
+                if(showDialog) {
+                    isLoading = false
+                    ResultDialog(
+                        success = false,
+                        message = userState.errorMessage,
+                        setShowDialog = {
+                            showDialog = it
+                        }
+                    )
+                }
+            }
+
+            else -> {}
         }
 
-        Spacer(modifier = Modifier.height(30.dp))
     }
 }
 

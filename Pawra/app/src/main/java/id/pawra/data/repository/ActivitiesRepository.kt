@@ -77,6 +77,36 @@ class ActivitiesRepository private constructor(
         }
     }
 
+    suspend fun getDetailActivity(user: SessionModel, activityId: Int, keyword: String? = ""): Flow<ActivitiesResponseItem> {
+        try {
+            return flowOf(
+                apiService.getDetailActivitiy("Bearer ${user.token}", activityId)
+            )
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorMessage = try {
+                val jsonError = errorBody?.let { JSONObject(it) }
+                jsonError?.optString("detail") ?: "Unknown error"
+            } catch (jsonException: JSONException) {
+                "Error parsing JSON"
+            }
+            return flowOf(
+                ActivitiesResponseItem(
+                    id = 0,
+                    error = errorMessage
+                )
+            )
+
+        } catch (e: Exception) {
+            return flowOf(
+                ActivitiesResponseItem(
+                    id = 0,
+                    error = e.message
+                )
+            )
+        }
+    }
+
     suspend fun addActivity(user: SessionModel, activityData: ActivityData): Flow<ActivitiesResponseItem> {
         fun removeEmptyMutableMap(data: MutableList<MutableMap<String, String>>): MutableList<MutableMap<String, String>> {
             return data.filter { it.isNotEmpty() }.toMutableList()
