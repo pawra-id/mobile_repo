@@ -80,7 +80,7 @@ fun PetActivities(
     var activeFilter by remember { mutableStateOf(FilterActivities.Latest.name) }
 
     LaunchedEffect(Unit){
-        activitiesViewModel.getSpecificActivities(petId, "")
+        activitiesViewModel.getSpecificActivities(petId, "", activeFilter)
     }
 
     var isLoading by remember { mutableStateOf(false) }
@@ -108,7 +108,7 @@ fun PetActivities(
 
             SearchBar(
                 query = query,
-                onQueryChange = {activitiesViewModel.getSpecificActivities(petId, it)},
+                onQueryChange = {activitiesViewModel.getSpecificActivities(petId, it, activeFilter)},
                 onSearch = {},
                 active = false,
                 onActiveChange = {},
@@ -164,6 +164,8 @@ fun PetActivities(
                             .padding(vertical = 5.dp, horizontal = 25.dp)
                             .clickable {
                                 activeFilter = filter.name
+
+                                activitiesViewModel.getSpecificActivities(petId, query, activeFilter)
                             }
                     ) {
                         Text(
@@ -198,7 +200,10 @@ fun PetActivities(
                                     .clip(shape = RoundedCornerShape(15.dp))
                                     .background(DisabledGreen)
                                     .fillMaxWidth()
-                                    .padding(horizontal = 20.dp, vertical = 15.dp),
+                                    .padding(horizontal = 20.dp, vertical = 15.dp)
+                                    .clickable {
+                                        navController.navigate(Screen.PetActivitiesPrev.createRoute(data.id))
+                                    },
                                 horizontalArrangement = Arrangement.spacedBy(20.dp)
                             ) {
                                 Column(
@@ -247,7 +252,7 @@ fun PetActivities(
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
                                     IconButton(
-                                        onClick = { /* do something */ },
+                                        onClick = {  },
                                         modifier = modifier
                                             .background(DarkGreen, CircleShape)
                                             .size(35.dp)

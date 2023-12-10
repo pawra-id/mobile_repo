@@ -25,9 +25,8 @@ import id.pawra.ui.theme.PawraTheme
 fun ProfileImage (
     image: String
 ) {
-    val imageUri = rememberSaveable { mutableStateOf(image) }
     val painter = rememberImagePainter(
-        imageUri.value.ifEmpty { R.drawable.ic_user }
+        image.ifEmpty { R.drawable.ic_user }
     )
     Column(
         modifier = Modifier

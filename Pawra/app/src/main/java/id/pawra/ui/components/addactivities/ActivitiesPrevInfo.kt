@@ -1,11 +1,15 @@
 package id.pawra.ui.components.addactivities
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.Absolute.Center
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -40,59 +44,32 @@ import id.pawra.R
 import id.pawra.data.ViewModelFactory
 import id.pawra.data.local.preference.ChipsModel
 import id.pawra.data.local.preference.PetData
+import id.pawra.data.remote.response.ActivitiesResponseItem
 import id.pawra.data.remote.response.PetResponseItem
+import id.pawra.ui.common.UiState
+import id.pawra.ui.components.dialog.ResultDialog
+import id.pawra.ui.components.loading.LoadingBox
 import id.pawra.ui.screen.auth.AuthViewModel
+import id.pawra.ui.screen.pet.activities.ActivitiesViewModel
+import id.pawra.ui.screen.pet.profile.PetViewModel
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkGreen
 import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
+import id.pawra.utils.DateConverter
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun ActivitiesPrevInfo (
     modifier: Modifier = Modifier,
-    pet: PetResponseItem,
-    viewModel: AuthViewModel
+    activity: ActivitiesResponseItem,
+    petViewModel: PetViewModel = viewModel(
+        factory = ViewModelFactory(LocalContext.current)
+    )
 ) {
-
-    viewModel.getSession()
-    val userInfo by viewModel.sessionState.collectAsState()
-
-    val petData = PetData(
-        pet.image ?: "",
-        pet.name ?: "",
-        pet.breed ?: "",
-        pet.neutered ?: false,
-        pet.age ?: 0,
-        pet.height ?: 0,
-        pet.gender ?: "",
-        pet.weight ?: 0,
-        pet.color ?: "",
-        "",
-        pet.description ?: ""
-    )
-
-    val selectedItems = mutableStateListOf<String>()
-    var tagsInput by remember { mutableStateOf("") }
-    var selectedTags by remember { mutableStateOf(listOf<String>()) }
-
-    val inputList = listOf(
-        ChipsModel(
-            name = "Poop",
-            textExpanded = "poop",
-        ),
-        ChipsModel(
-            name = "Sad",
-            textExpanded = "sad",
-        ),
-        ChipsModel(
-            name = "Poop",
-            textExpanded = "poop",
-        )
-    )
-
     Column(
         modifier = Modifier
             .padding(8.dp)
@@ -117,7 +94,7 @@ fun ActivitiesPrevInfo (
                     .size(130.dp)
             ) {
                 AsyncImage(
-                    model = userInfo.image,
+                    model = activity.dog?.image,
                     contentDescription = null,
                     modifier = Modifier
                         .wrapContentSize()
@@ -126,7 +103,7 @@ fun ActivitiesPrevInfo (
             }
         }
         Text(
-            text = petData.name,
+            text = activity.dog?.name ?: "",
             modifier = modifier
                 .fillMaxWidth(),
             fontFamily = Poppins,
@@ -135,8 +112,9 @@ fun ActivitiesPrevInfo (
             fontWeight = FontWeight.SemiBold,
             textAlign = TextAlign.Center
         )
+
         Text(
-            text = "17 Mei 2023",
+            text = DateConverter.convertStringToDate(activity.createdAt ?: ""),
             modifier = modifier
                 .fillMaxWidth(),
             fontFamily = Poppins,
@@ -149,7 +127,7 @@ fun ActivitiesPrevInfo (
         Spacer(modifier = Modifier.height(28.dp))
 
         Text(
-            text = "Lorem ipsum doloer sit amet",
+            text = activity.description ?: "",
             modifier = modifier
                 .fillMaxWidth()
                 .padding(bottom = 15.dp),
@@ -166,39 +144,33 @@ fun ActivitiesPrevInfo (
                 .wrapContentSize(Alignment.Center)
                 .padding(bottom = 15.dp),
         ) {
-            items(inputList) { item ->
-                val isSelected = selectedItems.contains(item.name)
+            items(activity.tags ?: listOf()) { item ->
+
                 Spacer(modifier = Modifier.padding(5.dp))
                 InputChip(
-                    selected = isSelected,
+                    selected = true,
                     onClick = {
-                        if (isSelected) {
-                            selectedItems.add(item.name)
-                        } else {
-                            selectedItems.remove(item.name)
-                        }
-                        selectedTags = selectedItems.toList()
-                        tagsInput = selectedTags.joinToString()
+
                     },
                     label = { Text(
-                        text = item.name,
-                        color = if (isSelected) DarkGreen else Gray
+                        text = item.name ?: "",
+                        color = DarkGreen
                     )
                     }
                 )
             }
         }
+
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(showBackground = true)
 fun ActivitiesPrevInfoPreview() {
     PawraTheme {
         ActivitiesPrevInfo(
-            pet = PetResponseItem(id=1),
-            viewModel = viewModel(
-                factory = ViewModelFactory(LocalContext.current)
-        ))
+            activity = ActivitiesResponseItem(id = 0)
+        )
     }
 }

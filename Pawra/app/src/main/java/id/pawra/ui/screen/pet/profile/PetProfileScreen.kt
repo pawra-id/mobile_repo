@@ -1,6 +1,6 @@
 package id.pawra.ui.screen.pet.profile
 
-import PetProfile
+import id.pawra.ui.components.petprofile.PetProfile
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement

@@ -70,7 +70,12 @@ interface ApiService {
     ): String
 
     @GET("activities/")
-    suspend fun getActivities(@Header("Authorization") authHeader: String): List<ActivitiesResponseItem>
+    suspend fun getActivities(
+        @Header("Authorization") authHeader: String,
+        @Query("search") keyword: String? = "",
+        @Query("size") size: Int? = 15,
+        @Query("page") skip: Int? = 0
+    ): List<ActivitiesResponseItem>
 
     @GET("activities/dog/{id}")
     suspend fun getSpesificActivities(
@@ -80,6 +85,12 @@ interface ApiService {
         @Query("size") size: Int? = 15,
         @Query("page") skip: Int? = 0
     ): List<ActivitiesResponseItem>
+
+    @GET("activities/{id}")
+    suspend fun getDetailActivitiy(
+        @Header("Authorization") authHeader: String,
+        @Path("id") id: Int
+    ): ActivitiesResponseItem
 
     @POST("activities/")
     suspend fun addActivity(

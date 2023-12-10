@@ -26,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import id.pawra.R
 import id.pawra.ui.theme.Black
@@ -39,15 +40,15 @@ fun Welcome(
     name: String,
     modifier: Modifier = Modifier
 ) {
-    val imageUri = rememberSaveable { mutableStateOf(image) }
-    val painter = rememberImagePainter(
-        imageUri.value.ifEmpty { R.drawable.ic_user }
+
+    val painter = rememberAsyncImagePainter(image.ifEmpty { R.drawable.ic_user }
     )
+    
     Row(
         modifier = modifier
             .padding(
                 start = 22.dp,
-                end = 10.dp,
+                end = 22.dp,
                 top = 10.dp,
                 bottom = 10.dp
             )

@@ -1,5 +1,6 @@
 package id.pawra.ui.screen.auth
 
+import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -10,12 +11,17 @@ import id.pawra.data.local.preference.SessionModel
 import id.pawra.data.remote.response.SignInResponse
 import id.pawra.data.remote.response.SignUpResponse
 import id.pawra.ui.common.UiState
+import id.pawra.utils.uriToFile
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 
 class AuthViewModel(
     private val authRepository: AuthRepository,
@@ -23,7 +29,8 @@ class AuthViewModel(
     private val validateEmail: ValidateEmail = ValidateEmail(),
     private val validatePassword: ValidatePassword = ValidatePassword(),
     private val validateRepeatedPassword: ValidateRepeatedPassword = ValidateRepeatedPassword(),
-    private val validateTerms: ValidateTerms = ValidateTerms()
+    private val validateTerms: ValidateTerms = ValidateTerms(),
+    private val validateSummary: ValidateSummary = ValidateSummary(),
 ): ViewModel() {
 
     private val _signInState: MutableStateFlow<UiState<SignInResponse>> = MutableStateFlow(UiState.None)
@@ -70,7 +77,7 @@ class AuthViewModel(
         }
     }
 
-    fun updateProfile(
+    private fun updateProfile(
         id: Int,
         token: String,
         name: String,
@@ -80,6 +87,7 @@ class AuthViewModel(
         password: String,
     ) {
         viewModelScope.launch {
+            _updateProfileState.value = UiState.Loading
             authRepository.updateProfile(
                 id = id,
                 token = token,
@@ -90,22 +98,42 @@ class AuthViewModel(
                 password = password
             ).collect { userDetail ->
                 when {
-                    userDetail.error != null -> _signUpState.value = UiState.Error(userDetail.error)
-                    else -> _signUpState.value = UiState.Success(userDetail)
+                    userDetail.error != null -> _updateProfileState.value = UiState.Error(userDetail.error)
+                    else -> _updateProfileState.value = UiState.Success(userDetail)
                 }
             }
         }
     }
 
-    fun uploadImage(imageUrl: String, file: MultipartBody.Part? = null) {
+    private fun uploadImageAndProfile(
+        id: Int,
+        token: String,
+        name: String,
+        email: String,
+        summary: String,
+        password: String,
+        imageUrl: String,
+        file: MultipartBody.Part? = null
+    ) {
         viewModelScope.launch {
-            image = imageUrl
-            val user = authRepository.getSession().first()
-            if (file != null) {
-                authRepository.postProfileImage(user, file)
-                    .collect { result ->
-                        image = result
-                    }
+            withContext(Dispatchers.IO){
+                image = imageUrl
+                val user = authRepository.getSession().first()
+                if (file != null) {
+                    authRepository.postProfileImage(user, file)
+                        .collect { result ->
+                            image = result
+                        }
+                }
+
+                updateProfile(
+                    id = id,
+                    token = token,
+                    name = name,
+                    email = email,
+                    summary = summary,
+                    image = image,
+                    password = password)
             }
         }
     }
@@ -199,7 +227,6 @@ class AuthViewModel(
         }
     }
 
-    // TODO: validation form
     fun onEventUpdateProfile(event: UpdateProfileFormEvent) {
         when(event) {
             is UpdateProfileFormEvent.NameChanged -> {
@@ -211,13 +238,17 @@ class AuthViewModel(
             }
             is UpdateProfileFormEvent.EmailChanged -> {
                 stateUpdateProfile = stateUpdateProfile.copy(email = event.email)
-                val nameResult = validateEmail.execute(stateUpdateProfile.email)
+                val emailResult = validateEmail.execute(stateUpdateProfile.email)
                 stateUpdateProfile = stateUpdateProfile.copy(
-                    emailError = nameResult.errorMessage
+                    emailError = emailResult.errorMessage
                 )
             }
-            is UpdateProfileFormEvent.Update -> {
-                updateDataProfile()
+            is UpdateProfileFormEvent.SummaryChanged -> {
+                stateUpdateProfile = stateUpdateProfile.copy(summary = event.summary)
+                val summaryResult = validateSummary.execute(stateUpdateProfile.summary)
+                stateUpdateProfile = stateUpdateProfile.copy(
+                    summaryError = summaryResult.errorMessage
+                )
             }
         }
     }
@@ -282,22 +313,46 @@ class AuthViewModel(
         }
     }
 
-    private fun updateDataProfile() {
+    fun updateDataProfile(
+        id: Int,
+        token: String,
+        name: String,
+        email: String,
+        summary: String,
+        password: String,
+        imageUrl: String,
+        file: MultipartBody.Part? = null
+    ) {
         val nameResult = validateName.execute(stateUpdateProfile.name)
         val emailResult = validateEmail.execute(stateUpdateProfile.email)
+        val summaryResult = validateSummary.execute(stateUpdateProfile.summary)
 
         val hasError = listOf(
             nameResult,
             emailResult,
+            summaryResult
         ).any { !it.successful }
 
         if(hasError) {
             stateUpdateProfile = stateUpdateProfile.copy(
                 nameError = nameResult.errorMessage,
                 emailError = emailResult.errorMessage,
+                summaryError = summaryResult.errorMessage,
             )
             showDialog = false
         } else {
+
+            uploadImageAndProfile(
+                id = id,
+                token = token,
+                name = name,
+                email = email,
+                summary = summary,
+                password = password,
+                imageUrl,
+                file
+            )
+
             showDialog = true
         }
     }

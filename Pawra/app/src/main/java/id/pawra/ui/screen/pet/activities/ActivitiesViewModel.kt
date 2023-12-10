@@ -13,6 +13,7 @@ import id.pawra.data.repository.AuthRepository
 import id.pawra.data.repository.ActivitiesRepository
 import id.pawra.ui.common.UiState
 import id.pawra.ui.components.addactivities.ChipData
+import id.pawra.ui.components.petactivities.FilterActivities
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -29,6 +30,10 @@ class ActivitiesViewModel(
     private val _activitiesState: MutableStateFlow<UiState<List<ActivitiesResponseItem>>> = MutableStateFlow(UiState.None)
     val activitiesState: StateFlow<UiState<List<ActivitiesResponseItem>>>
         get() = _activitiesState
+
+    private val _activityDetailState: MutableStateFlow<UiState<ActivitiesResponseItem>> = MutableStateFlow(UiState.None)
+    val activityDetailState: StateFlow<UiState<ActivitiesResponseItem>>
+        get() = _activityDetailState
 
     private val _addActivityState: MutableStateFlow<UiState<ActivitiesResponseItem>> = MutableStateFlow(UiState.None)
     val addActivityState: StateFlow<UiState<ActivitiesResponseItem>>
@@ -55,7 +60,29 @@ class ActivitiesViewModel(
         }
     }
 
-    fun getSpecificActivities(petId: Int, keyword: String) {
+    private fun filterActivities(list: List<ActivitiesResponseItem>, filter: String): List<ActivitiesResponseItem>{
+        return when(filter){
+            FilterActivities.Latest.name -> {
+                list.sortedByDescending { it.createdAt }
+            }
+
+            FilterActivities.Oldest.name -> {
+                list.sortedBy { it.createdAt }
+            }
+
+            FilterActivities.AZ.name -> {
+                list.sortedBy { it.description }
+            }
+
+            FilterActivities.ZA.name -> {
+                list.sortedByDescending { it.description }
+            }
+
+            else -> { list }
+        }
+    }
+
+    fun getSpecificActivities(petId: Int, keyword: String, filter: String) {
 
         _query.value = keyword
 
@@ -70,7 +97,9 @@ class ActivitiesViewModel(
                                 _activitiesState.value = UiState.Error(activities.error)
                             }
                             else -> {
-                                _activitiesState.value = UiState.Success(activities.activitiesResponse ?: listOf())
+                                _activitiesState.value = UiState.Success(
+                                    filterActivities(activities.activitiesResponse ?: listOf(), filter)
+                                )
                             }
                         }
                     }
@@ -81,14 +110,33 @@ class ActivitiesViewModel(
                             activities.error != null -> {
                                 _activitiesState.value = UiState.Error(activities.error)
                             }
-
                             else -> {
                                 _activitiesState.value =
-                                    UiState.Success(activities.activitiesResponse ?: listOf())
+                                    UiState.Success(
+                                        filterActivities(activities.activitiesResponse ?: listOf(), filter)
+                                    )
                             }
                         }
                     }
             }
+        }
+    }
+
+    fun getDetailActivity(activityId: Int) {
+        viewModelScope.launch {
+            _addActivityState.value = UiState.Loading
+            val user = authRepository.getSession().first()
+            activitiesRepository.getDetailActivity(user, activityId)
+                .collect { activityDetail ->
+                    when {
+                        activityDetail.error != null ->{
+                            _activityDetailState.value = UiState.Error(activityDetail.error)
+                        }
+                        else -> {
+                            _activityDetailState.value = UiState.Success(activityDetail)
+                        }
+                    }
+                }
         }
     }
 

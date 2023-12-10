@@ -2,6 +2,7 @@ package id.pawra.ui.components.pet
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,6 +22,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -50,8 +52,10 @@ import id.pawra.ui.theme.DarkPink
 import id.pawra.ui.theme.DisabledBlue
 import id.pawra.ui.theme.DisabledGreen
 import id.pawra.ui.theme.DisabledPink
+import id.pawra.ui.theme.LightGray
 import id.pawra.ui.theme.LightGreen
 import id.pawra.ui.theme.PawraTheme
+import id.pawra.ui.theme.White
 
 @Composable
 fun Pet(
@@ -61,7 +65,10 @@ fun Pet(
         factory = ViewModelFactory(LocalContext.current)
     )
 ) {
-    petViewModel.getDog()
+
+    LaunchedEffect(Unit){
+        petViewModel.getDog()
+    }
 
     var isLoading by remember { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(true) }
@@ -91,7 +98,9 @@ fun Pet(
                             modifier = modifier
                                 .height(150.dp)
                                 .width(150.dp)
-                                .clip(shape = RoundedCornerShape(12.dp))
+                                .clip(shape = RoundedCornerShape(15.dp))
+                                .background(White)
+                                .border(1.dp, LightGray, RoundedCornerShape(15.dp))
                                 .clickable {
                                     navController.navigate(Screen.PetProfile.createRoute(data.id))
                                 },

@@ -2,6 +2,7 @@ package id.pawra.ui.components.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -47,8 +48,10 @@ import id.pawra.ui.theme.DisabledBlue
 import id.pawra.ui.theme.DisabledGreen
 import id.pawra.ui.theme.DisabledPink
 import id.pawra.ui.theme.Gray
+import id.pawra.ui.theme.LightGray
 import id.pawra.ui.theme.LightGreen
 import id.pawra.ui.theme.PawraTheme
+import id.pawra.ui.theme.White
 
 @Composable
 fun ListDog(
@@ -56,32 +59,42 @@ fun ListDog(
     navController: NavController,
     viewModel: PetViewModel
 ) {
+
     viewModel.getDog()
     viewModel.petState.collectAsState().value.let { petState ->
         when (petState) {
             is UiState.Success -> {
                 LazyRow(
                     modifier = modifier
+                        .fillMaxWidth()
                         .padding(
                             start = 22.dp,
                             end = 22.dp,
                             top = 10.dp,
                             bottom = 10.dp
-                        )
-                        .fillMaxWidth(),
+                        ),
                     horizontalArrangement = Arrangement.spacedBy(15.dp)
                 ) {
                     items(petState.data, key = { it.id }) { data ->
 
                         val painter = rememberAsyncImagePainter(data.image?.ifEmpty { R.drawable.ic_pet })
 
-                        Column {
+                        Column(
+                            modifier = modifier
+                                .clip(shape = RoundedCornerShape(15.dp))
+                                .background(White)
+                                .border(1.dp, DarkGreen, RoundedCornerShape(15.dp))
+                                .clickable {
+                                    navController.navigate(Screen.PetProfile.createRoute(data.id))
+                                }
+                                .fillMaxWidth()
+                                .padding(horizontal = 10.dp, vertical = 15.dp),
+                        ) {
                             Box(
                                 modifier = modifier
                                     .clip(shape = RoundedCornerShape(15.dp))
-                                    .clickable {
-                                        navController.navigate(Screen.PetProfile.createRoute(data.id))
-                                    },
+                                    .background(White)
+                                    .border(1.dp, LightGray, RoundedCornerShape(15.dp)),
                             ) {
                                 Image(
                                     painter = painter,
