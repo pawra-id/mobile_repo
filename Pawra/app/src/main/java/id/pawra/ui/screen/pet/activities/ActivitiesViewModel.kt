@@ -2,6 +2,7 @@ package id.pawra.ui.screen.pet.activities
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -41,6 +42,11 @@ class ActivitiesViewModel(
 
     private val _query = mutableStateOf("")
     val query: State<String> get() = _query
+
+    private var activityId by mutableIntStateOf(0)
+    private var petId by mutableIntStateOf(0)
+    private var _activeFilter by mutableStateOf(FilterActivities.Latest.name)
+    private val activeFilter: String get() = _activeFilter
 
     fun getActivities() {
         viewModelScope.launch {
@@ -133,6 +139,7 @@ class ActivitiesViewModel(
                             _activityDetailState.value = UiState.Error(activityDetail.error)
                         }
                         else -> {
+                            this@ActivitiesViewModel.activityId = activityDetail.id
                             _activityDetailState.value = UiState.Success(activityDetail)
                         }
                     }
@@ -231,6 +238,28 @@ class ActivitiesViewModel(
                 tags = listTags
             )
             showDialog = true
+        }
+    }
+
+    fun deleteActivity(activityId: Int) {
+        viewModelScope.launch {
+            _activitiesState.value = UiState.Loading
+            try {
+                val user = authRepository.getSession().first()
+                activitiesRepository.deleteActivity(user, activityId)
+                    .collect { deleteResult ->
+                        when {
+                            deleteResult.error != null -> {
+                                _activitiesState.value = UiState.Error(deleteResult.error)
+                            }
+                            else -> {
+                                getSpecificActivities(petId, query.value, activeFilter)
+                            }
+                        }
+                    }
+            } catch (e: Exception) {
+                _activitiesState.value = UiState.Error("Failed to delete activity: ${e.message}")
+            }
         }
     }
 }

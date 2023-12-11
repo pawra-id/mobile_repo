@@ -1,6 +1,5 @@
 package id.pawra.data.repository
 
-import android.util.Log
 import id.pawra.data.local.preference.ActivityData
 import id.pawra.data.local.preference.SessionModel
 import id.pawra.data.remote.response.ActivitiesResponse
@@ -124,6 +123,35 @@ class ActivitiesRepository private constructor(
             data["tags"] = filteredData
 
             return flowOf(apiService.addActivity("Bearer ${user.token}", data))
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorMessage = try {
+                val jsonError = errorBody?.let { JSONObject(it) }
+                jsonError?.optString("detail") ?: "Unknown error"
+            } catch (jsonException: JSONException) {
+                "Error parsing JSON"
+            }
+            return flowOf(
+                ActivitiesResponseItem(
+                    id = 0,
+                    error = errorMessage
+                )
+            )
+
+        } catch (e: Exception) {
+            return flowOf(
+                ActivitiesResponseItem(
+                    id = 0,
+                    error = e.message
+                )
+            )
+        }
+    }
+
+    suspend fun deleteActivity(user: SessionModel, activityId: Int): Flow<ActivitiesResponseItem> {
+        try {
+            return flowOf(apiService.deleteActivity("Bearer ${user.token}", activityId))
+
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
             val errorMessage = try {

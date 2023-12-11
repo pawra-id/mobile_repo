@@ -266,7 +266,10 @@ fun PetActivities(
                                     }
 
                                     IconButton(
-                                        onClick = { /* do something */ },
+                                        onClick = {
+                                            activitiesViewModel.deleteActivity(data.id)
+                                            activitiesViewModel.getSpecificActivities(petId, query, activeFilter)
+                                                  },
                                         modifier = modifier
                                             .background(Red, CircleShape)
                                             .size(35.dp)
@@ -301,14 +304,17 @@ fun PetActivities(
             }
         }
     }
-
 }
 
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(showBackground = true)
-fun PetActivitiesPreview() {
+fun PetActivitiesPreview(
+    activitiesViewModel: ActivitiesViewModel = viewModel(
+        factory = ViewModelFactory(LocalContext.current)
+    )
+) {
     PawraTheme {
         PetActivities(
             navController = rememberNavController(),

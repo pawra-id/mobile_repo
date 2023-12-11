@@ -263,10 +263,10 @@ fun PetProfile(
                 InfoBox("Color", petData.primaryColor)
             }
             item {
-                InfoBox("Weight", "${petData.weight} kg")
+                InfoBox("Weight", "${petData.weight} pound")
             }
             item {
-                InfoBox("Height", "${petData.height} cm")
+                InfoBox("Height", "${petData.height} inch")
             }
             item {
                 InfoBox("Microchip ID", petData.microchipId ?: "")

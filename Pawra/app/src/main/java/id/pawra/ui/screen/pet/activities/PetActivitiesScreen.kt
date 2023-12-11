@@ -15,7 +15,6 @@ import androidx.navigation.compose.rememberNavController
 import id.pawra.data.ViewModelFactory
 import id.pawra.ui.components.petactivities.PetActivities
 import id.pawra.ui.components.petactivities.PetActivitiesTopBar
-import id.pawra.ui.screen.auth.AuthViewModel
 import id.pawra.ui.theme.PawraTheme
 
 @RequiresApi(Build.VERSION_CODES.O)
