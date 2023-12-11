@@ -118,6 +118,13 @@ interface ApiService {
         @Path("id") id: Int
     ): ActivitiesResponseItem
 
+    @PUT("dogs/{id}")
+    suspend fun updateActivity(
+        @Header("Authorization") authHeader: String,
+        @Path("id") id: Int,
+        @Body body: MutableMap<String, Any>
+    ): ActivitiesResponseItem
+
     @POST("activities/")
     suspend fun addActivity(
         @Header("Authorization") authHeader: String,
