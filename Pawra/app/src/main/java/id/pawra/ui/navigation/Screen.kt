@@ -33,6 +33,9 @@ sealed class Screen(val route: String) {
     data object PetActivitiesPrev : Screen("pet_activities_prev/{activityId}") {
         fun createRoute(activityId: Int) = "pet_activities_prev/$activityId"
     }
+    data object PetActivitiesUpdate : Screen("pet_activities_update/{activityId}"){
+        fun createRoute(activityId: Int) = "pet_activities_update/$activityId"
+    }
     data object PetMentalHealth : Screen("pet_mental_health")
     data object PetMentalHealthResult : Screen("pet_mental_health_result")
 

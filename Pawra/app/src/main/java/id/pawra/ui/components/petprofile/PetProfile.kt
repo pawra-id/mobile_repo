@@ -247,10 +247,10 @@ fun PetProfile(
                 InfoBox("Color", pet.color ?: "")
             }
             item {
-                InfoBox("Weight", "${pet.weight} kg")
+                InfoBox("Weight", "${pet.weight} pound")
             }
             item {
-                InfoBox("Height", "${pet.height} cm")
+                InfoBox("Height", "${pet.height} inch")
             }
             // TODO: microchip not provide
             item {

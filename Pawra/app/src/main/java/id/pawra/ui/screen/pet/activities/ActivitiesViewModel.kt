@@ -2,6 +2,7 @@ package id.pawra.ui.screen.pet.activities
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -39,8 +40,17 @@ class ActivitiesViewModel(
     val addActivityState: StateFlow<UiState<ActivitiesResponseItem>>
         get() = _addActivityState
 
+    private val _updateActivityState: MutableStateFlow<UiState<ActivitiesResponseItem>> = MutableStateFlow(UiState.None)
+    val updateActivityState: StateFlow<UiState<ActivitiesResponseItem>>
+        get() = _updateActivityState
+
     private val _query = mutableStateOf("")
     val query: State<String> get() = _query
+
+    private var activityId by mutableIntStateOf(0)
+    private var petId by mutableIntStateOf(0)
+    private var _activeFilter by mutableStateOf(FilterActivities.Latest.name)
+    private val activeFilter: String get() = _activeFilter
 
     fun getActivities() {
         viewModelScope.launch {
@@ -117,6 +127,7 @@ class ActivitiesViewModel(
                             _activityDetailState.value = UiState.Error(activityDetail.error)
                         }
                         else -> {
+                            this@ActivitiesViewModel.activityId = activityDetail.id
                             _activityDetailState.value = UiState.Success(activityDetail)
                         }
                     }
@@ -215,6 +226,119 @@ class ActivitiesViewModel(
                 tags = listTags
             )
             showDialog = true
+        }
+    }
+
+    private fun updateActivity(
+        description: String,
+        dogId: Int,
+        tags: List<Tags>
+    ) {
+        viewModelScope.launch {
+            _updateActivityState.value = UiState.Loading
+            val user = authRepository.getSession().first()
+            val activityData = ActivityData(
+                description = description,
+                dogId = dogId,
+                tags = tags
+            )
+            activitiesRepository.updateActivity(user, activityId, activityData)
+                .collect { activity ->
+                    when {
+                        activity.error != null ->{
+                            _updateActivityState.value = UiState.Error(activity.error)
+                        }
+                        else -> {
+                            _updateActivityState.value = UiState.Success(activity)
+                        }
+                    }
+                }
+        }
+    }
+
+    var stateUpdateActivity by mutableStateOf(UpdateActivityFormState())
+
+    fun onEventUpdateActivity(event: UpdateActivityFormEvent) {
+        when(event) {
+            is UpdateActivityFormEvent.DogChanged -> {
+                stateUpdateActivity = stateUpdateActivity.copy(dog = event.dog)
+                val dogResult = validateDog.execute(stateUpdateActivity.dog)
+                stateUpdateActivity = stateUpdateActivity.copy(
+                    dogError = dogResult.errorMessage
+                )
+            }
+            is UpdateActivityFormEvent.ActivityChanged -> {
+                stateUpdateActivity = stateUpdateActivity.copy(activity = event.activity)
+                val activityResult = validateActivity.execute(stateUpdateActivity.activity)
+                stateUpdateActivity = stateUpdateActivity.copy(
+                    activityError = activityResult.errorMessage
+                )
+            }
+            is UpdateActivityFormEvent.TagsChanged -> {
+                stateUpdateActivity = stateUpdateActivity.copy(tags = event.tags)
+                val tagsResult = validateTags.execute(tagChip)
+                stateUpdateActivity = stateUpdateActivity.copy(
+                    tagsError = tagsResult.errorMessage
+                )
+            }
+            is UpdateActivityFormEvent.Update -> {
+                submitDataUpdateActivity()
+            }
+        }
+    }
+
+    private fun submitDataUpdateActivity() {
+        val dogResult = validateDog.execute(stateUpdateActivity.dog)
+        val activityResult = validateActivity.execute(stateUpdateActivity.activity)
+        val tagsResult = validateTags.execute(tagChip)
+
+        val hasError = listOf(
+            dogResult,
+            activityResult,
+            tagsResult,
+        ).any { !it.successful }
+
+        if(hasError) {
+            stateUpdateActivity = stateUpdateActivity.copy(
+                dogError = dogResult.errorMessage,
+                activityError = activityResult.errorMessage,
+                tagsError = tagsResult.errorMessage,
+            )
+            showDialog = false
+        } else {
+            val listTags = mutableListOf<Tags>()
+            tagChip.forEach{ data ->
+                listTags.add(Tags(name = data.text))
+            }
+
+            updateActivity(
+                description = stateUpdateActivity.activity,
+                dogId = stateUpdateActivity.dogId,
+                tags = listTags
+            )
+            showDialog = true
+        }
+    }
+
+    fun deleteActivity(activityId: Int) {
+        viewModelScope.launch {
+            _activitiesState.value = UiState.Loading
+            try {
+                val user = authRepository.getSession().first()
+                activitiesRepository.deleteActivity(user, activityId)
+                    .collect { deleteResult ->
+                        when {
+                            deleteResult.error != null -> {
+                                _activitiesState.value = UiState.Error(deleteResult.error)
+                            }
+                            else -> {
+                                getSpecificActivities(petId, query.value, activeFilter)
+                            }
+                        }
+                    }
+            } catch (e: Exception) {
+                _activitiesState.value = UiState.Error("Failed to delete activity: ${e.message}")
+            }
         }
     }
 }

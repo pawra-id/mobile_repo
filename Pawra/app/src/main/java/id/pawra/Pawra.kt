@@ -33,6 +33,7 @@ import id.pawra.ui.screen.pet.profile.PetAddScreen
 import id.pawra.ui.screen.pet.mentalhealth.PetMentalHealthScreen
 import id.pawra.ui.screen.pet.profile.PetProfileScreen
 import id.pawra.ui.screen.pet.PetScreen
+import id.pawra.ui.screen.pet.activities.ActivitiesUpdateScreen
 import id.pawra.ui.screen.pet.profile.PetUpdateScreen
 import id.pawra.ui.screen.profile.ProfileEditScreen
 import id.pawra.ui.screen.profile.ProfileScreen
@@ -82,9 +83,11 @@ fun Pawra(
             listOf(navArgument("petId") { type = NavType.IntType })
         ) {
             val petId = it.arguments?.getInt("petId") ?: 0
+            val activityId = it.arguments?.getInt("activityId") ?: 0
             PetNav(
                 navController = navController,
-                petId = petId
+                petId = petId,
+                activityId = activityId
             )
         }
 
@@ -137,6 +140,17 @@ fun Pawra(
         ) {
             val petId = it.arguments?.getString("petId")?.toInt() ?: 0
             ActivitiesAddScreen(
+                navController = navController,
+                petId = petId
+            )
+        }
+
+        composable(
+            Screen.PetActivitiesUpdate.route,
+            listOf(navArgument("activityId") { type = NavType.IntType })
+        ) {
+            val petId = it.arguments?.getInt("activityId") ?: 0
+            ActivitiesUpdateScreen(
                 navController = navController,
                 petId = petId
             )
@@ -236,7 +250,8 @@ fun PetNav(
     modifier: Modifier = Modifier,
     navPetController: NavHostController = rememberNavController(),
     navController: NavHostController,
-    petId: Int
+    petId: Int,
+    activityId: Int
 ){
     val navBackStackEntry by navPetController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -266,7 +281,8 @@ fun PetNav(
             composable(Screen.PetActivities.route) {
                 PetActivitiesScreen(
                     navController = navController,
-                    petId = petId
+                    petId = petId,
+                    activityId = activityId
                 )
             }
 

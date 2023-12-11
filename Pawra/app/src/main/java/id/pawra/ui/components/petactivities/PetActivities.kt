@@ -53,6 +53,7 @@ import id.pawra.data.ViewModelFactory
 import id.pawra.data.remote.response.TagsItem
 import id.pawra.ui.common.NoRippleTheme
 import id.pawra.ui.common.UiState
+import id.pawra.ui.components.dialog.ConfirmationDialog
 import id.pawra.ui.components.dialog.ResultDialog
 import id.pawra.ui.components.general.SearchBar
 import id.pawra.ui.components.loading.LoadingBox
@@ -74,6 +75,7 @@ fun PetActivities(
     navController: NavController,
     activitiesViewModel: ActivitiesViewModel,
     petId: Int,
+    activityId: Int,
     modifier: Modifier = Modifier
 ) {
     val query by remember { activitiesViewModel.query }
@@ -85,6 +87,7 @@ fun PetActivities(
 
     var isLoading by remember { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(true) }
+    var showResultDialog by remember { mutableStateOf(false) }
 
     if (isLoading) {
         Column (
@@ -252,7 +255,9 @@ fun PetActivities(
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
                                     IconButton(
-                                        onClick = {  },
+                                        onClick = {
+                                            navController.navigate(Screen.PetActivitiesUpdate.createRoute(activityId))
+                                        },
                                         modifier = modifier
                                             .background(DarkGreen, CircleShape)
                                             .size(35.dp)
@@ -266,7 +271,11 @@ fun PetActivities(
                                     }
 
                                     IconButton(
-                                        onClick = { /* do something */ },
+                                        onClick = {
+                                            activitiesViewModel.deleteActivity(data.id)
+                                            showResultDialog = true
+                                            activitiesViewModel.getSpecificActivities(petId, query, activeFilter)
+                                                  },
                                         modifier = modifier
                                             .background(Red, CircleShape)
                                             .size(35.dp)
@@ -302,20 +311,32 @@ fun PetActivities(
         }
     }
 
+    if (showResultDialog) {
+        ResultDialog(
+            success = true,
+            message = "Successful deletion",
+            setShowDialog = { showResultDialog = it },
+        )
+    }
 }
 
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(showBackground = true)
-fun PetActivitiesPreview() {
+fun PetActivitiesPreview(
+    activitiesViewModel: ActivitiesViewModel = viewModel(
+        factory = ViewModelFactory(LocalContext.current)
+    )
+) {
     PawraTheme {
         PetActivities(
             navController = rememberNavController(),
             activitiesViewModel = viewModel(
                 factory = ViewModelFactory(LocalContext.current)
             ),
-            petId = 0
+            petId = 0,
+            activityId = 0
         )
     }
 }

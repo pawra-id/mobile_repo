@@ -15,7 +15,6 @@ import androidx.navigation.compose.rememberNavController
 import id.pawra.data.ViewModelFactory
 import id.pawra.ui.components.petactivities.PetActivities
 import id.pawra.ui.components.petactivities.PetActivitiesTopBar
-import id.pawra.ui.screen.auth.AuthViewModel
 import id.pawra.ui.theme.PawraTheme
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -24,6 +23,7 @@ fun PetActivitiesScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
     petId: Int,
+    activityId: Int,
     activitiesViewModel: ActivitiesViewModel = viewModel(
         factory = ViewModelFactory(LocalContext.current)
     )
@@ -37,7 +37,8 @@ fun PetActivitiesScreen(
         PetActivities(
             navController = navController,
             activitiesViewModel = activitiesViewModel,
-            petId = petId
+            petId = petId,
+            activityId = activityId
         )
     }
 
@@ -50,7 +51,8 @@ fun PetActivitiesScreenPreview() {
     PawraTheme {
         PetActivitiesScreen(
             navController = rememberNavController(),
-            petId = 0
+            petId = 0,
+            activityId = 0
         )
     }
 }
