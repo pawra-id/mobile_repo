@@ -28,11 +28,11 @@ class ActivitiesViewModel(
     private val validateTags: ValidateTags = ValidateTags(),
 ): ViewModel() {
 
-    private val _activitiesState: MutableStateFlow<UiState<List<ActivitiesResponseItem>>> = MutableStateFlow(UiState.None)
+    private val _activitiesState: MutableStateFlow<UiState<List<ActivitiesResponseItem>>> = MutableStateFlow(UiState.Loading)
     val activitiesState: StateFlow<UiState<List<ActivitiesResponseItem>>>
         get() = _activitiesState
 
-    private val _activityDetailState: MutableStateFlow<UiState<ActivitiesResponseItem>> = MutableStateFlow(UiState.None)
+    private val _activityDetailState: MutableStateFlow<UiState<ActivitiesResponseItem>> = MutableStateFlow(UiState.Loading)
     val activityDetailState: StateFlow<UiState<ActivitiesResponseItem>>
         get() = _activityDetailState
 
@@ -50,7 +50,6 @@ class ActivitiesViewModel(
 
     fun getActivities() {
         viewModelScope.launch {
-            _addActivityState.value = UiState.Loading
             val user = authRepository.getSession().first()
             activitiesRepository.getActivities(user)
                 .collect { activities ->
@@ -59,7 +58,9 @@ class ActivitiesViewModel(
                             _activitiesState.value = UiState.Error(activities.error)
                         }
                         else -> {
-                            _activitiesState.value = UiState.Success(activities.activitiesResponse ?: listOf())
+                            _activitiesState.value = UiState.Success(
+                                filterActivities(activities.items ?: listOf(), FilterActivities.Latest.name)
+                            )
                         }
                     }
                 }
@@ -89,48 +90,31 @@ class ActivitiesViewModel(
     }
 
     fun getSpecificActivities(petId: Int, keyword: String, filter: String) {
-
         _query.value = keyword
-
         viewModelScope.launch {
-            _addActivityState.value = UiState.Loading
             val user = authRepository.getSession().first()
-            if (_query.value.isNotEmpty()) {
-                activitiesRepository.getSpesificActivities(user, petId, keyword)
-                    .collect { activities ->
-                        when {
-                            activities.error != null -> {
-                                _activitiesState.value = UiState.Error(activities.error)
-                            }
-                            else -> {
-                                _activitiesState.value = UiState.Success(
-                                    filterActivities(activities.activitiesResponse ?: listOf(), filter)
-                                )
-                            }
+//            if (_query.value.isEmpty()) {
+//                _activitiesState.value = UiState.Loading
+//            }
+            activitiesRepository.getSpecificActivities(user, petId, keyword)
+                .collect { activities ->
+                    when {
+                        activities.error != null -> {
+                            _activitiesState.value = UiState.Error(activities.error)
+                        }
+                        else -> {
+                            _activitiesState.value = UiState.Success(
+                                filterActivities(activities.items ?: listOf(), filter)
+                            )
                         }
                     }
-            } else {
-                activitiesRepository.getSpesificActivities(user, petId)
-                    .collect { activities ->
-                        when {
-                            activities.error != null -> {
-                                _activitiesState.value = UiState.Error(activities.error)
-                            }
-                            else -> {
-                                _activitiesState.value =
-                                    UiState.Success(
-                                        filterActivities(activities.activitiesResponse ?: listOf(), filter)
-                                    )
-                            }
-                        }
-                    }
-            }
+                }
         }
     }
 
     fun getDetailActivity(activityId: Int) {
         viewModelScope.launch {
-            _addActivityState.value = UiState.Loading
+            _activityDetailState.value = UiState.Loading
             val user = authRepository.getSession().first()
             activitiesRepository.getDetailActivity(user, activityId)
                 .collect { activityDetail ->

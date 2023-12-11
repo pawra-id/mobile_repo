@@ -1,16 +1,10 @@
 package id.pawra.ui.screen.pet.activities
 
-import android.graphics.Movie
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import id.pawra.data.local.preference.SessionModel
-import id.pawra.data.remote.response.ActivitiesResponse
 import id.pawra.data.remote.response.ActivitiesResponseItem
 import id.pawra.data.remote.retrofit.ApiService
-import id.pawra.data.repository.ActivitiesRepository
-import kotlinx.coroutines.flow.flowOf
-import org.json.JSONException
-import org.json.JSONObject
 import retrofit2.HttpException
 
 class ActivitiesPagingSource(
@@ -24,7 +18,7 @@ class ActivitiesPagingSource(
         return try {
             if (keyword.isEmpty()) return LoadResult.Page(data = emptyList(), null, null)
             val nextPageNumber = params.key ?: 1
-            val response = apiService.getSpesificActivities(user.token, petId, keyword, params.loadSize, nextPageNumber)
+            val response = apiService.getSpecificActivities(user.token, petId, keyword, params.loadSize, nextPageNumber)
 
             LoadResult.Page(
                 data = response,

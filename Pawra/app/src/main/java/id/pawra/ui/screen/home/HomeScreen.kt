@@ -35,6 +35,7 @@ import id.pawra.ui.components.home.Welcome
 import id.pawra.ui.screen.auth.AuthViewModel
 import id.pawra.ui.screen.pet.activities.ActivitiesViewModel
 import id.pawra.ui.screen.pet.profile.PetViewModel
+import id.pawra.ui.screen.vet.VetViewModel
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.PawraTheme
 
@@ -51,6 +52,9 @@ fun HomeScreen(
         factory = ViewModelFactory(LocalContext.current)
     ),
     activitiesViewModel: ActivitiesViewModel = viewModel(
+        factory = ViewModelFactory(LocalContext.current)
+    ),
+    vetViewModel: VetViewModel = viewModel(
         factory = ViewModelFactory(LocalContext.current)
     )
 ) {
@@ -82,7 +86,8 @@ fun HomeScreen(
             ) }
 
             item { NearbyVets(
-                navController = navController
+                navController = navController,
+                viewModel = vetViewModel
             ) }
 
             item {

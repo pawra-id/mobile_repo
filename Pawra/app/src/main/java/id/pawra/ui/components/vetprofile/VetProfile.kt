@@ -1,5 +1,7 @@
 package id.pawra.ui.components.vetprofile
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -54,14 +56,21 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.compose.rememberImagePainter
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapUiSettings
+import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.maps.android.compose.rememberMarkerState
 import id.pawra.R
 import id.pawra.data.ViewModelFactory
 import id.pawra.data.local.preference.VetData
+import id.pawra.data.remote.response.VetResponseItem
 import id.pawra.ui.screen.auth.AuthViewModel
+import id.pawra.ui.screen.vet.VetViewModel
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkBlue
 import id.pawra.ui.theme.DarkGreen
@@ -75,20 +84,29 @@ import id.pawra.ui.theme.Orange
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
 import id.pawra.ui.theme.White
+import id.pawra.utils.CustomMarker
+import java.lang.String
 
 @Composable
 fun VetProfile(
-    vet: VetData,
-    viewModel: AuthViewModel,
+    vet: VetResponseItem,
+    vetViewModel: VetViewModel,
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
 
+    val context = LocalContext.current
+
+    val location = LatLng(0.9936048, 104.6352146)
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(location, 10f)
+    }
     val mapProperties = MapProperties()
     val uiSettings = MapUiSettings(
-        zoomControlsEnabled = false
+        zoomControlsEnabled = false,
+        scrollGesturesEnabled = false,
+        zoomGesturesEnabled = false
     )
-    val cameraPositionState = rememberCameraPositionState()
 
     Column(
     modifier = modifier
@@ -111,7 +129,7 @@ fun VetProfile(
                         .size(150.dp)
                 ) {
                     AsyncImage(
-                        model = "https://2.bp.blogspot.com/-_sOpXiMO0m4/ViVULhN611I/AAAAAAAAMCk/LbqKTS7T9Fw/s1600/indah%2Bkusuma%2Bhot%2Bdoctor%2Bindonesia.jpg",
+                        model = vet.image,
                         contentDescription = vet.name,
                         modifier = modifier
                             .fillMaxSize()
@@ -145,7 +163,8 @@ fun VetProfile(
                         )
 
                     Text(
-                        text = "${vet.rangeLocation} km",
+                        // vet.rangeLocation
+                        text = " km",
                         fontFamily = Poppins,
                         fontSize = 11.sp,
                         color = DarkBlue,
@@ -170,7 +189,8 @@ fun VetProfile(
                     )
 
                     Text(
-                        text = "${vet.experience} years",
+                        // vet.experience
+                        text = "years",
                         fontFamily = Poppins,
                         fontSize = 11.sp,
                         color = Black,
@@ -195,7 +215,8 @@ fun VetProfile(
                     )
 
                     Text(
-                        text = "${vet.startWorkingHours} - ${vet.endWorkingHours}",
+                        // vet.startWorkingHours - vet.endWorkingHours
+                        text = "",
                         fontFamily = Poppins,
                         fontSize = 11.sp,
                         color = Orange,
@@ -212,7 +233,7 @@ fun VetProfile(
         ){
             Column {
                 Text(
-                    text = vet.name,
+                    text = vet.name ?: "",
                     color = Black,
                     fontFamily = Poppins,
                     fontWeight = FontWeight.Bold,
@@ -220,7 +241,7 @@ fun VetProfile(
                 )
 
                 Text(
-                    text = vet.workPlace,
+                    text = vet.clinicName ?: "",
                     color = Gray,
                     fontFamily = Poppins,
                     fontWeight = FontWeight.Medium,
@@ -235,8 +256,21 @@ fun VetProfile(
                 .padding(start = 22.dp, end = 22.dp, top = 10.dp, bottom = 10.dp),
              
         ) {
+            // vet.phoneNumber
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    context.startActivity(
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse(
+                                String.format(
+                                    "https://api.whatsapp.com/send?phone=%s",
+                                    "+62 83161228858"
+                                )
+                            )
+                        )
+                    )
+                },
                 border = BorderStroke(2.dp, DarkGreen),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = DisabledGreen
@@ -257,9 +291,18 @@ fun VetProfile(
                     color = DarkGreen
                 )
             }
-
+            // vet.email
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    val emailIntent = Intent(
+                        Intent.ACTION_SEND
+                    )
+                    emailIntent.type = "vnd.android.cursor.item/email"
+                    emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("idris.munu@gmail.com"))
+                    context.startActivity(
+                        emailIntent
+                    )
+                },
                 border = BorderStroke(2.dp, DarkGreen),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = DarkGreen
@@ -304,56 +347,75 @@ fun VetProfile(
                 )
 
                 Column {
-                    vet.studies.forEach {
-                        Row {
-                            Text(
-                                text = "\u2022",
-                                style = TextStyle().copy(textAlign = TextAlign.Center),
-                                modifier = modifier.padding(end = 10.dp),
-                                color = Black
-                            )
-                            Text(
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                text = it,
-                                color = Black,
-                                textAlign = TextAlign.Start,
-                                fontSize = 13.sp,
-                                lineHeight = 18.sp
-                            )
-                        }
-                    }
+//                    vet.studies
+//                    vet.studies.forEach {
+//                        Row {
+//                            Text(
+//                                text = "\u2022",
+//                                style = TextStyle().copy(textAlign = TextAlign.Center),
+//                                modifier = modifier.padding(end = 10.dp),
+//                                color = Black
+//                            )
+//                            Text(
+//                                modifier = Modifier
+//                                    .fillMaxWidth(),
+//                                text = it,
+//                                color = Black,
+//                                textAlign = TextAlign.Start,
+//                                fontSize = 13.sp,
+//                                lineHeight = 18.sp
+//                            )
+//                        }
+//                    }
                 }
             }
         }
 
-        Box(
+        Column(
             modifier = modifier
-                .padding(start = 22.dp, end = 22.dp, bottom = 15.dp)
+                .padding(horizontal = 22.dp, vertical = 15.dp)
                 .background(White, RoundedCornerShape(10.dp))
                 .border(2.dp, DarkGreen, RoundedCornerShape(10.dp))
-                .height(700.dp),
         ) {
             Box(
                 modifier = Modifier
+                    .height(350.dp)
                     .padding(15.dp)
+                    .border(1.dp, LightGray, RoundedCornerShape(10.dp))
+                    .fillMaxWidth()
             ) {
                 GoogleMap(
                     properties = mapProperties,
                     cameraPositionState = cameraPositionState,
                     uiSettings = uiSettings,
-                    modifier = modifier.fillMaxHeight()
-                )
-
-                Text(
-                    text = vet.location,
-                    fontSize = 13.sp,
-                    textAlign = TextAlign.Center,
-                    lineHeight = 18.sp,
                     modifier = modifier
-                        .background(White, RoundedCornerShape(15.dp, 15.dp))
-                        .padding(15.dp)
-                        .align(Alignment.BottomCenter),
+                        .fillMaxHeight()
+                        .border(1.dp, LightGray, RoundedCornerShape(10.dp))
+                ) {
+
+                    Marker(
+                        state = rememberMarkerState(position = location),
+                        title = vet.name ?: "",
+                        snippet = vet.address ?: "",
+                        icon = CustomMarker.bitmapDescriptor(context, R.drawable.map_icon)
+                    )
+                }
+            }
+
+            Box(
+                modifier = Modifier
+                    .padding(15.dp)
+                    .border(1.dp, LightGray, RoundedCornerShape(10.dp))
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    text = vet.address ?: "",
+                    fontSize = 13.sp,
+                    textAlign = TextAlign.Justify,
+                    lineHeight = 18.sp,
+                    color = Black,
+                    modifier = modifier
+                        .padding(horizontal = 15.dp)
                 )
             }
         }
@@ -381,8 +443,8 @@ fun VetProfilePreview() {
             listOf("Doctor of Veterinary Medicine (DVM), University of Veterinary Sciences, 2007", "Bachelor of Science in Animal Science, State University, 2003.")
         )
         VetProfile(
-            vet = vetData,
-            viewModel = viewModel(
+            vet = VetResponseItem(id=0),
+            vetViewModel = viewModel(
                 factory = ViewModelFactory(LocalContext.current)
             ),
             navController = rememberNavController()
