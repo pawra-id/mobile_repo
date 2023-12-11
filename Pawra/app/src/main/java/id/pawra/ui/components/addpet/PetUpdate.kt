@@ -38,9 +38,12 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -61,6 +64,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import id.pawra.R
 import id.pawra.data.ViewModelFactory
+import id.pawra.ui.common.UiState
 import id.pawra.ui.screen.pet.profile.DogUpdateFormEvent
 import id.pawra.ui.screen.pet.profile.PetViewModel
 import id.pawra.ui.theme.Black
@@ -72,6 +76,10 @@ import id.pawra.ui.theme.LightGreen
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
 import id.pawra.ui.theme.Red
+import id.pawra.utils.uriToFile
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -79,6 +87,7 @@ fun PetUpdate(
     navController: NavController,
     modifier: Modifier = Modifier,
     showDialog: (Boolean) -> Unit,
+    petId: Int,
     petViewModel: PetViewModel
 ) {
     var isExpanded by remember { mutableStateOf(false) }
@@ -86,13 +95,41 @@ fun PetUpdate(
     val state = petViewModel.updateDogValidationState
     val context = LocalContext.current
 
-    val painter = rememberAsyncImagePainter(state.file.ifEmpty { R.drawable.ic_pet }
-    )
+    petViewModel.getDetailDog(petId)
+
+    petViewModel.petDetailState.collectAsState().value.let {petDetail ->
+        when(petDetail) {
+            is UiState.Success -> {
+                LaunchedEffect(Unit){
+                    state.id = petDetail.data.id
+                    state.name = petDetail.data.name ?: ""
+                    state.breed = petDetail.data.breed ?: ""
+                    state.year = petDetail.data.age.toString()
+                    state.height = petDetail.data.height.toString()
+                    state.sex = petDetail.data.gender.toString()
+                    state.neutered = petDetail.data.neutered ?: false
+                    state.weight = petDetail.data.weight.toString()
+                    state.color = petDetail.data.color ?: ""
+                    state.microchipId = ""
+                    state.summary = petDetail.data.description ?: ""
+                    state.file = petDetail.data.image ?: ""
+                }
+            }
+            else -> {}
+        }
+
+    }
+
+    var isImageUpdate by rememberSaveable { mutableStateOf(false) }
+
+    val painter = rememberAsyncImagePainter(state.file.ifEmpty { R.drawable.ic_pet })
+
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         uri?.let {
-            petViewModel.onEventUpdateDog(DogUpdateFormEvent.DogImageChanged(it.toString()), context)
+            petViewModel.onEventUpdateDog(DogUpdateFormEvent.DogImageChanged(it.toString()))
+            isImageUpdate = true
         }
     }
 
@@ -169,7 +206,7 @@ fun PetUpdate(
                 )
             },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-            onValueChange = { petViewModel.onEventUpdateDog(DogUpdateFormEvent.DogNameChanged(it), context) },
+            onValueChange = { petViewModel.onEventUpdateDog(DogUpdateFormEvent.DogNameChanged(it)) },
             singleLine = true,
             shape = RoundedCornerShape(10.dp),
             modifier = modifier.fillMaxWidth(),
@@ -221,7 +258,7 @@ fun PetUpdate(
                 )
             },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-            onValueChange = { petViewModel.onEventUpdateDog(DogUpdateFormEvent.DogBreedChanged(it), context) },
+            onValueChange = { petViewModel.onEventUpdateDog(DogUpdateFormEvent.DogBreedChanged(it)) },
             singleLine = true,
             shape = RoundedCornerShape(10.dp),
             modifier = modifier.fillMaxWidth(),
@@ -264,7 +301,7 @@ fun PetUpdate(
             ) {
                 Switch(
                     checked = state.neutered,
-                    onCheckedChange = { petViewModel.onEventUpdateDog(DogUpdateFormEvent.DogNeuteredChanged(it), context) },
+                    onCheckedChange = { petViewModel.onEventUpdateDog(DogUpdateFormEvent.DogNeuteredChanged(it)) },
                     modifier = modifier
                         .weight(1f)
                         .padding(end = 8.dp, top = 8.dp, bottom = 8.dp),
@@ -294,7 +331,7 @@ fun PetUpdate(
             ) {
                 OutlinedTextField(
                     value = state.year,
-                    onValueChange = { petViewModel.onEventUpdateDog(DogUpdateFormEvent.DogYearChanged(it), context) },
+                    onValueChange = { petViewModel.onEventUpdateDog(DogUpdateFormEvent.DogYearChanged(it)) },
                     modifier = modifier.weight(2f),
                     suffix = {
                         Text(
@@ -366,7 +403,7 @@ fun PetUpdate(
 
                 OutlinedTextField(
                     value = state.height,
-                    onValueChange = { petViewModel.onEventUpdateDog(DogUpdateFormEvent.DogHeightChanged(it), context) },
+                    onValueChange = { petViewModel.onEventUpdateDog(DogUpdateFormEvent.DogHeightChanged(it)) },
                     modifier = Modifier
                         .width(100.dp),
                     suffix = {
@@ -464,7 +501,7 @@ fun PetUpdate(
                             )
                             },
                             onClick = {
-                                petViewModel.onEventUpdateDog(DogUpdateFormEvent.DogSexChanged("Male"), context)
+                                petViewModel.onEventUpdateDog(DogUpdateFormEvent.DogSexChanged("Male"))
                                     .toString()
                                 isExpanded = false
                             }
@@ -477,7 +514,7 @@ fun PetUpdate(
                             )
                             },
                             onClick = {
-                                petViewModel.onEventUpdateDog(DogUpdateFormEvent.DogSexChanged("Female"), context)
+                                petViewModel.onEventUpdateDog(DogUpdateFormEvent.DogSexChanged("Female"))
                                     .toString()
                                 isExpanded = false
                             }
@@ -502,7 +539,7 @@ fun PetUpdate(
 
                 OutlinedTextField(
                     value = state.weight,
-                    onValueChange = { petViewModel.onEventUpdateDog(DogUpdateFormEvent.DogWeightChanged(it), context) },
+                    onValueChange = { petViewModel.onEventUpdateDog(DogUpdateFormEvent.DogWeightChanged(it)) },
                     modifier = Modifier
                         .width(100.dp),
                     suffix = {
@@ -567,7 +604,7 @@ fun PetUpdate(
                 )
             },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-            onValueChange = { petViewModel.onEventUpdateDog(DogUpdateFormEvent.DogColorChanged(it), context) },
+            onValueChange = { petViewModel.onEventUpdateDog(DogUpdateFormEvent.DogColorChanged(it)) },
             singleLine = true,
             shape = RoundedCornerShape(10.dp),
             modifier = modifier.fillMaxWidth(),
@@ -618,7 +655,7 @@ fun PetUpdate(
                 )
             },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-            onValueChange = { petViewModel.onEventUpdateDog(DogUpdateFormEvent.DogMicrochipIdChanged(it), context) },
+            onValueChange = { petViewModel.onEventUpdateDog(DogUpdateFormEvent.DogMicrochipIdChanged(it)) },
             singleLine = true,
             shape = RoundedCornerShape(10.dp),
             modifier = modifier.fillMaxWidth(),
@@ -670,7 +707,7 @@ fun PetUpdate(
                 )
             },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-            onValueChange = { petViewModel.onEventUpdateDog(DogUpdateFormEvent.DogSummaryChanged(it), context) },
+            onValueChange = { petViewModel.onEventUpdateDog(DogUpdateFormEvent.DogSummaryChanged(it)) },
             singleLine = false,
             shape = RoundedCornerShape(10.dp),
             modifier = modifier
@@ -705,7 +742,18 @@ fun PetUpdate(
 
         Button(
             onClick = {
-                petViewModel.onEventUpdateDog(DogUpdateFormEvent.Submit, context)
+                var multipartBody: MultipartBody.Part? = null
+                if (isImageUpdate) {
+                    val imageFile = uriToFile(Uri.parse(state.file), context)
+                    val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
+                    multipartBody = MultipartBody.Part.createFormData(
+                        "file",
+                        imageFile.name,
+                        requestImageFile
+                    )
+                }
+
+                petViewModel.submitDataUpdateDog(multipartBody)
                 showDialog(petViewModel.showDialog)
             },
             shape = RoundedCornerShape(10.dp),
@@ -715,7 +763,7 @@ fun PetUpdate(
                 .height(50.dp)
         ) {
             Text(
-                text = stringResource(R.string.save),
+                text = stringResource(R.string.update),
                 fontSize = 14.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -737,6 +785,7 @@ fun PetUpdatePreview() {
             petViewModel = viewModel(
                 factory = ViewModelFactory(LocalContext.current)
             ),
+            petId = 0,
             showDialog = {}
         )
     }

@@ -118,9 +118,14 @@ fun Pawra(
             )
         }
 
-        composable(Screen.PetUpdate.route) {
+        composable(
+            Screen.PetUpdate.route,
+            listOf(navArgument("petId") { type = NavType.IntType })
+        ) {
+            val petId = it.arguments?.getInt("petId") ?: 0
             PetUpdateScreen(
-                navController = navController
+                navController = navController,
+                petId = petId
             )
         }
 
