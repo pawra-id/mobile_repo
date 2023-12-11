@@ -46,6 +46,7 @@ import id.pawra.ui.theme.Red
 fun PetProfileTopBar(
     modifier: Modifier = Modifier,
     navController: NavController,
+    petId: Int,
     onDeleteClick: () -> Unit
 ) {
     var displayMenu by remember { mutableStateOf(false)}
@@ -119,7 +120,7 @@ fun PetProfileTopBar(
                             color = DarkGreen
                         ) },
                         onClick = {
-                            navController.navigate(Screen.PetUpdate.route)
+                            navController.navigate(Screen.PetUpdate.createRoute(petId))
                             displayMenu = false
                         },
                         leadingIcon = {
@@ -153,7 +154,7 @@ fun PetProfileTopBar(
     if (showDeleteConfirmation) {
         ConfirmationDialog(
             headText = "Delete Confirmation",
-            warn = true,
+            warn = false,
             message = "Are you sure you want to delete this?",
             setShowDialog = { showDeleteConfirmation = it },
             action = {
@@ -182,6 +183,7 @@ fun PetProfileTopBarPreview(
     PawraTheme {
         PetProfileTopBar(
             navController = rememberNavController(),
+            petId = 0,
             onDeleteClick = ({
                 petViewModel.deleteDogId()
             })

@@ -54,7 +54,7 @@ interface ApiService {
         @Header("Authorization") authHeader: String,
         @Query("search") keyword: String? = "",
         @Query("size") size: Int? = 15,
-        @Query("page") skip: Int? = 1
+        @Query("page") page: Int? = 1
     ): PetResponse
 
     @GET("dogs/{id}")
@@ -94,7 +94,7 @@ interface ApiService {
         @Header("Authorization") authHeader: String,
         @Query("search") keyword: String? = "",
         @Query("size") size: Int? = 15,
-        @Query("page") skip: Int? = 1
+        @Query("page") page: Int? = 1
     ): ActivitiesResponse
 
     @GET("activities/dog/{id}")
@@ -103,8 +103,8 @@ interface ApiService {
         @Path("id") id: Int,
         @Query("search") keyword: String? = "",
         @Query("size") size: Int? = 15,
-        @Query("page") skip: Int? = 1
-    ): List<ActivitiesResponseItem>
+        @Query("page") page: Int? = 1
+    ): ActivitiesResponse
 
     @GET("activities/{id}")
     suspend fun getDetailActivity(
@@ -123,7 +123,7 @@ interface ApiService {
         @Header("Authorization") authHeader: String,
         @Query("search") keyword: String? = "",
         @Query("size") size: Int? = 15,
-        @Query("page") skip: Int? = 1
+        @Query("page") page: Int? = 1
     ): VetResponse
 
     @GET("vets/{id}")

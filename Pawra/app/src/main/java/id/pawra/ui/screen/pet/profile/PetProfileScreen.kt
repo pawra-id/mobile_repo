@@ -53,7 +53,11 @@ fun PetProfileScreen(
     }
 
     Column {
-        PetProfileTopBar(navController = navController,  onDeleteClick = ({ petViewModel.deleteDogId() }))
+        PetProfileTopBar(
+            navController = navController,
+            onDeleteClick = ({ petViewModel.deleteDogId() }),
+            petId = petId
+        )
 
         Column(
             modifier = modifier

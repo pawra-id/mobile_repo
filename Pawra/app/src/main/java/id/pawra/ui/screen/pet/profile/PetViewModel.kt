@@ -255,7 +255,6 @@ class PetViewModel(
                 )
             }
             is DogAddFormEvent.Submit -> {
-
                 submitDataAddDog(context)
             }
         }
@@ -323,11 +322,11 @@ class PetViewModel(
         }
     }
 
-    fun updateDog(
+    private fun updateDog(
         petId: Int,
         name: String,
         breed: String,
-        neutred: Boolean,
+        neutered: Boolean,
         age: Int,
         height: Int,
         gender: String,
@@ -335,20 +334,27 @@ class PetViewModel(
         primaryColor: String,
         microchipId: String,
         summary: String,
-        file: MultipartBody.Part
+        imageUrl: String,
+        file: MultipartBody.Part? = null
     ) {
         viewModelScope.launch {
             _petUpdateState.value = UiState.Loading
             try {
                 val user = authRepository.getSession().first()
 
-                val result = petRepository.postDogImage(user, file).first()
+                var image = imageUrl
+                if (file != null) {
+                    authRepository.postProfileImage(user, file)
+                        .collect { result ->
+                            image = result
+                        }
+                }
 
                 val petData = PetData(
                     name = name,
-                    image = result,
+                    image = image,
                     breed = breed,
-                    neutred = neutred,
+                    neutred = neutered,
                     age = age,
                     height = height,
                     gender = gender,
@@ -367,7 +373,7 @@ class PetViewModel(
     }
 
     var updateDogValidationState by mutableStateOf(DogUpdateFormState())
-    fun onEventUpdateDog(event: DogUpdateFormEvent, context: Context) {
+    fun onEventUpdateDog(event: DogUpdateFormEvent) {
         when(event) {
             is DogUpdateFormEvent.DogNameChanged -> {
                 updateDogValidationState = updateDogValidationState.copy(name = event.name)
@@ -438,14 +444,10 @@ class PetViewModel(
                     fileError = fileResult.errorMessage
                 )
             }
-            is DogUpdateFormEvent.Submit -> {
-
-                submitDataUpdateDog(context)
-            }
         }
     }
 
-    private fun submitDataUpdateDog(context: Context) {
+    fun submitDataUpdateDog(multipartBody: MultipartBody.Part? = null) {
         val nameResult = validateDogName.execute(updateDogValidationState.name)
         val breedResult = validateDogBreed.execute(updateDogValidationState.breed)
         val yearResult = validateDogYear.execute(updateDogValidationState.year)
@@ -482,29 +484,23 @@ class PetViewModel(
             )
             showDialog = false
         } else {
-            val imageFile = uriToFile(Uri.parse(updateDogValidationState.file), context)
-            val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
-            val multipartBody = MultipartBody.Part.createFormData(
-                "file",
-                imageFile.name,
-                requestImageFile
-            )
 
-//            updateDog(
-//                updateDogValidationState.petId,
-//                updateDogValidationState.name,
-//                updateDogValidationState.breed,
-//                updateDogValidationState.neutered,
-//                updateDogValidationState.year.toInt(),
-//                updateDogValidationState.height.toInt(),
-//                updateDogValidationState.sex,
-//                updateDogValidationState.weight.toInt(),
-//                updateDogValidationState.color,
-//                updateDogValidationState.microchipId,
-//                updateDogValidationState.summary,
-//                multipartBody
-//            )
-//            showDialog = true
+            updateDog(
+                updateDogValidationState.id,
+                updateDogValidationState.name,
+                updateDogValidationState.breed,
+                updateDogValidationState.neutered,
+                updateDogValidationState.year.toInt(),
+                updateDogValidationState.height.toInt(),
+                updateDogValidationState.sex,
+                updateDogValidationState.weight.toInt(),
+                updateDogValidationState.color,
+                updateDogValidationState.microchipId,
+                updateDogValidationState.summary,
+                updateDogValidationState.file,
+                multipartBody
+            )
+            showDialog = true
         }
     }
 
