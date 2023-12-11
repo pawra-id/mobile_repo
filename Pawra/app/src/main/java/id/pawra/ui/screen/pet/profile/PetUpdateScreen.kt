@@ -32,24 +32,25 @@ import id.pawra.ui.theme.PawraTheme
 fun PetUpdateScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
+    petId: Int,
     petViewModel: PetViewModel = viewModel(
         factory = ViewModelFactory(LocalContext.current)
     )
 ) {
-    Column {
-        var isLoading by remember { mutableStateOf(false) }
-        var showDialog by remember { mutableStateOf(false) }
+    var isLoading by remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(false) }
 
-        if (isLoading) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-                modifier = modifier.fillMaxSize()
-            ) {
-                LoadingBox()
-            }
+    if (isLoading) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = modifier.fillMaxSize()
+        ) {
+            LoadingBox()
         }
+    }
 
+    Column {
         PetAddTopBar(navController = rememberNavController())
         Column(
             modifier = modifier
@@ -62,44 +63,45 @@ fun PetUpdateScreen(
             PetUpdate(
                 navController = rememberNavController(),
                 showDialog = { showDialog = it },
-                petViewModel = petViewModel
+                petViewModel = petViewModel,
+                petId = petId
             )
         }
+    }
 
-        petViewModel.petAddState.collectAsState().value.let { addState ->
-            when (addState) {
-                is UiState.Loading -> {
-                    isLoading = true
+    petViewModel.petUpdateState.collectAsState().value.let { addState ->
+        when (addState) {
+            is UiState.Loading -> {
+                isLoading = true
+            }
+            is UiState.Success -> {
+                if(showDialog) {
+                    isLoading = false
+                    ResultDialog(
+                        success = true,
+                        message = "Dog updated successfully",
+                        setShowDialog = {
+                            showDialog = it
+                        }
+                    )
                 }
-                is UiState.Success -> {
-                    if(showDialog) {
-                        isLoading = false
-                        ResultDialog(
-                            success = true,
-                            message = "Dog created successfully",
-                            setShowDialog = {
-                                showDialog = it
-                            }
-                        )
-                    }
+            }
+            is UiState.Error -> {
+                if(showDialog) {
+                    isLoading = false
+                    ResultDialog(
+                        success = false,
+                        message = addState.errorMessage,
+                        setShowDialog = {
+                            showDialog = it
+                        }
+                    )
                 }
-                is UiState.Error -> {
-                    if(showDialog) {
-                        isLoading = false
-                        ResultDialog(
-                            success = false,
-                            message = addState.errorMessage,
-                            setShowDialog = {
-                                showDialog = it
-                            }
-                        )
-                    }
-                }
-
-                else -> {}
             }
 
+            else -> {}
         }
+
     }
 }
 
@@ -108,7 +110,8 @@ fun PetUpdateScreen(
 fun PetUpdateScreenPreview() {
     PawraTheme {
         PetUpdateScreen(
-            navController = rememberNavController()
+            navController = rememberNavController(),
+            petId = 0
         )
     }
 }

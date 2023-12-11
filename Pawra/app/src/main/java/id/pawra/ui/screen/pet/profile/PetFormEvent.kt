@@ -28,6 +28,4 @@ sealed class DogUpdateFormEvent {
     data class DogSummaryChanged(val summary: String) : DogUpdateFormEvent()
     data class DogNeuteredChanged(val neutered: Boolean) : DogUpdateFormEvent()
     data class DogImageChanged(val file: String) : DogUpdateFormEvent()
-
-    data object Submit: DogUpdateFormEvent()
 }

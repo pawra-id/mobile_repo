@@ -44,11 +44,7 @@ class ActivitiesRepository private constructor(
     suspend fun getSpecificActivities(user: SessionModel, petId: Int, keyword: String? = ""): Flow<ActivitiesResponse> {
         try {
             val response = apiService.getSpecificActivities("Bearer ${user.token}", petId, keyword)
-            return flowOf(
-                ActivitiesResponse(
-                    items  = response
-                )
-            )
+            return flowOf(response)
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
             val errorMessage = try {

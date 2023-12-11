@@ -21,9 +21,9 @@ class ActivitiesPagingSource(
             val response = apiService.getSpecificActivities(user.token, petId, keyword, params.loadSize, nextPageNumber)
 
             LoadResult.Page(
-                data = response,
+                data = response.items ?: listOf(),
                 prevKey = if (nextPageNumber == 1) null else nextPageNumber - 1,
-                nextKey = if (response.isEmpty()) null else nextPageNumber + 1
+                nextKey = if (response.items?.isEmpty() == true) null else nextPageNumber + 1
             )
         } catch (e: HttpException) {
             return LoadResult.Error(e)
