@@ -188,7 +188,9 @@ fun NearbyVets(
                                 modifier = modifier.padding(top = 10.dp)
                             )
                             Button(
-                                onClick = { /*TODO*/ },
+                                onClick = {
+                                    navController.navigate(Screen.VetProfile.createRoute(vetDetailState.data.id))
+                                },
                                 modifier = modifier
                                     .padding(top = 16.dp),
                                 colors = ButtonDefaults.buttonColors(
