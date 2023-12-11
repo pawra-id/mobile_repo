@@ -425,9 +425,9 @@ class PetViewModel(
                 )
             }
             is DogUpdateFormEvent.DogSummaryChanged -> {
-                addDogValidationState = addDogValidationState.copy(summary = event.summary)
-                val summaryResult = validateDogSummary.execute(addDogValidationState.summary)
-                addDogValidationState = addDogValidationState.copy(
+                updateDogValidationState = updateDogValidationState.copy(summary = event.summary)
+                val summaryResult = validateDogSummary.execute(updateDogValidationState.summary)
+                updateDogValidationState = updateDogValidationState.copy(
                     summaryError = summaryResult.errorMessage
                 )
             }
@@ -486,19 +486,19 @@ class PetViewModel(
         } else {
 
             updateDog(
-                updateDogValidationState.id,
-                updateDogValidationState.name,
-                updateDogValidationState.breed,
-                updateDogValidationState.neutered,
-                updateDogValidationState.year.toInt(),
-                updateDogValidationState.height.toInt(),
-                updateDogValidationState.sex,
-                updateDogValidationState.weight.toInt(),
-                updateDogValidationState.color,
-                updateDogValidationState.microchipId,
-                updateDogValidationState.summary,
-                updateDogValidationState.file,
-                multipartBody
+                petId = updateDogValidationState.id,
+                name = updateDogValidationState.name,
+                breed = updateDogValidationState.breed,
+                neutered = updateDogValidationState.neutered,
+                age = updateDogValidationState.year.toInt(),
+                height = updateDogValidationState.height.toInt(),
+                gender = updateDogValidationState.sex,
+                weight = updateDogValidationState.weight.toInt(),
+                primaryColor = updateDogValidationState.color,
+                microchipId = updateDogValidationState.microchipId,
+                summary = updateDogValidationState.summary,
+                imageUrl = updateDogValidationState.file,
+                file = multipartBody
             )
             showDialog = true
         }

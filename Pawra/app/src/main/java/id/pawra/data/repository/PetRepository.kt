@@ -139,13 +139,13 @@ class PetRepository private constructor(
             data["image"] = petData.image
             data["name"] = petData.name
             data["breed"] = petData.breed
-            data["neutred"] = petData.neutred
+            data["neutered"] = petData.neutred
             data["age"] = petData.age
             data["height"] = petData.height
             data["gender"] = petData.gender
             data["weight"] = petData.weight
-            data["primaryColor"] = petData.primaryColor
-            data["summary"] = petData.summary.toString()
+            data["color"] = petData.primaryColor
+            data["description"] = petData.summary.toString()
 
             return flow {
                 val response = apiService.updateDog("Bearer ${user.token}", petId, data)
