@@ -148,9 +148,14 @@ fun Pawra(
             )
         }
 
-        composable(Screen.VetProfile.route) {
+        composable(
+            Screen.VetProfile.route,
+            listOf(navArgument("vetId") { type = NavType.IntType })
+        ) {
+            val vetId = it.arguments?.getInt("vetId") ?: 0
             VetProfileScreen(
-                navController = navController
+                navController = navController,
+                vetId = vetId
             )
         }
 

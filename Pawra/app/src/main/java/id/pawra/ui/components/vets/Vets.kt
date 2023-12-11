@@ -192,7 +192,7 @@ fun Vets(
                                     .background(White)
                                     .border(1.dp, LightGray, RoundedCornerShape(15.dp))
                                     .clickable {
-                                        navController.navigate(Screen.VetProfile.route)
+                                        navController.navigate(Screen.VetProfile.createRoute(data.id))
                                     }
                                     .fillMaxWidth()
                                     .padding(horizontal = 10.dp, vertical = 15.dp),
