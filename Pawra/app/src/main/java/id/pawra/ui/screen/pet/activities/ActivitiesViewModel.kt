@@ -108,7 +108,7 @@ class ActivitiesViewModel(
 
     fun getDetailActivity(activityId: Int) {
         viewModelScope.launch {
-            _activityDetailState.value = UiState.Loading
+
             val user = authRepository.getSession().first()
             activitiesRepository.getDetailActivity(user, activityId)
                 .collect { activityDetail ->

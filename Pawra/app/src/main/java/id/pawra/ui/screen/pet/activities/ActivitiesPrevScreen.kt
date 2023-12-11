@@ -76,6 +76,7 @@ fun ActivitiesPrevScreen(
             activitiesViewModel.activityDetailState.collectAsState().value.let { activityDetailState ->
                 when (activityDetailState) {
                     is UiState.Success -> {
+                        isLoading = false
                         ActivitiesPrevInfo(
                             activity = activityDetailState.data,
                         )
