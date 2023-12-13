@@ -114,7 +114,7 @@ fun NearbyVets(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(25.dp)
                     ) {
-                        items(vetsState.data, key = { it.id }) { data ->
+                        items(vetsState.data.take(10), key = { it.id }) { data ->
                             Box(
                                 contentAlignment = Alignment.Center,
                                 modifier = modifier

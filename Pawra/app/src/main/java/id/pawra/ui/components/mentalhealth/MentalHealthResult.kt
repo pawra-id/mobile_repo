@@ -1,5 +1,6 @@
 package id.pawra.ui.components.mentalhealth
 
+import android.health.connect.datatypes.units.Percentage
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,18 +22,10 @@ import id.pawra.ui.theme.Poppins
 @Composable
 fun MentalHealthResult (
     modifier: Modifier = Modifier,
+    percentage: Float,
+    descriptionResult: String
 ) {
-    val mentalHealthData = MentalHealthData(
-        "Max",
-        70f,
-        "There is 70% chance that your dog has depression",
-        "Some of the symptoms that the machine catch are sudden change on behavior, eat less food, and aggressiveness toward other animals",
-        listOf(
-            "Take your pet for a walk daily.",
-            "Spend quality time playing with your pet.",
-            "Consider consulting a veterinarian for professional advice."
-        )
-    )
+    val titleResult = "There is ${percentage}% chance that your dog has depression"
 
     Column(
         modifier = Modifier
@@ -41,7 +34,7 @@ fun MentalHealthResult (
     ) {
 
         Text(
-            text = mentalHealthData.titleResult,
+            text = titleResult,
             modifier = modifier
                 .fillMaxWidth()
                 .padding(bottom = 15.dp),
@@ -52,7 +45,7 @@ fun MentalHealthResult (
             textAlign = TextAlign.Center
         )
         Text(
-            text = mentalHealthData.descResult,
+            text = descriptionResult,
             modifier = modifier
                 .fillMaxWidth()
                 .padding(bottom = 15.dp),
@@ -69,6 +62,9 @@ fun MentalHealthResult (
 @Preview(showBackground = true)
 fun MentalHealthResultPreview() {
     PawraTheme {
-        MentalHealthResult()
+        MentalHealthResult(
+            percentage = 0f,
+            descriptionResult = ""
+        )
     }
 }

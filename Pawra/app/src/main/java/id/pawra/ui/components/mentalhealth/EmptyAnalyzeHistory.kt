@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -49,7 +50,8 @@ fun EmptyAnalyzeHistory(
         Text(
             text = "analyzing your dog's mental health to get a list history ",
             fontSize = 12.sp,
-            color = Gray
+            color = Gray,
+            textAlign = TextAlign.Center
         )
     }
 }

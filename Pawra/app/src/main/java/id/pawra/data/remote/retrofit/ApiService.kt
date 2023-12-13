@@ -2,8 +2,11 @@ package id.pawra.data.remote.retrofit
 
 import id.pawra.data.remote.response.ActivitiesResponse
 import id.pawra.data.remote.response.ActivitiesResponseItem
+import id.pawra.data.remote.response.AnalysisResponse
+import id.pawra.data.remote.response.AnalysisResponseItem
 import id.pawra.data.remote.response.PetResponse
 import id.pawra.data.remote.response.PetResponseItem
+import id.pawra.data.remote.response.ShareAnalysisResponse
 import id.pawra.data.remote.response.SignInResponse
 import id.pawra.data.remote.response.SignUpResponse
 import id.pawra.data.remote.response.VetResponse
@@ -144,4 +147,46 @@ interface ApiService {
         @Header("Authorization") authHeader: String,
         @Path("id") id: Int
     ): VetResponseItem
+
+    @GET("analysis/dog/{id}")
+    suspend fun getSpecificAnalysis(
+        @Header("Authorization") authHeader: String,
+        @Path("id") id: Int,
+        @Query("search") keyword: String? = "",
+        @Query("size") size: Int? = 15,
+        @Query("page") page: Int? = 1
+    ): AnalysisResponse
+
+    @GET("analysis/{id}")
+    suspend fun getDetailAnalysis(
+        @Header("Authorization") authHeader: String,
+        @Path("id") id: Int
+    ): AnalysisResponseItem
+
+    @GET("analysis/shared")
+    suspend fun getSharedAnalysis(
+        @Header("Authorization") authHeader: String,
+        @Query("search") keyword: String? = "",
+        @Query("size") size: Int? = 15,
+        @Query("page") page: Int? = 1
+    ): AnalysisResponse
+
+    @POST("analysis/")
+    suspend fun addAnalysis(
+        @Header("Authorization") authHeader: String,
+        @Query("days") days: Int,
+        @Body body: MutableMap<String, Any>
+    ): AnalysisResponseItem
+
+    @PUT("/analysis/{id}/share")
+    suspend fun shareAnalysis(
+        @Header("Authorization") authHeader: String,
+        @Path("id") id: Int
+    ): ShareAnalysisResponse
+
+    @PUT("/analysis/{id}/unshare")
+    suspend fun unshareAnalysis(
+        @Header("Authorization") authHeader: String,
+        @Path("id") id: Int
+    ): ShareAnalysisResponse
 }

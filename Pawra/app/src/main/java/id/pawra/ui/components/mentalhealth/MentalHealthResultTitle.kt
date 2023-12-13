@@ -20,26 +20,14 @@ import id.pawra.ui.theme.Poppins
 
 @Composable
 fun MentalHealthResultTitle (
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    petName: String
 ) {
-
-    val mentalHealthData = MentalHealthData(
-        "Max",
-        70f,
-        "There is 70% chance that your dog has depression",
-        "Some of the symptoms that the machine catch are sudden change on behavior, eat less food, and aggressiveness toward other animals",
-        listOf(
-            "Take your pet for a walk daily.",
-            "Spend quality time playing with your pet.",
-            "Consider consulting a veterinarian for professional advice."
-        )
-    )
-
     Column {
         Text(
             text = buildAnnotatedString {
                 withStyle(style = SpanStyle(color = LightGreen)) {
-                    append(mentalHealthData.petName)
+                    append(petName)
                 }
                 withStyle(style = SpanStyle(color = Black)) {
                     append(" mental")
@@ -73,6 +61,8 @@ fun MentalHealthResultTitle (
 @Preview(showBackground = true)
 fun MentalHealthResultTitlePreview() {
     PawraTheme {
-        MentalHealthResultTitle()
+        MentalHealthResultTitle(
+            petName = "Max"
+        )
     }
 }

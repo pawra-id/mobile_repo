@@ -1,6 +1,7 @@
 package id.pawra.ui.components.mentalhealth
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,13 +29,14 @@ import id.pawra.ui.theme.Poppins
 
 @Composable
 fun MentalHealthAction (
-    mentalHealthData: MentalHealthData,
+    listAction: List<String>,
     modifier: Modifier = Modifier,
 ) {
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(start = 22.dp, end = 22.dp, bottom = 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
@@ -48,8 +50,12 @@ fun MentalHealthAction (
             fontWeight = FontWeight.SemiBold,
         )
 
-        LazyColumn {
-            items(mentalHealthData.recommendedActions.orEmpty()) { action ->
+        LazyColumn(
+            modifier = modifier
+                .padding(top = 20.dp),
+            verticalArrangement = Arrangement.spacedBy(15.dp)
+        ) {
+            items(listAction) { action ->
                 ActionBox(action)
             }
         }
@@ -59,50 +65,38 @@ fun MentalHealthAction (
 
 @Composable
 fun ActionBox(value: String) {
-
     Box(
         modifier = Modifier
-            .height(65.dp)
             .fillMaxWidth()
-            .padding(8.dp)
             .clip(shape = RoundedCornerShape(10.dp))
             .background(LightGreen),
         contentAlignment = Alignment.CenterStart
     ) {
-        Column(
-            horizontalAlignment = Alignment.Start
-        ) {
             Text(
                 text = value,
                 fontFamily = Poppins,
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 14.sp,
                 modifier = Modifier
-                    .padding(10.dp),
+                    .padding(15.dp),
                 color = DarkGreen,
                 textAlign = TextAlign.Start
             )
-        }
+
     }
 }
 
 @Composable
 @Preview(showBackground = true)
 fun MentalHealthActionPreview() {
-    val mentalHealthData = MentalHealthData(
-        "Max",
-        70f,
-        "There is 70% chance that your dog has depression",
-        "Some of the symptoms that the machine catch are sudden change on behavior, eat less food, and aggressiveness toward other animals",
-        listOf(
-            "Take your pet for a walk daily.",
-            "Spend quality time playing with your pet.",
-            "Consider consulting a veterinarian for professional advice."
-        )
-    )
-
     PawraTheme {
-        MentalHealthAction(mentalHealthData = mentalHealthData)
+        MentalHealthAction(
+            listAction = listOf(
+                "Take your pet for a walk daily.",
+                "Spend quality time playing with your pet.",
+                "Consider consulting a veterinarian for professional advice."
+            )
+        )
     }
 }
 

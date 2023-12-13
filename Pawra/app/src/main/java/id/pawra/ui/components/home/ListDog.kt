@@ -75,7 +75,7 @@ fun ListDog(
                         ),
                     horizontalArrangement = Arrangement.spacedBy(15.dp)
                 ) {
-                    items(petState.data, key = { it.id }) { data ->
+                    items(petState.data.take(5), key = { it.id }) { data ->
 
                         val painter = rememberAsyncImagePainter(data.image?.ifEmpty { R.drawable.ic_pet })
 

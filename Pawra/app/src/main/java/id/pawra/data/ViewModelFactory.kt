@@ -4,12 +4,14 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import id.pawra.data.repository.ActivitiesRepository
+import id.pawra.data.repository.AnalysisRepository
 import id.pawra.data.repository.AuthRepository
 import id.pawra.data.repository.PetRepository
 import id.pawra.data.repository.VetRepository
 import id.pawra.di.Injection
 import id.pawra.ui.screen.auth.AuthViewModel
 import id.pawra.ui.screen.pet.activities.ActivitiesViewModel
+import id.pawra.ui.screen.pet.mentalhealth.AnalysisViewModel
 import id.pawra.ui.screen.pet.profile.PetViewModel
 import id.pawra.ui.screen.vet.MapViewModel
 import id.pawra.ui.screen.vet.VetViewModel
@@ -20,6 +22,7 @@ class ViewModelFactory (
     private val petRepository: PetRepository = Injection.providePetRepository(context),
     private val activitiesRepository: ActivitiesRepository = Injection.provideActivitiesRepository(context),
     private val vetRepository: VetRepository = Injection.provideVetRepository(context),
+    private val analysisRepository: AnalysisRepository = Injection.provideAnalysisRepository(context),
 ): ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
@@ -38,6 +41,9 @@ class ViewModelFactory (
         }
         if (modelClass.isAssignableFrom(VetViewModel::class.java)) {
             return VetViewModel(vetRepository, authRepository) as T
+        }
+        if (modelClass.isAssignableFrom(AnalysisViewModel::class.java)) {
+            return AnalysisViewModel(analysisRepository, authRepository) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
