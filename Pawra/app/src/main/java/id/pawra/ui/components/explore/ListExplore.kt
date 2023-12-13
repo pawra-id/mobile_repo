@@ -47,13 +47,14 @@ fun ListExplore(
         modifier = modifier.padding(top = 10.dp)
     ) {
         if (activeMenu == Menu.MentalHealth.name) {
-            (0 until 3).forEach { _ ->
-                SharedMental()
-            }
+            SharedMental()
         } else {
-            (0 until 3).forEach { _ ->
-                Blogs(navController = rememberNavController())
-            }
+            Blogs(
+                navController = rememberNavController(),
+                blogsViewModel = viewModel(
+                    factory = ViewModelFactory(LocalContext.current)
+                )
+            )
         }
     }
 }

@@ -1,31 +1,46 @@
 package id.pawra.ui.components.explore
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
-import id.pawra.R
-import id.pawra.ui.navigation.Screen
+import id.pawra.data.ViewModelFactory
+import id.pawra.ui.common.UiState
+import id.pawra.ui.components.dialog.ResultDialog
+import id.pawra.ui.components.general.SearchBar
+import id.pawra.ui.components.loading.LoadingBox
+import id.pawra.ui.screen.explore.BlogsViewModel
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.PawraTheme
@@ -33,75 +48,140 @@ import id.pawra.ui.theme.PawraTheme
 @Composable
 fun Blogs(
     modifier: Modifier = Modifier,
-    navController: NavController
+    navController: NavController,
+    blogsViewModel: BlogsViewModel
 ) {
 
-    val title = "Here is 5 possible reasons your dog become aggressive."
-    val date = "23 February 2023"
+    val query by remember { blogsViewModel.query }
+
+    LaunchedEffect(Unit){
+        blogsViewModel.getBlogs("")
+    }
+
+    var isLoading by remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(true) }
+
+    if (isLoading) {
+        Column (
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = modifier.fillMaxSize()
+        ) {
+            LoadingBox()
+        }
+    }
 
     Column(
         modifier = modifier
-            .padding(
-                top = 10.dp,
-                bottom = 10.dp
-            )
-            .clip(shape = RoundedCornerShape(15.dp))
-            .clickable {
-                navController.navigate(Screen.BlogDetail.route)
-            }
+            .fillMaxWidth(),
     ) {
-        Row(
-            modifier = modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            AsyncImage(
-                model = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Joko_Widodo_2019_official_portrait.jpg/639px-Joko_Widodo_2019_official_portrait.jpg",
-                contentDescription = "Admin Profile Picture",
-                modifier = modifier
-                    .size(28.dp)
-                    .clip(CircleShape),
-                contentScale = ContentScale.Crop,
-            )
+        SearchBar(
+            query = query,
+            onQueryChange = blogsViewModel::getBlogs,
+            onSearch = {},
+            active = false,
+            onActiveChange = {},
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = null,
+                    tint = Gray
+                )
+            },
+            placeholder = {
+                Text(
+                    "Search",
+                    color = Gray
+                )
+            },
+            modifier = modifier
+                .padding(top = 16.dp, bottom = 16.dp)
+                .fillMaxWidth()
+                .heightIn(min = 48.dp)
+        ) {}
 
-            Text(
-                color = Gray,
-                fontSize = 13.sp,
-                text = "by",
-                modifier = modifier.padding(start = 10.dp)
-            )
-            Text(
-                text = "Admin",
-                color = Gray,
-                fontSize = 13.sp,
-                fontWeight = FontWeight.SemiBold,
-                modifier = modifier.padding(start = 5.dp)
-            )
+        blogsViewModel.blogsState.collectAsState().value.let { blogsState ->
+            when (blogsState) {
+                is UiState.Loading -> {
+                    isLoading = true
+                }
+
+                is UiState.Success -> {
+                    isLoading = false
+
+                    LazyColumn(
+                        modifier = modifier.weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        items(blogsState.data, key = { it.id }) {data ->
+
+                            Row(
+                                modifier = modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Text(
+                                    color = Gray,
+                                    fontSize = 13.sp,
+                                    text = "by",
+                                    modifier = modifier.padding(start = 10.dp)
+                                )
+                                Text(
+                                    text = "Admin",
+                                    color = Gray,
+                                    fontSize = 13.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    modifier = modifier.padding(start = 5.dp)
+                                )
+                            }
+
+                            AsyncImage(
+                                model = data.image,
+                                contentDescription = data.title,
+                                modifier = modifier
+                                    .padding(top = 10.dp)
+                                    .height(185.dp)
+                                    .clip(RoundedCornerShape(15.dp))
+                                    .fillMaxWidth(),
+                                contentScale = ContentScale.Crop,
+                            )
+
+                            Text(
+                                text = data.title ?: "",
+                                color = Black,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                modifier = modifier.padding(top = 10.dp)
+                            )
+
+                            Text(
+                                text = data.createdAt ?: "",
+                                color = Gray,
+                                fontSize = 13.sp,
+                                modifier = modifier
+                                    .padding(top = 5.dp)
+                                    .align(Alignment.End)
+                            )
+                        }
+                    }
+                }
+
+                is UiState.Error -> {
+                    if(showDialog) {
+                        isLoading = false
+                        ResultDialog(
+                            success = false,
+                            message = blogsState.errorMessage,
+                            setShowDialog = {
+                                showDialog = it
+                            }
+                        )
+                    }
+                }
+
+                else -> {}
+
+            }
         }
-
-        AsyncImage(
-            model = "https://media.istockphoto.com/id/1210830302/photo/agressive-dogs-dog-attack-dog-fight.webp?b=1&s=170667a&w=0&k=20&c=ZlCp4kZ2AJlilf4NM2fdr5rI5pjFNkKb7YSehrHYfjs=",
-            contentDescription = title,
-            modifier = modifier.padding(top = 10.dp)
-                .height(185.dp)
-                .clip(RoundedCornerShape(15.dp))
-                .fillMaxWidth(),
-            contentScale = ContentScale.Crop,
-        )
-
-        Text(
-            text = title,
-            color = Black,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.SemiBold,
-            modifier = modifier.padding(top = 10.dp)
-        )
-
-        Text(
-            text = date,
-            color = Gray,
-            fontSize = 13.sp,
-            modifier = modifier.padding(top = 5.dp).align(Alignment.End)
-        )
     }
 }
 
@@ -109,6 +189,11 @@ fun Blogs(
 @Preview(showBackground = true)
 fun BlogsPreview() {
     PawraTheme {
-        Blogs(navController = rememberNavController())
+        Blogs(
+            navController = rememberNavController(),
+            blogsViewModel = viewModel(
+                factory = ViewModelFactory(LocalContext.current)
+            )
+        )
     }
 }
