@@ -1,4 +1,4 @@
-package id.pawra.ui.components.mapaddress
+package id.pawra.ui.components.general
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -30,7 +30,8 @@ fun BottomSheet(
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = SheetState(
             skipPartiallyExpanded = false,
-            initialValue = SheetValue.Expanded)
+            initialValue = SheetValue.Expanded,
+            skipHiddenState = true)
     )
 
     val configuration = LocalConfiguration.current
@@ -39,7 +40,6 @@ fun BottomSheet(
 
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
-//        sheetPeekHeight = halfScreenHeight - (halfScreenHeight / 2),
         sheetContainerColor = White,
         sheetShape = RoundedCornerShape(40.dp, 40.dp),
         sheetContent = {

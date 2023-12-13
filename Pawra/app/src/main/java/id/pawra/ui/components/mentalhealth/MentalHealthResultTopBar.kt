@@ -14,19 +14,28 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import id.pawra.data.ViewModelFactory
+import id.pawra.ui.screen.pet.mentalhealth.AnalysisViewModel
 import id.pawra.ui.theme.DarkGreen
 import id.pawra.ui.theme.DisabledGreen
 import id.pawra.ui.theme.PawraTheme
+import id.pawra.ui.theme.Red
 
 
 @Composable
 fun MentalHealthResultTopBar (
     modifier: Modifier = Modifier,
-    navController: NavController
+    navController: NavController,
+    analysisViewModel: AnalysisViewModel,
+    isShared : Boolean,
+    analysisId: Int,
+    setShowDialog: (Boolean) -> Unit
 ) {
     Box(
         contentAlignment = Alignment.CenterStart,
@@ -56,12 +65,19 @@ fun MentalHealthResultTopBar (
             IconButton(
                 modifier = modifier
                     .size(32.dp),
-                onClick = {  }
+                onClick = {
+                    if (isShared) {
+                        analysisViewModel.unshareAnalysis(analysisId)
+                    } else {
+                        analysisViewModel.shareAnalysis(analysisId)
+                    }
+                    setShowDialog(true)
+                }
             ) {
                 Icon(
                     imageVector = Icons.Filled.Share,
                     contentDescription = "Share",
-                    tint = DarkGreen,
+                    tint = if (isShared) DarkGreen else Red,
                     modifier = modifier.size(25.dp),
                 )
             }
@@ -73,6 +89,14 @@ fun MentalHealthResultTopBar (
 @Preview(showBackground = true)
 fun MentalHealthResultTopBarPreview() {
     PawraTheme {
-        MentalHealthResultTopBar(navController = rememberNavController())
+        MentalHealthResultTopBar(
+            navController = rememberNavController(),
+            analysisViewModel = viewModel(
+                factory = ViewModelFactory(LocalContext.current)
+            ),
+            analysisId = 0,
+            setShowDialog = {},
+            isShared = false
+        )
     }
 }

@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontFamily
@@ -28,27 +29,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import id.pawra.data.local.preference.MentalHealthData
+import id.pawra.ui.theme.DarkBlue
 import id.pawra.ui.theme.DarkGreen
+import id.pawra.ui.theme.DarkYellow
+import id.pawra.ui.theme.DisabledBlue
 import id.pawra.ui.theme.DisabledGreen
+import id.pawra.ui.theme.DisabledRed
+import id.pawra.ui.theme.DisabledYellow
 import id.pawra.ui.theme.PawraTheme
+import id.pawra.ui.theme.Red
+import kotlin.math.roundToInt
 
 @Composable
-fun MentalHealthResultGraph () {
-
-    val mentalHealthData = MentalHealthData(
-        "Max",
-        70f,
-        "There is 70% chance that your dog has depression",
-        "Some of the symptoms that the machine catch are sudden change on behavior, eat less food, and aggressiveness toward other animals",
-        listOf(
-            "Take your pet for a walk daily.",
-            "Spend quality time playing with your pet.",
-            "Consider consulting a veterinarian for professional advice."
-        )
-    )
-
-    val percentage by remember { mutableStateOf(mentalHealthData.petPercentage) }
-
+fun MentalHealthResultGraph (
+    percentage: Float
+) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -71,7 +66,23 @@ fun MentalHealthResultGraph () {
 
 @Composable
 fun PercentageCircleProgressBar(percentage: Float, modifier: Modifier = Modifier) {
-    val currentPercentage by remember { mutableFloatStateOf(percentage) }
+
+    var color: Color
+    var disableColor: Color
+
+    if (percentage < 25) {
+        color = DarkGreen
+        disableColor = DisabledGreen
+    } else if(percentage < 50) {
+        color = DarkBlue
+        disableColor = DisabledBlue
+    } else if(percentage < 75) {
+        color = DarkYellow
+        disableColor = DisabledYellow
+    } else {
+        color = Red
+        disableColor = DisabledRed
+    }
 
     Box(
         modifier = modifier
@@ -89,13 +100,13 @@ fun PercentageCircleProgressBar(percentage: Float, modifier: Modifier = Modifier
 
             val strokeWidth = 60.dp.toPx()
             val startAngle = 0f
-            val sweepAngle = 360f * (currentPercentage / 100)
+            val sweepAngle = 360f * (percentage / 100)
 
             val offsetX = (size.width - canvasWidth) / 2
             val offsetY = (size.height - canvasHeight) / 2
 
             drawArc(
-                color = DisabledGreen,
+                color = disableColor,
                 startAngle = startAngle,
                 sweepAngle = 360f,
                 useCenter = false,
@@ -105,7 +116,7 @@ fun PercentageCircleProgressBar(percentage: Float, modifier: Modifier = Modifier
             )
 
             drawArc(
-                color = DarkGreen,
+                color = color,
                 startAngle = startAngle,
                 sweepAngle = sweepAngle,
                 useCenter = false,
@@ -116,7 +127,7 @@ fun PercentageCircleProgressBar(percentage: Float, modifier: Modifier = Modifier
         }
 
         Text(
-            text = "${currentPercentage.toInt()}%",
+            text = "${percentage.roundToInt()}%",
             modifier = Modifier
                 .align(Alignment.Center),
             fontFamily = FontFamily.Default,
@@ -131,6 +142,8 @@ fun PercentageCircleProgressBar(percentage: Float, modifier: Modifier = Modifier
 @Preview(showBackground = true)
 fun MentalHealthResultGraphPreview() {
     PawraTheme {
-        MentalHealthResultGraph()
+        MentalHealthResultGraph(
+            percentage = 78f
+        )
     }
 }

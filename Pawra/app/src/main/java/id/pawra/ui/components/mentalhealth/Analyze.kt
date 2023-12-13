@@ -73,7 +73,7 @@ fun Analyze(
             )
         }
 
-        var isFinished by remember { mutableStateOf(true) }
+        var isFinished by remember { mutableStateOf(false) }
 
         Box(
             modifier = modifier
