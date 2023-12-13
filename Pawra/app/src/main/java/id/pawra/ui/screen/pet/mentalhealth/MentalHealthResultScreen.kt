@@ -81,6 +81,7 @@ fun MentalHealthResultScreen(
 
             is UiState.Success -> {
                 BottomSheet(
+                    expanded = false,
                     content = {
                         Column {
                             petViewModel.getDetailDog(detailAnalysisState.data.dogId ?: 0)
@@ -117,7 +118,7 @@ fun MentalHealthResultScreen(
                             Column(
                                 modifier = modifier
                                     .fillMaxSize()
-                                    .padding(horizontal = 22.dp)
+                                    .padding(start = 22.dp, end = 22.dp, bottom = 56.dp )
                                     .verticalScroll(rememberScrollState()),
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 verticalArrangement = Arrangement.Top,
