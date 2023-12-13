@@ -24,13 +24,14 @@ import id.pawra.ui.theme.White
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomSheet(
+    expanded: Boolean,
     content: @Composable (() -> Unit),
     sheetContent: @Composable (() -> Unit),
 ) {
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = SheetState(
             skipPartiallyExpanded = false,
-            initialValue = SheetValue.Expanded,
+            initialValue = if (expanded) SheetValue.Expanded else SheetValue.PartiallyExpanded,
             skipHiddenState = true)
     )
 
@@ -79,6 +80,7 @@ fun DragHandle(
 fun BottomSheetPreview() {
     PawraTheme {
         BottomSheet(
+            true,
             {},
             {}
         )
