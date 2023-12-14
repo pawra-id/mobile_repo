@@ -25,7 +25,7 @@ import id.pawra.ui.screen.auth.SignUpScreen
 import id.pawra.ui.screen.explore.BlogScreen
 import id.pawra.ui.screen.explore.ExploreScreen
 import id.pawra.ui.screen.home.HomeScreen
-import id.pawra.ui.screen.pet.MentalHealthResultScreen
+import id.pawra.ui.screen.pet.mentalhealth.MentalHealthResultScreen
 import id.pawra.ui.screen.pet.activities.ActivitiesAddScreen
 import id.pawra.ui.screen.pet.activities.ActivitiesPrevScreen
 import id.pawra.ui.screen.pet.activities.PetActivitiesScreen
@@ -178,9 +178,14 @@ fun Pawra(
             )
         }
 
-        composable(Screen.PetMentalHealthResult.route) {
+        composable(
+            Screen.PetMentalHealthResult.route,
+            listOf(navArgument("analysisId") { type = NavType.IntType })
+        ) {
+            val analysisId = it.arguments?.getInt("analysisId") ?: 0
             MentalHealthResultScreen(
-                navController = navController
+                navController = navController,
+                analysisId = analysisId
             )
         }
 
@@ -287,7 +292,10 @@ fun PetNav(
             }
 
             composable(Screen.PetMentalHealth.route) {
-                PetMentalHealthScreen(navController = navController)
+                PetMentalHealthScreen(
+                    navController = navController,
+                    petId = petId
+                )
             }
         }
     }

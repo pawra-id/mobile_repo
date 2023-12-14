@@ -114,7 +114,7 @@ fun HomeScreen(
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 verticalArrangement = Arrangement.spacedBy(10.dp)
                             ){
-                                for (item in activitiesState.data) {
+                                for (item in activitiesState.data.take(10)) {
                                     key(item) {
                                         Activities(
                                             data = item,
