@@ -4,6 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import id.pawra.data.remote.response.AnalysisResponse
 import id.pawra.data.remote.response.AnalysisResponseItem
 import id.pawra.data.remote.response.ShareAnalysisResponse
 import id.pawra.data.remote.response.VetResponseItem
@@ -31,6 +32,11 @@ class AnalysisViewModel(
         UiState.Loading)
     val analysisDetailState: StateFlow<UiState<AnalysisResponseItem>>
         get() = _analysisDetailState
+
+    private val _addAnalysisState: MutableStateFlow<UiState<AnalysisResponseItem>> = MutableStateFlow(
+        UiState.None)
+    val addAnalysisState: StateFlow<UiState<AnalysisResponseItem>>
+        get() = _addAnalysisState
 
     private val _shareState: MutableStateFlow<ShareAnalysisResponse> = MutableStateFlow(
         ShareAnalysisResponse(
@@ -61,6 +67,24 @@ class AnalysisViewModel(
                 }
 
 
+        }
+    }
+
+    fun addAnalysis(petId: Int, days: Int) {
+        viewModelScope.launch {
+            _addAnalysisState.value = UiState.Loading
+            val user = authRepository.getSession().first()
+            analysisRepository.addAnalysis(user, petId, days)
+                .collect { addAnalysis ->
+                    when {
+                        addAnalysis.error != null ->{
+                            _addAnalysisState.value = UiState.Error(addAnalysis.error)
+                        }
+                        else -> {
+                            _addAnalysisState.value = UiState.Success(addAnalysis)
+                        }
+                    }
+                }
         }
     }
 

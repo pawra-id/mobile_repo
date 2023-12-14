@@ -133,7 +133,7 @@ fun PercentageCircleProgressBar(percentage: Float, modifier: Modifier = Modifier
             fontFamily = FontFamily.Default,
             fontSize = 38.sp,
             fontWeight = FontWeight.Bold,
-            color = DarkGreen
+            color = color
         )
     }
 }

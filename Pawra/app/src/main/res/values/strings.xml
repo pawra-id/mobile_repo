@@ -45,7 +45,7 @@
     <string name="microchipid">Microchip ID</string>
     <string name="select_dog">Select Dog</string>
     <string name="activity">Activity</string>
-    <string name="tags">Tags (optional)</string>
+    <string name="tags">Tags</string>
     <string name="input_dog_name">Enter your dog\'s name</string>
     <string name="input_dog_breed">Enter your dog\'s breed</string>
     <string name="input_dog_color">Enter your dog\'s Primary Color</string>

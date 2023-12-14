@@ -1,6 +1,8 @@
 package id.pawra.ui.components.addactivities
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +16,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -38,11 +42,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalContext
@@ -71,10 +77,11 @@ import id.pawra.ui.theme.LightGreen
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
 import id.pawra.ui.theme.Red
+import kotlinx.coroutines.launch
 
 @SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class,
-    ExperimentalComposeUiApi::class
+    ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class
 )
 @Composable
 fun AddActivitiesForm (
@@ -264,41 +271,54 @@ fun AddActivitiesForm (
                     .weight(1f),
                 contentAlignment = Alignment.CenterStart
             ) {
-                BasicTextField(
-                    value = state.tags,
-                    onValueChange = {
-                        activitiesViewModel.onEventAddActivity(AddActivityFormEvent.TagsChanged(it)) },
-                    singleLine = false,
+                val bringIntoViewRequester = remember { BringIntoViewRequester() }
+                val coroutineScope = rememberCoroutineScope()
 
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 8.dp),
-                    textStyle = TextStyle.Default.copy(
-                        fontSize = 14.sp,
-                        color = Gray,
-                        fontFamily = Poppins,
-                    ),
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Done
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onDone = {
-                            if (state.tags.isNotEmpty()) {
-                                keyboardController?.hide()
-                                val chip = ChipData(
-                                    text = state.tags
-                                )
-                                if (!chipDataSnapshotStateList.contains(chip)){
-                                    selectedItems.add(state.tags)
-                                    chipDataSnapshotStateList.add(chip)
-                                    activitiesViewModel.onEventAddActivity(AddActivityFormEvent.TagsChanged(""))
+                Column {
+                    BasicTextField(
+                        value = state.tags,
+                        onValueChange = {
+                            activitiesViewModel.onEventAddActivity(AddActivityFormEvent.TagsChanged(it)) },
+                        singleLine = false,
+
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 8.dp)
+                            .bringIntoViewRequester(bringIntoViewRequester)
+                            .onFocusEvent { focusState ->
+                                if (focusState.isFocused) {
+                                    coroutineScope.launch {
+                                        bringIntoViewRequester.bringIntoView()
+                                    }
                                 }
-                                state.tags = ""
-                                keyboardController?.show()
+                            },
+                        textStyle = TextStyle.Default.copy(
+                            fontSize = 14.sp,
+                            color = Gray,
+                            fontFamily = Poppins,
+                        ),
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Done
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                if (state.tags.isNotEmpty()) {
+                                    keyboardController?.hide()
+                                    val chip = ChipData(
+                                        text = state.tags
+                                    )
+                                    if (!chipDataSnapshotStateList.contains(chip)){
+                                        selectedItems.add(state.tags)
+                                        chipDataSnapshotStateList.add(chip)
+                                        activitiesViewModel.onEventAddActivity(AddActivityFormEvent.TagsChanged(""))
+                                    }
+                                    state.tags = ""
+                                    keyboardController?.show()
+                                }
                             }
-                        }
+                        )
                     )
-                )
+                }
             }
         }
 

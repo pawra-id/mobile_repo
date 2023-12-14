@@ -63,6 +63,7 @@ fun MapAddress(
 
 
     BottomSheet(
+        expanded = true,
         content = {
             Column {
                 MapAddressTopBar()
