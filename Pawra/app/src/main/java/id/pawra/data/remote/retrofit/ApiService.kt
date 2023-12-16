@@ -38,6 +38,11 @@ interface ApiService {
         @Field("password") password: String
     ): SignInResponse
 
+    @POST("token/refresh")
+    suspend fun refreshToken(
+        @Body body: MutableMap<String, Any>
+    ): SignInResponse
+
     @PUT("users/{id}")
     suspend fun updateProfile(
         @Header("Authorization") authHeader: String,
@@ -70,7 +75,7 @@ interface ApiService {
     suspend fun deleteDog(
         @Header("Authorization") authHeader: String,
         @Path("id") id: Int
-    ): PetResponseItem
+    ): String
 
     @PUT("dogs/{id}")
     suspend fun updateDog(
@@ -119,9 +124,9 @@ interface ApiService {
     suspend fun deleteActivity(
         @Header("Authorization") authHeader: String,
         @Path("id") id: Int
-    ): ActivitiesResponseItem
+    ): String
 
-    @PUT("dogs/{id}")
+    @PUT("activities/{id}")
     suspend fun updateActivity(
         @Header("Authorization") authHeader: String,
         @Path("id") id: Int,

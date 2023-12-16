@@ -35,7 +35,6 @@ import id.pawra.ui.components.loading.LoadingBox
 import id.pawra.ui.screen.pet.profile.PetViewModel
 import id.pawra.ui.theme.PawraTheme
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ActivitiesPrevScreen(
     modifier: Modifier = Modifier,
@@ -105,7 +104,6 @@ fun ActivitiesPrevScreen(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(showBackground = true)
 fun ActivitiesPrevScreenPreview() {

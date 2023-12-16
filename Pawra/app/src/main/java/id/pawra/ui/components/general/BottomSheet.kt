@@ -42,6 +42,7 @@ fun BottomSheet(
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         sheetContainerColor = White,
+        sheetShadowElevation = 5.dp,
         sheetShape = RoundedCornerShape(40.dp, 40.dp),
         sheetContent = {
             sheetContent()

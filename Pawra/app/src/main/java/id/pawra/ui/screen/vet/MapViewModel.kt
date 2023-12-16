@@ -23,7 +23,8 @@ class MapViewModel: ViewModel() {
     lateinit var placesClient: PlacesClient
     lateinit var geoCoder: Geocoder
 
-    var locationState by mutableStateOf<LocationState>(LocationState.NoPermission)
+    var locationState by mutableStateOf<LocationState>(LocationState.LocationLoading)
+    var query by mutableStateOf("")
 
     @SuppressLint("MissingPermission")
     fun getCurrentLocation() {
@@ -31,10 +32,13 @@ class MapViewModel: ViewModel() {
         fusedLocationClient
             .getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
             .addOnSuccessListener { location ->
-                locationState = if (location == null && locationState !is LocationState.LocationAvailable) {
-                    LocationState.Error
+                if (location == null) {
+                    locationState = LocationState.NoPermission
+                    if (locationState !is LocationState.LocationAvailable) {
+                        locationState = LocationState.Error
+                    }
                 } else {
-                    LocationState.LocationAvailable(LatLng(location.latitude, location.longitude))
+                    locationState = LocationState.LocationAvailable(LatLng(location.latitude, location.longitude))
                 }
             }
     }
@@ -81,12 +85,10 @@ class MapViewModel: ViewModel() {
         }
     }
 
-    var text by mutableStateOf("")
-
     fun getAddress(latLng: LatLng) {
         viewModelScope.launch {
             val address = geoCoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
-            text = address?.get(0)?.getAddressLine(0).toString()
+            query = address?.get(0)?.getAddressLine(0).toString()
         }
     }
 }

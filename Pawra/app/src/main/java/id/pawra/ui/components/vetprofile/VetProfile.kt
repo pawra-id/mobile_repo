@@ -97,7 +97,7 @@ fun VetProfile(
 
     val context = LocalContext.current
 
-    val location = LatLng(0.9936048, 104.6352146)
+    val location = LatLng(vet.latitude?.toDouble() ?: 0.0, vet.longitude?.toDouble() ?: 0.0)
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(location, 10f)
     }
@@ -189,8 +189,7 @@ fun VetProfile(
                     )
 
                     Text(
-                        // vet.experience
-                        text = "years",
+                        text = "${vet.experience} years",
                         fontFamily = Poppins,
                         fontSize = 11.sp,
                         color = Black,
@@ -215,8 +214,7 @@ fun VetProfile(
                     )
 
                     Text(
-                        // vet.startWorkingHours - vet.endWorkingHours
-                        text = "",
+                        text = "${vet.startWorkHour} - ${vet.endWorkHour}",
                         fontFamily = Poppins,
                         fontSize = 11.sp,
                         color = Orange,
@@ -256,7 +254,6 @@ fun VetProfile(
                 .padding(start = 22.dp, end = 22.dp, top = 10.dp, bottom = 10.dp),
              
         ) {
-            // vet.phoneNumber
             Button(
                 onClick = {
                     context.startActivity(
@@ -265,7 +262,7 @@ fun VetProfile(
                             Uri.parse(
                                 String.format(
                                     "https://api.whatsapp.com/send?phone=%s",
-                                    "+62 83161228858"
+                                    "${vet.phone}"
                                 )
                             )
                         )
@@ -291,14 +288,13 @@ fun VetProfile(
                     color = DarkGreen
                 )
             }
-            // vet.email
             Button(
                 onClick = {
                     val emailIntent = Intent(
                         Intent.ACTION_SEND
                     )
                     emailIntent.type = "vnd.android.cursor.item/email"
-                    emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("idris.munu@gmail.com"))
+                    emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("${vet.email}"))
                     context.startActivity(
                         emailIntent
                     )
@@ -347,26 +343,23 @@ fun VetProfile(
                 )
 
                 Column {
-//                    vet.studies
-//                    vet.studies.forEach {
-//                        Row {
-//                            Text(
-//                                text = "\u2022",
-//                                style = TextStyle().copy(textAlign = TextAlign.Center),
-//                                modifier = modifier.padding(end = 10.dp),
-//                                color = Black
-//                            )
-//                            Text(
-//                                modifier = Modifier
-//                                    .fillMaxWidth(),
-//                                text = it,
-//                                color = Black,
-//                                textAlign = TextAlign.Start,
-//                                fontSize = 13.sp,
-//                                lineHeight = 18.sp
-//                            )
-//                        }
-//                    }
+                    Row {
+                        Text(
+                            text = "\u2022",
+                            style = TextStyle().copy(textAlign = TextAlign.Center),
+                            modifier = modifier.padding(end = 10.dp),
+                            color = Black
+                        )
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            text = vet.education ?: "",
+                            color = Black,
+                            textAlign = TextAlign.Start,
+                            fontSize = 13.sp,
+                            lineHeight = 18.sp
+                        )
+                    }
                 }
             }
         }
@@ -402,22 +395,15 @@ fun VetProfile(
                 }
             }
 
-            Box(
-                modifier = Modifier
-                    .padding(15.dp)
-                    .border(1.dp, LightGray, RoundedCornerShape(10.dp))
-                    .fillMaxWidth()
-            ) {
-                Text(
-                    text = vet.address ?: "",
-                    fontSize = 13.sp,
-                    textAlign = TextAlign.Justify,
-                    lineHeight = 18.sp,
-                    color = Black,
-                    modifier = modifier
-                        .padding(horizontal = 15.dp)
-                )
-            }
+            Text(
+                text = vet.address ?: "",
+                fontSize = 13.sp,
+                textAlign = TextAlign.Justify,
+                lineHeight = 18.sp,
+                color = Black,
+                modifier = modifier
+                    .padding(horizontal = 15.dp)
+            )
         }
     }
 }

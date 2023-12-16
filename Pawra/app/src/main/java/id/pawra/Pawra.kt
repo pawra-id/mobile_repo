@@ -1,13 +1,19 @@
 package id.pawra
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Build
+import android.preference.PreferenceManager
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -15,11 +21,15 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import id.pawra.data.ViewModelFactory
+import id.pawra.data.local.preference.Preference
+import id.pawra.data.local.preference.dataStore
 import id.pawra.ui.components.onboarding.Onboarding
 import id.pawra.ui.navigation.AddButton
 import id.pawra.ui.navigation.BottomNavigation
 import id.pawra.ui.navigation.PetBottomNavigation
 import id.pawra.ui.navigation.Screen
+import id.pawra.ui.screen.auth.AuthViewModel
 import id.pawra.ui.screen.auth.SignInScreen
 import id.pawra.ui.screen.auth.SignUpScreen
 import id.pawra.ui.screen.explore.BlogScreen
@@ -42,8 +52,8 @@ import id.pawra.ui.screen.vet.MapAddressScreen
 import id.pawra.ui.screen.vet.VetProfileScreen
 import id.pawra.ui.screen.vet.VetScreen
 import id.pawra.ui.theme.PawraTheme
+import kotlinx.coroutines.flow.first
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Pawra(
     modifier: Modifier = Modifier,
@@ -55,9 +65,25 @@ fun Pawra(
         modifier = modifier
     ) {
         composable(Screen.SplashScreen.route) {
-            SplashScreen(
-                navController = navController
+            val viewModel: AuthViewModel = viewModel(
+                factory = ViewModelFactory(LocalContext.current)
             )
+
+            viewModel.getSession()
+            val sessionState by viewModel.sessionState.collectAsState()
+
+            if (!sessionState.isLaunched) {
+                SplashScreen(
+                    navController = navController
+                )
+            } else {
+                if (sessionState.isLogin) {
+                    HomeNav(navController = navController)
+                } else {
+                    SignInScreen(navController = navController)
+                }
+            }
+
         }
         composable(Screen.OnBoarding.route) {
             Onboarding(
@@ -149,10 +175,10 @@ fun Pawra(
             Screen.PetActivitiesUpdate.route,
             listOf(navArgument("activityId") { type = NavType.IntType })
         ) {
-            val petId = it.arguments?.getInt("activityId") ?: 0
+            val activityId = it.arguments?.getInt("activityId") ?: 0
             ActivitiesUpdateScreen(
                 navController = navController,
-                petId = petId
+                activityId = activityId
             )
         }
 
@@ -198,7 +224,6 @@ fun Pawra(
 
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeNav(
     modifier: Modifier = Modifier,
@@ -232,8 +257,9 @@ fun HomeNav(
             }
 
             composable(Screen.Pet.route) {
-                PetScreen(navHomeController = navHomeController,
-                    navController = navController)
+                PetScreen(
+                    navController = navController
+                )
             }
 
             composable(Screen.Explore.route) {
@@ -249,7 +275,6 @@ fun HomeNav(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun PetNav(
     modifier: Modifier = Modifier,
@@ -301,7 +326,6 @@ fun PetNav(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun PawraAppPreview() {

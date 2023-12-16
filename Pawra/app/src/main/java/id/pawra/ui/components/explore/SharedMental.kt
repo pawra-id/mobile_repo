@@ -9,7 +9,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Female
+import androidx.compose.material.icons.filled.Male
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -66,14 +71,18 @@ fun SharedMental(
                 modifier = modifier.padding(5.dp)
                     .align(Alignment.BottomEnd)
             ) {
-                Text(
-                    text = gender,
-                    fontSize = 11.sp,
-                    color = if (gender == "male") DarkBlue else DarkPink,
-                    modifier = modifier
-                        .clip(shape = RoundedCornerShape(15.dp))
-                        .background(if (gender == "male") DisabledBlue else DisabledPink)
+                Icon(
+                    if (gender == "male") Icons.Filled.Male else Icons.Filled.Female,
+                    "Sex Icon",
+                    modifier
+                        .align(Alignment.TopEnd)
+                        .clip(CircleShape)
+                        .background(
+                            color = if (gender == "male") DisabledBlue else DisabledPink
+                        )
                         .padding(vertical = 2.dp, horizontal = 10.dp)
+                        .size(18.dp),
+                    (if (gender == "male") DarkBlue else DarkPink)
                 )
             }
 

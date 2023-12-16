@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,6 +27,7 @@ import id.pawra.ui.common.UiState
 import id.pawra.ui.components.dialog.ResultDialog
 import id.pawra.ui.components.loading.LoadingBox
 import id.pawra.ui.components.petprofile.PetProfileTopBar
+import id.pawra.ui.navigation.Screen
 import id.pawra.ui.theme.PawraTheme
 
 @Composable
@@ -38,7 +40,10 @@ fun PetProfileScreen(
         factory = ViewModelFactory(LocalContext.current)
     )
 ) {
-    petViewModel.getDetailDog(petId)
+    LaunchedEffect(Unit){
+        petViewModel.getDetailDog(petId)
+    }
+
     var isLoading by remember { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(true) }
 
@@ -55,7 +60,9 @@ fun PetProfileScreen(
     Column {
         PetProfileTopBar(
             navController = navController,
-            onDeleteClick = ({ petViewModel.deleteDogId() }),
+            onDeleteClick = ({
+                petViewModel.deleteDogId(petId)
+            }),
             petId = petId
         )
 
@@ -97,7 +104,6 @@ fun PetProfileScreen(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(showBackground = true)
 fun PetProfileScreenPreview() {

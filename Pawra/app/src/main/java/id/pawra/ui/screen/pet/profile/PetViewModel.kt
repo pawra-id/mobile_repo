@@ -2,6 +2,8 @@ package id.pawra.ui.screen.pet.profile
 
 import android.content.Context
 import android.net.Uri
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -59,9 +61,6 @@ class PetViewModel(
     val petUpdateState : StateFlow<UiState<PetResponseItem?>>
         get() = _petUpdateState
 
-    private var petId by mutableIntStateOf(0)
-    private var showResultDialog by mutableStateOf(false)
-
     fun getDog() {
         viewModelScope.launch {
             val user = authRepository.getSession().first()
@@ -90,7 +89,6 @@ class PetViewModel(
                         }
                         else -> {
                             _petDetailState.value = UiState.Success(dogDetail)
-                            this@PetViewModel.petId = dogDetail.id
                         }
                     }
                 }
@@ -504,21 +502,15 @@ class PetViewModel(
         }
     }
 
-    fun deleteDogId(){
+    fun deleteDogId(petId: Int){
         deleteDog(petId)
     }
 
     private fun deleteDog(petId: Int) {
         viewModelScope.launch {
-            val user = authRepository.getSession().first()
             try {
+                val user = authRepository.getSession().first()
                 petRepository.deleteDog(user, petId)
-                    .collect { result ->
-                        handleDelete(result, result.error, _petDetailState)
-                        if (result.error == null) {
-                            showResultDialog = true
-                        }
-                    }
             } catch (e: Exception) {
                 _petDetailState.value = UiState.Error(e.message ?: "Terjadi kesalahan yang tidak diketahui")
             }

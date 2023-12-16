@@ -35,7 +35,7 @@ import id.pawra.ui.theme.PawraTheme
 @Composable
 fun ActivitiesUpdateScreen(
     modifier: Modifier = Modifier,
-    petId: Int,
+    activityId: Int,
     navController: NavController,
     activitiesViewModel: ActivitiesViewModel = viewModel(
         factory = ViewModelFactory(LocalContext.current)
@@ -58,7 +58,7 @@ fun ActivitiesUpdateScreen(
     }
 
     Column {
-        AddActivitiesTopBar(navController = rememberNavController())
+        AddActivitiesTopBar(navController = navController)
 
         Column(
             modifier = modifier
@@ -71,48 +71,47 @@ fun ActivitiesUpdateScreen(
             AddActivitiesTitle()
             Spacer(modifier = Modifier.height(15.dp))
             UpdateActivitiesForm(
-                navController = rememberNavController(),
-                petId = petId,
+                navController = navController,
+                activityId = activityId,
                 activitiesViewModel = activitiesViewModel,
-                petViewModel = petViewModel,
                 showDialog = { showDialog = it }
             )
-
-            activitiesViewModel.addActivityState.collectAsState().value.let { activityState ->
-                when (activityState) {
-                    is UiState.Loading -> {
-                        isLoading = true
-                    }
-                    is UiState.Success -> {
-                        if(showDialog) {
-                            isLoading = false
-                            ResultDialog(
-                                success = true,
-                                message = "Activity add successfully",
-                                setShowDialog = {
-                                    showDialog = it
-                                }
-                            )
-                        }
-                    }
-                    is UiState.Error -> {
-                        if(showDialog) {
-                            isLoading = false
-                            ResultDialog(
-                                success = false,
-                                message = activityState.errorMessage,
-                                setShowDialog = {
-                                    showDialog = it
-                                }
-                            )
-                        }
-                    }
-
-                    else -> {}
-                }
-
-            }
         }
+    }
+
+    activitiesViewModel.updateActivityState.collectAsState().value.let { activityState ->
+        when (activityState) {
+            is UiState.Loading -> {
+                isLoading = true
+            }
+            is UiState.Success -> {
+                if(showDialog) {
+                    isLoading = false
+                    ResultDialog(
+                        success = true,
+                        message = "Activity updated successfully",
+                        setShowDialog = {
+                            showDialog = it
+                        }
+                    )
+                }
+            }
+            is UiState.Error -> {
+                if(showDialog) {
+                    isLoading = false
+                    ResultDialog(
+                        success = false,
+                        message = activityState.errorMessage,
+                        setShowDialog = {
+                            showDialog = it
+                        }
+                    )
+                }
+            }
+
+            else -> {}
+        }
+
     }
 }
 
@@ -122,7 +121,7 @@ fun ActivitiesUpdateScreenPreview() {
     PawraTheme {
         ActivitiesUpdateScreen(
             navController = rememberNavController(),
-            petId = 0
+            activityId = 0
         )
     }
 }

@@ -1,5 +1,8 @@
+@file:Suppress("DEPRECATION")
+
 package id.pawra.ui.screen.onboarding
 
+import android.preference.PreferenceManager
 import androidx.annotation.FloatRange
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,8 +26,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,11 +42,10 @@ import id.pawra.R
 import id.pawra.ui.components.onboarding.OnBoardingData
 import id.pawra.ui.components.onboarding.Onboarding
 import id.pawra.ui.components.onboarding.PagerIndicator
-import id.pawra.ui.components.signup.SignUpFooter
 import id.pawra.ui.navigation.Screen
 import id.pawra.ui.theme.BottomCardShape
-import id.pawra.ui.theme.LightGreen
 import id.pawra.ui.theme.Gray
+import id.pawra.ui.theme.LightGreen
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -56,26 +58,24 @@ fun OnBoardingPager(
     pagerState: PagerState,
     navController: NavController
 ) {
+    val context = LocalContext.current
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(LightGreen),
+        contentAlignment = Alignment.TopCenter,
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(LightGreen),
-            contentAlignment = Alignment.Center
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.background_onboarding),
-                contentDescription = "Background Image",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize(),
-            )
-        }
+
+        Image(
+            painter = painterResource(id = R.drawable.background_onboarding),
+            contentDescription = "Background Image",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize(),
+        )
 
         LazyColumn(
             modifier = Modifier
-                .background(Color.Transparent)
+                .fillMaxSize()
         ) {
             item {
                 Spacer(modifier = Modifier.height(20.dp))
@@ -83,6 +83,7 @@ fun OnBoardingPager(
                     Box(
                         contentAlignment = Alignment.TopCenter,
                         modifier = Modifier
+                            .background(Color.Transparent)
                             .fillMaxSize()
                     ) {
                         Image(
@@ -97,9 +98,6 @@ fun OnBoardingPager(
 
                 Spacer(modifier = Modifier.height(16.dp))
                 Card(
-                    modifier = Modifier
-                        .background(Color.Transparent)
-                        .fillMaxSize(),
                     elevation = CardDefaults.cardElevation(
                         defaultElevation = 0.dp
                     ),
@@ -152,12 +150,20 @@ fun OnBoardingPager(
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
-                            .fillMaxSize()
                             .background(Color.White)
+                            .padding(bottom = 200.dp)
                     ){
                         Button(
+                            enabled = pagerState.currentPage == 2,
                             onClick = {
-                                navController.navigate(Screen.SignUp.route)
+                                PreferenceManager.getDefaultSharedPreferences(context).edit()
+                                    .putBoolean("IS_FIRST_LAUNCHED", false)
+                                    .apply()
+                                navController.navigate(Screen.SignUp.route){
+                                    popUpTo(Screen.OnBoarding.route) {
+                                        inclusive = true
+                                    }
+                                }
                             },
                             shape = RoundedCornerShape(10.dp),
                             modifier = Modifier
@@ -166,14 +172,10 @@ fun OnBoardingPager(
                                 .height(50.dp)
                         ) {
                             Text(
-                                text = stringResource(R.string.create_account),
+                                text = "Next",
                                 fontSize = 13.sp
                             )
                         }
-
-                        SignUpFooter(
-                            navController = navController
-                        )
                     }
                 }
             }

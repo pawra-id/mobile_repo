@@ -44,7 +44,6 @@ import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.White
 import id.pawra.utils.DateConverter
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Activities(
     modifier: Modifier = Modifier,
@@ -115,7 +114,6 @@ fun Activities(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(showBackground = true)
 fun ActivitiesPreview() {

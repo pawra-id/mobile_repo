@@ -110,7 +110,7 @@ fun PetUpdate(
                     state.neutered = petDetail.data.neutered ?: false
                     state.weight = petDetail.data.weight.toString()
                     state.color = petDetail.data.color ?: ""
-                    state.microchipId = ""
+                    state.microchipId = petDetail.data.microchipId ?: ""
                     state.summary = petDetail.data.description ?: ""
                     state.file = petDetail.data.image ?: ""
                 }

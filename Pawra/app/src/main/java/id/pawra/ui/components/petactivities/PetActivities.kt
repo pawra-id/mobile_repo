@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -34,6 +35,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -68,8 +70,8 @@ import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Red
 import id.pawra.ui.theme.White
 import id.pawra.utils.DateConverter
+import kotlinx.coroutines.launch
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun PetActivities(
     navController: NavController,
@@ -189,13 +191,21 @@ fun PetActivities(
                 is UiState.Success -> {
                     isLoading = false
 
+                    val listState = rememberLazyListState()
+                    val coroutineScope = rememberCoroutineScope()
+
                     LazyColumn(
                         modifier = modifier
                             .fillMaxSize()
                             .padding(top = 10.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                        verticalArrangement = Arrangement.spacedBy(10.dp),
+                        state = listState
                     ) {
+                        coroutineScope.launch {
+                            listState.animateScrollToItem(index = 0)
+                        }
+
                         items(activitiesState.data, key = { it.id }) { data ->
                             val listTags: List<TagsItem> = data.tags ?: listOf()
                             Row(
@@ -256,7 +266,7 @@ fun PetActivities(
                                 ) {
                                     IconButton(
                                         onClick = {
-                                            navController.navigate(Screen.PetActivitiesUpdate.createRoute(activityId))
+                                            navController.navigate(Screen.PetActivitiesUpdate.createRoute(data.id))
                                         },
                                         modifier = modifier
                                             .background(DarkGreen, CircleShape)
@@ -274,7 +284,6 @@ fun PetActivities(
                                         onClick = {
                                             activitiesViewModel.deleteActivity(data.id)
                                             showResultDialog = true
-                                            activitiesViewModel.getSpecificActivities(petId, query, activeFilter)
                                                   },
                                         modifier = modifier
                                             .background(Red, CircleShape)
@@ -315,13 +324,15 @@ fun PetActivities(
         ResultDialog(
             success = true,
             message = "Successful deletion",
-            setShowDialog = { showResultDialog = it },
+            setShowDialog = {
+                showResultDialog = it
+                activitiesViewModel.getSpecificActivities(petId, "", activeFilter)
+                            },
         )
     }
 }
 
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(showBackground = true)
 fun PetActivitiesPreview(

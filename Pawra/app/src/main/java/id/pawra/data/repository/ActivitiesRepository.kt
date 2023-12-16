@@ -182,7 +182,7 @@ class ActivitiesRepository private constructor(
         }
     }
 
-    suspend fun deleteActivity(user: SessionModel, activityId: Int): Flow<ActivitiesResponseItem> {
+    suspend fun deleteActivity(user: SessionModel, activityId: Int): Flow<String> {
         try {
             return flowOf(apiService.deleteActivity("Bearer ${user.token}", activityId))
 
@@ -195,18 +195,12 @@ class ActivitiesRepository private constructor(
                 "Error parsing JSON"
             }
             return flowOf(
-                ActivitiesResponseItem(
-                    id = 0,
-                    error = errorMessage
-                )
+                errorMessage
             )
 
         } catch (e: Exception) {
             return flowOf(
-                ActivitiesResponseItem(
-                    id = 0,
-                    error = e.message
-                )
+                e.message ?: ""
             )
         }
     }

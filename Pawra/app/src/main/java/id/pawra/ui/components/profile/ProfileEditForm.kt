@@ -221,7 +221,6 @@ fun ProfileEditForm(
                     state.name,
                     state.email,
                     state.summary,
-                    userInfo.password,
                     imageUri,
                     multipartBody
                 )

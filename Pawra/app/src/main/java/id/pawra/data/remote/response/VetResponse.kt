@@ -30,14 +30,11 @@ data class VetResponseItem(
 	@field:SerializedName("address")
 	val address: String? = null,
 
-	@field:SerializedName("updated_at")
-	val updatedAt: String? = null,
+	@field:SerializedName("education")
+	val education: String? = null,
 
-	@field:SerializedName("phone")
-	val phone: String? = null,
-
-	@field:SerializedName("name")
-	val name: String? = null,
+	@field:SerializedName("latitude")
+	val latitude: String? = null,
 
 	@field:SerializedName("clinic_name")
 	val clinicName: String? = null,
@@ -47,6 +44,30 @@ data class VetResponseItem(
 
 	@field:SerializedName("created_at")
 	val createdAt: String? = null,
+
+	@field:SerializedName("experience")
+	val experience: String? = null,
+
+	@field:SerializedName("updated_at")
+	val updatedAt: String? = null,
+
+	@field:SerializedName("phone")
+	val phone: String? = null,
+
+	@field:SerializedName("end_work_hour")
+	val endWorkHour: String? = null,
+
+	@field:SerializedName("name")
+	val name: String? = null,
+
+	@field:SerializedName("start_work_hour")
+	val startWorkHour: String? = null,
+
+	@field:SerializedName("email")
+	val email: String? = null,
+
+	@field:SerializedName("longitude")
+	val longitude: String? = null,
 
 	@field:SerializedName("id")
 	val id: Int,

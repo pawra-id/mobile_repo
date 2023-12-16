@@ -26,7 +26,6 @@ import id.pawra.ui.components.profile.ProfileTopBar
 import id.pawra.ui.screen.auth.AuthViewModel
 import id.pawra.ui.theme.PawraTheme
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ProfileScreen(
     modifier: Modifier = Modifier,
@@ -59,7 +58,6 @@ fun ProfileScreen(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(showBackground = true)
 fun ProfileScreenPreview() {

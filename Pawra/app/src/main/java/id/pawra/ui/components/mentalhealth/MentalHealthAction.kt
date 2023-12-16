@@ -21,15 +21,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import id.pawra.data.local.preference.MentalHealthData
+import id.pawra.data.remote.response.ActionsItem
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkGreen
+import id.pawra.ui.theme.DisabledGreen
+import id.pawra.ui.theme.LightGray
 import id.pawra.ui.theme.LightGreen
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
 
 @Composable
 fun MentalHealthAction (
-    listAction: List<String>,
+    listAction: List<ActionsItem>,
     modifier: Modifier = Modifier,
 ) {
 
@@ -56,7 +59,7 @@ fun MentalHealthAction (
             verticalArrangement = Arrangement.spacedBy(15.dp)
         ) {
             items(listAction) { action ->
-                ActionBox(action)
+                ActionBox(action.action ?: "")
             }
         }
 
@@ -91,11 +94,7 @@ fun ActionBox(value: String) {
 fun MentalHealthActionPreview() {
     PawraTheme {
         MentalHealthAction(
-            listAction = listOf(
-                "Take your pet for a walk daily.",
-                "Spend quality time playing with your pet.",
-                "Consider consulting a veterinarian for professional advice."
-            )
+            listAction = listOf()
         )
     }
 }
