@@ -1,9 +1,6 @@
 package id.pawra.data.repository
 
-import id.pawra.data.local.preference.ActivityData
 import id.pawra.data.local.preference.SessionModel
-import id.pawra.data.remote.response.ActivitiesResponse
-import id.pawra.data.remote.response.ActivitiesResponseItem
 import id.pawra.data.remote.response.AnalysisResponse
 import id.pawra.data.remote.response.AnalysisResponseItem
 import id.pawra.data.remote.response.ShareAnalysisResponse
@@ -44,7 +41,7 @@ class AnalysisRepository private constructor(
         }
     }
 
-    suspend fun getSharedAnalysis(user: SessionModel): Flow<AnalysisResponse> {
+    suspend fun getSharedAnalysis(user: SessionModel, analysisId: Int): Flow<AnalysisResponse> {
         try {
             val response = apiService.getSharedAnalysis("Bearer ${user.token}")
             return flowOf(response)

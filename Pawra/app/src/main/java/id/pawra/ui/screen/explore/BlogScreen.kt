@@ -13,7 +13,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import id.pawra.ui.components.blogs.BlogDetail
 import id.pawra.ui.components.blogs.BlogDetailTopBar
 import id.pawra.ui.theme.PawraTheme
 
@@ -33,7 +32,7 @@ fun BlogScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top,
         ) {
-            BlogDetail()
+//            BlogDetail()
         }
     }
 }

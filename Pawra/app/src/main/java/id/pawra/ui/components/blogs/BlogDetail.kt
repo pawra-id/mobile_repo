@@ -102,12 +102,6 @@ fun BlogDetail(
 @Preview(showBackground = true)
 fun BlogDetailPreview() {
     PawraTheme {
-        val blogsData = BlogsData(
-            "https://media.istockphoto.com/id/1210830302/photo/agressive-dogs-dog-attack-dog-fight.webp?b=1&s=170667a&w=0&k=20&c=ZlCp4kZ2AJlilf4NM2fdr5rI5pjFNkKb7YSehrHYfjs=",
-            "23 February 2023",
-            "Here is 5 possible reasons your dog become aggressive.",
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        )
         BlogDetail(
             blogs = BlogsResponseItem(id=0),
             blogsViewModel = viewModel(
