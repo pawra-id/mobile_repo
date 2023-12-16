@@ -35,32 +35,38 @@ import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.White
 import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.LaunchedEffect
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
 import id.pawra.ui.components.general.BottomSheet
+import id.pawra.ui.screen.vet.LocationState
 
 @Composable
 fun MapAddress(
     modifier: Modifier = Modifier,
-    viewModel: MapViewModel
+    viewModel: MapViewModel,
+    state: LocationState.LocationAvailable
 ) {
-    var query by remember { mutableStateOf("") }
     val context = LocalContext.current
 
     val mapProperties = MapProperties()
     val uiSettings = MapUiSettings(
         zoomControlsEnabled = false
     )
-    val cameraPositionState = rememberCameraPositionState()
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(state.cameraLatLang, 15f)
+    }
 
-//    LaunchedEffect(viewModel.currentLatLong) {
-//        cameraPositionState.animate(CameraUpdateFactory.newLatLng(viewModel.currentLatLong))
-//    }
-//
+    LaunchedEffect(viewModel.currentLatLong) {
+        cameraPositionState.animate(CameraUpdateFactory.newLatLng(viewModel.currentLatLong))
+    }
+
 //    LaunchedEffect(cameraPositionState.isMoving) {
 //        if (!cameraPositionState.isMoving) {
 //            viewModel.getAddress(cameraPositionState.position.target)
 //        }
 //    }
-
 
     BottomSheet(
         expanded = true,
@@ -79,25 +85,21 @@ fun MapAddress(
 
                     Surface(
                         modifier = Modifier
+                            .padding(vertical = 22.dp, horizontal = 15.dp)
                             .align(Alignment.TopCenter)
-                            .padding(8.dp)
                             .fillMaxWidth(),
                         color = White,
-                        shape = RoundedCornerShape(8.dp)
+                        shape = RoundedCornerShape(15.dp)
                     ) {
                         Column(
-                            modifier = Modifier
-                                .padding(vertical = 22.dp, horizontal = 15.dp),
+                            modifier = Modifier,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            var text by remember { mutableStateOf("") }
-
                             SearchBar(
-                                query = query,
+                                query = viewModel.query,
                                 onQueryChange = {
-                                    query = it
-                                    viewModel.searchPlaces(it)
-                                                },
+                                    viewModel.query = it
+                                    viewModel.searchPlaces(it) },
                                 onSearch = {},
                                 active = false,
                                 onActiveChange = {},
@@ -125,7 +127,7 @@ fun MapAddress(
                                                 .fillMaxWidth()
                                                 .padding(16.dp)
                                                 .clickable {
-                                                    text = data.address
+                                                    viewModel.query = data.address
                                                     viewModel.locationAutofill.clear()
                                                     viewModel.getCoordinates(data)
                                                 }
@@ -134,35 +136,9 @@ fun MapAddress(
                                         }
                                     }
                                 }
-                                Spacer(Modifier.height(16.dp))
                             }
                         }
                     }
-
-//                    Row(
-//                        modifier = modifier
-//                            .padding(vertical = 22.dp, horizontal = 15.dp),
-//                        horizontalArrangement = Arrangement.spacedBy(15.dp)
-//                    ) {
-
-
-
-//                        IconButton(
-//                            onClick = {
-//
-//                            },
-//                            modifier = modifier
-//                                .background(White, RoundedCornerShape(10.dp))
-//                                .size(56.dp)
-//                        ) {
-//                            Icon(
-//                                Icons.Filled.Search,
-//                                "Add Activity",
-//                                tint = Gray,
-//                                modifier = modifier
-//                            )
-//                        }
-//                    }
                 }
             }
         }
@@ -176,7 +152,10 @@ fun MapAddress(
 fun MapAddressPreview() {
     PawraTheme {
         MapAddress(
-            viewModel = MapViewModel()
+            viewModel = MapViewModel(),
+            state = LocationState.LocationAvailable(
+                LatLng(0.0,0.0)
+            )
         )
     }
 }

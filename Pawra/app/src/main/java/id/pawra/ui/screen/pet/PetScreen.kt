@@ -14,7 +14,6 @@ import id.pawra.ui.theme.PawraTheme
 @Composable
 fun PetScreen(
     modifier: Modifier = Modifier,
-    navHomeController: NavController,
     navController: NavController
 ) {
     Column(
@@ -31,7 +30,6 @@ fun PetScreen(
 fun PetScreenPreview() {
     PawraTheme {
         PetScreen(
-            navHomeController = rememberNavController(),
             navController = rememberNavController()
         )
     }

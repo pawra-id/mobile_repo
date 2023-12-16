@@ -39,7 +39,6 @@ import id.pawra.ui.screen.vet.VetViewModel
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.PawraTheme
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
@@ -79,7 +78,9 @@ fun HomeScreen(
             modifier = modifier
                 .fillMaxSize()
         ) {
-            item { Banner() }
+            item { Banner(
+                navController = navController
+            ) }
             item { ListDog(
                 navController = navController,
                 viewModel = petViewModel
@@ -133,7 +134,6 @@ fun HomeScreen(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(showBackground = true)
 fun HomeScreenPreview() {

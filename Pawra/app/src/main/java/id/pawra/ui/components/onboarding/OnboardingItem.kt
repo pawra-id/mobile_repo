@@ -75,7 +75,7 @@ fun Onboarding(navController: NavController) {
             initialPage = 0,
         )
 
-
+        
         OnBoardingPager(
             item = items, pagerState = pagerState, navController
         )

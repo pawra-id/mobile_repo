@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -57,17 +58,18 @@ fun PetProfileOwner(
                 .padding(15.dp)
         ) {
 
-            val painterOwner = rememberAsyncImagePainter(owner.image?.ifEmpty { R.drawable.ic_user })
+            val painterOwner = rememberAsyncImagePainter(
+                if (owner.image.isNullOrEmpty()) R.drawable.ic_user else owner.image
+            )
 
             Row(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Image(
                     painter = painterOwner,
-                    contentDescription = null,
+                    contentDescription = "Owner Profile",
                     modifier = Modifier
-                        .width(60.dp)
-                        .height(60.dp)
+                        .size(60.dp)
                         .clip(CircleShape),
                     contentScale = ContentScale.Crop
                 )

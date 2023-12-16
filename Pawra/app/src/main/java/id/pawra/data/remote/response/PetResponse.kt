@@ -93,5 +93,8 @@ data class PetResponseItem(
 	@field:SerializedName("height")
 	val height: Int? = null,
 
+	@field:SerializedName("microchip_id")
+	val microchipId: String? = null,
+
 	val error: String? = null
 )

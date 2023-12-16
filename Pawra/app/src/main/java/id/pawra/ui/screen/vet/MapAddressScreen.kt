@@ -2,13 +2,17 @@ package id.pawra.ui.screen.vet
 
 import android.Manifest
 import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.LocationManager
+import android.util.Log
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Column
@@ -45,6 +49,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationSettingsRequest
+import com.google.android.gms.location.LocationSettingsStates
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.libraries.places.api.Places
 import com.google.maps.android.compose.MapProperties
@@ -91,6 +96,17 @@ fun MapAddressScreen(
             } else {
                 viewModel.locationState = LocationState.LocationDisabled
             }
+        } else {
+            viewModel.locationState = LocationState.NoPermission
+        }
+    }
+
+    val locationLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartIntentSenderForResult()
+    ) {
+        if (it.resultCode == RESULT_OK) {
+            showDialog = false
+            viewModel.getCurrentLocation()
         }
     }
 
@@ -117,7 +133,9 @@ fun MapAddressScreen(
                     setShowDialog = {
                         showDialog = it
                     },
-                    action = { requestLocationEnable(context, viewModel) }
+                    action = {
+                        requestLocationEnable(context, viewModel, locationLauncher)
+                    }
                 )
             }
             is LocationState.LocationLoading -> {
@@ -135,13 +153,17 @@ fun MapAddressScreen(
                 )
             }
             is LocationState.LocationAvailable -> {
-                MapAddress(viewModel = viewModel)
+                MapAddress(viewModel = viewModel, state = state)
             }
         }
     }
 }
 
-fun requestLocationEnable(context: Context, viewModel: MapViewModel) {
+fun requestLocationEnable(
+    context: Context,
+    viewModel: MapViewModel,
+    locationLauncher: ManagedActivityResultLauncher<IntentSenderRequest, ActivityResult>
+) {
     context as Activity
     context.let { it ->
         val locationRequest = LocationRequest.create()
@@ -160,7 +182,9 @@ fun requestLocationEnable(context: Context, viewModel: MapViewModel) {
             .addOnFailureListener {
                 if (it is ResolvableApiException) {
                     try {
-                        it.startResolutionForResult(context, 999)
+                        val intentSenderRequest = IntentSenderRequest.Builder(it.resolution).build()
+                        locationLauncher.launch(intentSenderRequest)
+
                     } catch (e : IntentSender.SendIntentException) {
                         e.printStackTrace()
                     }

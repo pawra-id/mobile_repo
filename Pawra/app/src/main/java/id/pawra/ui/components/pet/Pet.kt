@@ -16,9 +16,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Female
+import androidx.compose.material.icons.filled.Male
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -191,14 +194,18 @@ fun PetItem(
                     .padding(5.dp)
                     .align(Alignment.BottomEnd)
             ) {
-                Text(
-                    text = gender,
-                    fontSize = 11.sp,
-                    color = if (gender == "male") DarkBlue else DarkPink,
-                    modifier = modifier
-                        .clip(shape = RoundedCornerShape(12.dp))
-                        .background(color = if (gender == "male") DisabledBlue else DisabledPink)
+                Icon(
+                    if (gender == "male") Icons.Filled.Male else Icons.Filled.Female,
+                    "Sex Icon",
+                    modifier
+                        .align(Alignment.TopEnd)
+                        .clip(CircleShape)
+                        .background(
+                            color = if (gender == "male") DisabledBlue else DisabledPink
+                        )
                         .padding(vertical = 2.dp, horizontal = 10.dp)
+                        .size(18.dp),
+                    (if (gender == "male") DarkBlue else DarkPink)
                 )
             }
         }

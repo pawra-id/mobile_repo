@@ -141,11 +141,7 @@ fun MentalHealthResultScreen(
                     }
                 ) {
                     MentalHealthAction(
-                        listAction = listOf(
-                            "Take your pet for a walk daily.",
-                            "Spend quality time playing with your pet.",
-                            "Consider consulting a veterinarian for professional advice."
-                        )
+                        listAction = detailAnalysisState.data.actions ?: listOf()
                     )
                 }
 

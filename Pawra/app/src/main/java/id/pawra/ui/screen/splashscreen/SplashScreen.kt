@@ -1,5 +1,6 @@
 package id.pawra.ui.screen.splashscreen
 
+import android.preference.PreferenceManager
 import android.view.animation.OvershootInterpolator
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
@@ -52,6 +53,7 @@ fun SplashScreen(navController: NavController) {
         factory = ViewModelFactory(LocalContext.current)
     )
 
+    val context = LocalContext.current
     viewModel.getSession()
 
     val sessionState by viewModel.sessionState.collectAsState()
@@ -67,7 +69,18 @@ fun SplashScreen(navController: NavController) {
             )
         )
         delay(3000L)
-        navController.navigate(if (sessionState.isLogin) Screen.Home.route else Screen.OnBoarding.route){
+        navController.navigate(
+            if (sessionState.isLogin){
+                Screen.Home.route
+            } else{
+                if (!PreferenceManager.getDefaultSharedPreferences(context)
+                    .getBoolean("IS_FIRST_LAUNCHED", true)) {
+                    Screen.SignIn.route
+                } else {
+                    Screen.OnBoarding.route
+                }
+            }
+        ){
             popUpTo(Screen.SplashScreen.route) {
                 inclusive = true
             }

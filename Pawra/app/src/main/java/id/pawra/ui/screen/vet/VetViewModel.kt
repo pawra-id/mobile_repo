@@ -36,9 +36,6 @@ class VetViewModel(
         _query.value = keyword
         viewModelScope.launch {
             val user = authRepository.getSession().first()
-//            if (_query.value.isEmpty()) {
-//                _vetsState.value = UiState.Loading
-//            }
             vetRepository.getVets(user, keyword)
                 .collect { activities ->
                     when {

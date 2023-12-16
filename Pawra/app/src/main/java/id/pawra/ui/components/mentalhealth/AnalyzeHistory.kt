@@ -19,6 +19,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Female
+import androidx.compose.material.icons.filled.Male
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -113,16 +115,18 @@ fun AnalyzeHistory(
                     .padding(5.dp)
                     .align(Alignment.BottomEnd)
             ) {
-                Text(
-                    text = dogGender,
-                    fontSize = 11.sp,
-                    color = if (dogGender == "male") DarkBlue else DarkPink,
-                    modifier = modifier
-                        .clip(shape = RoundedCornerShape(15.dp))
+                Icon(
+                    if (dogGender == "male") Icons.Filled.Male else Icons.Filled.Female,
+                    "Sex Icon",
+                    modifier
+                        .align(Alignment.TopEnd)
+                        .clip(CircleShape)
                         .background(
                             color = if (dogGender == "male") DisabledBlue else DisabledPink
                         )
                         .padding(vertical = 2.dp, horizontal = 10.dp)
+                        .size(18.dp),
+                    (if (dogGender == "male") DarkBlue else DarkPink)
                 )
             }
 

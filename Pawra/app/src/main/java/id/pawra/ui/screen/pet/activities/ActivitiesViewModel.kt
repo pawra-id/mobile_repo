@@ -232,6 +232,7 @@ class ActivitiesViewModel(
     private fun updateActivity(
         description: String,
         dogId: Int,
+        activityId: Int,
         tags: List<Tags>
     ) {
         viewModelScope.launch {
@@ -314,6 +315,7 @@ class ActivitiesViewModel(
             updateActivity(
                 description = stateUpdateActivity.activity,
                 dogId = stateUpdateActivity.dogId,
+                activityId = stateUpdateActivity.id,
                 tags = listTags
             )
             showDialog = true
@@ -322,20 +324,9 @@ class ActivitiesViewModel(
 
     fun deleteActivity(activityId: Int) {
         viewModelScope.launch {
-            _activitiesState.value = UiState.Loading
             try {
                 val user = authRepository.getSession().first()
                 activitiesRepository.deleteActivity(user, activityId)
-                    .collect { deleteResult ->
-                        when {
-                            deleteResult.error != null -> {
-                                _activitiesState.value = UiState.Error(deleteResult.error)
-                            }
-                            else -> {
-                                getSpecificActivities(petId, query.value, activeFilter)
-                            }
-                        }
-                    }
             } catch (e: Exception) {
                 _activitiesState.value = UiState.Error("Failed to delete activity: ${e.message}")
             }

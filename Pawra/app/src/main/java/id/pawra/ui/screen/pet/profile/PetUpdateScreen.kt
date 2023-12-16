@@ -51,7 +51,7 @@ fun PetUpdateScreen(
     }
 
     Column {
-        PetAddTopBar(navController = rememberNavController())
+        PetAddTopBar(navController = navController)
         Column(
             modifier = modifier
                 .fillMaxSize()
@@ -61,7 +61,7 @@ fun PetUpdateScreen(
             verticalArrangement = Arrangement.Top,
         ) {
             PetUpdate(
-                navController = rememberNavController(),
+                navController = navController,
                 showDialog = { showDialog = it },
                 petViewModel = petViewModel,
                 petId = petId
