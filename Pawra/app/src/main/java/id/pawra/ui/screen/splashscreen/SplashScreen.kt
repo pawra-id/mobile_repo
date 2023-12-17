@@ -45,18 +45,13 @@ import id.pawra.ui.theme.Poppins
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(navController: NavController) {
+fun SplashScreen(
+    navController: NavController,
+    destination: String
+) {
     val scale = remember {
         Animatable(0.5f)
     }
-    val viewModel: AuthViewModel = viewModel(
-        factory = ViewModelFactory(LocalContext.current)
-    )
-
-    val context = LocalContext.current
-    viewModel.getSession()
-
-    val sessionState by viewModel.sessionState.collectAsState()
 
     LaunchedEffect(key1 = true) {
         scale.animateTo(
@@ -69,18 +64,7 @@ fun SplashScreen(navController: NavController) {
             )
         )
         delay(3000L)
-        navController.navigate(
-            if (sessionState.isLogin){
-                Screen.Home.route
-            } else{
-                if (!PreferenceManager.getDefaultSharedPreferences(context)
-                    .getBoolean("IS_FIRST_LAUNCHED", true)) {
-                    Screen.SignIn.route
-                } else {
-                    Screen.OnBoarding.route
-                }
-            }
-        ){
+        navController.navigate(destination){
             popUpTo(Screen.SplashScreen.route) {
                 inclusive = true
             }
@@ -131,6 +115,9 @@ fun SplashScreen(navController: NavController) {
 @Composable
 fun SplashScreenPreview() {
     PawraTheme {
-        SplashScreen(rememberNavController())
+        SplashScreen(
+            rememberNavController(),
+            ""
+        )
     }
 }

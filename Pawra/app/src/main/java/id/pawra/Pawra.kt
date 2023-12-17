@@ -59,31 +59,44 @@ fun Pawra(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController()
 ) {
+    val viewModel: AuthViewModel = viewModel(
+        factory = ViewModelFactory(LocalContext.current)
+    )
+
+    viewModel.getSession()
+    val sessionState by viewModel.sessionState.collectAsState()
+
+    val initialRoute: String = if (!sessionState.isLaunched) {
+        Screen.SplashScreen.route
+    } else {
+        if (sessionState.isLogin) {
+            Screen.Home.route
+        } else {
+            Screen.SignIn.route
+        }
+    }
+
+    val destination = if (sessionState.isLogin){
+        Screen.Home.route
+    } else{
+        if (!PreferenceManager.getDefaultSharedPreferences(LocalContext.current)
+                .getBoolean("IS_FIRST_LAUNCHED", true)) {
+            Screen.SignIn.route
+        } else {
+            Screen.OnBoarding.route
+        }
+    }
+
     NavHost(
         navController = navController,
-        startDestination = Screen.SplashScreen.route,
+        startDestination = initialRoute,
         modifier = modifier
     ) {
         composable(Screen.SplashScreen.route) {
-            val viewModel: AuthViewModel = viewModel(
-                factory = ViewModelFactory(LocalContext.current)
+            SplashScreen(
+                navController = navController,
+                destination = destination
             )
-
-            viewModel.getSession()
-            val sessionState by viewModel.sessionState.collectAsState()
-
-            if (!sessionState.isLaunched) {
-                SplashScreen(
-                    navController = navController
-                )
-            } else {
-                if (sessionState.isLogin) {
-                    HomeNav(navController = navController)
-                } else {
-                    SignInScreen(navController = navController)
-                }
-            }
-
         }
         composable(Screen.OnBoarding.route) {
             Onboarding(
