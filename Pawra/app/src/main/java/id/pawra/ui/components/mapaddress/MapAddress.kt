@@ -35,38 +35,62 @@ import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.White
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import id.pawra.data.ViewModelFactory
 import id.pawra.ui.components.general.BottomSheet
+import id.pawra.ui.screen.auth.AuthViewModel
 import id.pawra.ui.screen.vet.LocationState
+import id.pawra.ui.screen.vet.VetViewModel
 
 @Composable
 fun MapAddress(
     modifier: Modifier = Modifier,
     viewModel: MapViewModel,
+    authViewModel: AuthViewModel,
     state: LocationState.LocationAvailable
 ) {
-    val context = LocalContext.current
-
     val mapProperties = MapProperties()
     val uiSettings = MapUiSettings(
         zoomControlsEnabled = false
     )
     val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(state.cameraLatLang, 15f)
+        position = CameraPosition.fromLatLngZoom(state.cameraLatLang, 6.5f)
     }
 
+    authViewModel.getSession()
+    val userInfo = authViewModel.sessionState.collectAsState().value
+
+    viewModel.getAddress(
+        state.cameraLatLang,
+        user = userInfo
+    )
     LaunchedEffect(viewModel.currentLatLong) {
-        cameraPositionState.animate(CameraUpdateFactory.newLatLng(viewModel.currentLatLong))
+        if ((viewModel.currentLatLong.latitude == 0.0) and (viewModel.currentLatLong.longitude == 0.0)) {
+            cameraPositionState.animate(CameraUpdateFactory.newLatLng(state.cameraLatLang))
+        } else {
+            cameraPositionState.animate(CameraUpdateFactory.newLatLng(viewModel.currentLatLong))
+        }
+
     }
 
-//    LaunchedEffect(cameraPositionState.isMoving) {
-//        if (!cameraPositionState.isMoving) {
-//            viewModel.getAddress(cameraPositionState.position.target)
-//        }
-//    }
+    val textSearch by viewModel.query.collectAsState()
+
+    val isVisible by remember {
+        derivedStateOf {
+            textSearch.isNotBlank()
+        }
+    }
 
     BottomSheet(
         expanded = true,
@@ -80,7 +104,8 @@ fun MapAddress(
                     Maps(
                         mapProperties,
                         cameraPositionState,
-                        uiSettings
+                        uiSettings,
+                        location = state.cameraLatLang
                     )
 
                     Surface(
@@ -96,10 +121,10 @@ fun MapAddress(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             SearchBar(
-                                query = viewModel.query,
+                                query = textSearch,
                                 onQueryChange = {
-                                    viewModel.query = it
-                                    viewModel.searchPlaces(it) },
+                                    viewModel.setSearchText(it, true)
+                                    viewModel.searchPlaces() },
                                 onSearch = {},
                                 active = false,
                                 onActiveChange = {},
@@ -108,6 +133,18 @@ fun MapAddress(
                                         "Search location",
                                         color = Gray
                                     )
+                                },
+                                trailingIcon = {
+                                    if (isVisible) {
+                                        Icon(
+                                            imageVector = Icons.Default.Clear,
+                                            contentDescription = "Clear",
+                                            tint = Gray,
+                                            modifier = modifier.clickable {
+                                                viewModel.setSearchText("", false)
+                                            }
+                                        )
+                                    }
                                 },
                                 modifier = modifier.background(White, RoundedCornerShape(15.dp))
                             ) {}
@@ -127,7 +164,7 @@ fun MapAddress(
                                                 .fillMaxWidth()
                                                 .padding(16.dp)
                                                 .clickable {
-                                                    viewModel.query = data.address
+                                                    viewModel.setSearchText(data.address, false)
                                                     viewModel.locationAutofill.clear()
                                                     viewModel.getCoordinates(data)
                                                 }
@@ -143,7 +180,10 @@ fun MapAddress(
             }
         }
     ) {
-        BottomSheetMapContent()
+        BottomSheetMapContent(
+            headAddress = viewModel.headLocation,
+            fullAddress = viewModel.location
+        )
     }
 }
 
@@ -152,7 +192,12 @@ fun MapAddress(
 fun MapAddressPreview() {
     PawraTheme {
         MapAddress(
-            viewModel = MapViewModel(),
+            viewModel = viewModel(
+                factory = ViewModelFactory(LocalContext.current)
+            ),
+            authViewModel = viewModel(
+                factory = ViewModelFactory(LocalContext.current)
+            ),
             state = LocationState.LocationAvailable(
                 LatLng(0.0,0.0)
             )

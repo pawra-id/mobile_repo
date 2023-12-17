@@ -31,7 +31,7 @@ class ViewModelFactory (
             return AuthViewModel(authRepository) as T
         }
         if (modelClass.isAssignableFrom(MapViewModel::class.java)) {
-            return MapViewModel() as T
+            return MapViewModel(authRepository) as T
         }
         if (modelClass.isAssignableFrom(PetViewModel::class.java)) {
             return PetViewModel(petRepository, authRepository) as T

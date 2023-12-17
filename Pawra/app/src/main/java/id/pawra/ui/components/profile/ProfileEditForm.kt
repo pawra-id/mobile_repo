@@ -216,8 +216,7 @@ fun ProfileEditForm(
                     )
                 }
                 viewModel.updateDataProfile(
-                    userInfo.id,
-                    userInfo.token,
+                    userInfo,
                     state.name,
                     state.email,
                     state.summary,

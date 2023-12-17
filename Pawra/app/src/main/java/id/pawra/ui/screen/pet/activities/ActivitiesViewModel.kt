@@ -48,9 +48,6 @@ class ActivitiesViewModel(
     val query: State<String> get() = _query
 
     private var activityId by mutableIntStateOf(0)
-    private var petId by mutableIntStateOf(0)
-    private var _activeFilter by mutableStateOf(FilterActivities.Latest.name)
-    private val activeFilter: String get() = _activeFilter
 
     fun getActivities() {
         viewModelScope.launch {
@@ -97,9 +94,6 @@ class ActivitiesViewModel(
         _query.value = keyword
         viewModelScope.launch {
             val user = authRepository.getSession().first()
-//            if (_query.value.isEmpty()) {
-//                _activitiesState.value = UiState.Loading
-//            }
             activitiesRepository.getSpecificActivities(user, petId, keyword)
                 .collect { activities ->
                     when {

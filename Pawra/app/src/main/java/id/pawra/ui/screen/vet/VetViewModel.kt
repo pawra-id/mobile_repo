@@ -1,13 +1,17 @@
 package id.pawra.ui.screen.vet
 
+import android.location.Location
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.maps.model.LatLng
+import id.pawra.data.local.preference.SessionModel
 import id.pawra.data.remote.response.VetResponseItem
 import id.pawra.data.repository.AuthRepository
 import id.pawra.data.repository.VetRepository
 import id.pawra.ui.common.UiState
+import id.pawra.ui.components.petactivities.FilterActivities
 import id.pawra.ui.components.vets.FilterVets
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -32,7 +36,10 @@ class VetViewModel(
     private val _query = mutableStateOf("")
     val query: State<String> get() = _query
 
-    fun getVets(keyword: String) {
+    private val _location = mutableStateOf(LatLng(0.0,0.0))
+    val location: State<LatLng> get() = _location
+
+    fun getVets(keyword: String, filter: String) {
         _query.value = keyword
         viewModelScope.launch {
             val user = authRepository.getSession().first()
@@ -43,7 +50,9 @@ class VetViewModel(
                             _vetsState.value = UiState.Error(activities.error)
                         }
                         else -> {
-                            _vetsState.value = UiState.Success(activities.items ?: listOf())
+                            _vetsState.value = UiState.Success(
+                                filterVets(activities.items ?: listOf(), filter)
+                            )
                         }
                     }
                 }
@@ -52,23 +61,57 @@ class VetViewModel(
         }
     }
 
+    data class Locations(val latitude: Double, val longitude: Double)
+
     private fun filterVets(list: List<VetResponseItem>, filter: String): List<VetResponseItem>{
+        viewModelScope.launch {
+            val user = authRepository.getSession().first()
+            _location.value = LatLng(user.latitude.toDouble(), user.longitude.toDouble())
+        }
+
+        val distanceComparator = Comparator<VetResponseItem> { location1, location2 ->
+            val loc1 = Locations(location1.latitude?.toDouble() ?: 0.0, location1.longitude?.toDouble() ?: 0.0)
+            val loc2 = Locations(location2.latitude?.toDouble() ?: 0.0, location2.longitude?.toDouble() ?: 0.0)
+            val distance1 = calculateDistance(_location.value.latitude, _location.value.longitude, loc1)
+            val distance2 = calculateDistance(_location.value.latitude, _location.value.longitude, loc2)
+            distance1.compareTo(distance2)
+        }
+
         return when(filter){
             FilterVets.Nearest.name -> {
-                list.sortedByDescending { it.createdAt }
+                list.sortedWith(distanceComparator)
             }
 
             FilterVets.Experience.name -> {
-                list.sortedByDescending { it.description }
+                list.sortedByDescending { it.experience }
             }
 
             else -> { list }
         }
     }
 
+    private fun calculateDistance(userLat: Double, userLng: Double, location: Locations): Double {
+        val earthRadius = 6371000 // meters
+
+        val lat1 = Math.toRadians(userLat)
+        val lat2 = Math.toRadians(location.latitude)
+        val lon1 = Math.toRadians(userLng)
+        val lon2 = Math.toRadians(location.longitude)
+
+        val dLat = lat2 - lat1
+        val dLon = lon2 - lon1
+
+        val a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) * Math.sin(dLon / 2)
+        val c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+        return earthRadius * c
+    }
+
     fun getDetailVet(vetId: Int) {
         viewModelScope.launch {
             val user = authRepository.getSession().first()
+            _location.value = LatLng(user.latitude.toDouble(), user.longitude.toDouble())
+
             vetRepository.getDetailVet(user, vetId)
                 .collect { vetDetail ->
                     when {

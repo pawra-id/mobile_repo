@@ -1,6 +1,7 @@
 package id.pawra.ui.components.vetprofile
 
 import android.content.Intent
+import android.location.Location
 import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -69,6 +70,7 @@ import id.pawra.R
 import id.pawra.data.ViewModelFactory
 import id.pawra.data.local.preference.VetData
 import id.pawra.data.remote.response.VetResponseItem
+import id.pawra.ui.components.vets.haversineDistance
 import id.pawra.ui.screen.auth.AuthViewModel
 import id.pawra.ui.screen.vet.VetViewModel
 import id.pawra.ui.theme.Black
@@ -107,6 +109,19 @@ fun VetProfile(
         scrollGesturesEnabled = false,
         zoomGesturesEnabled = false
     )
+
+    val myLocation = Location("myLocation").apply {
+        latitude = vetViewModel.location.value.latitude
+        longitude = vetViewModel.location.value.longitude
+    }
+
+    val vetLocation = Location("vetLocation").apply {
+        latitude = vet.latitude?.toDouble() ?: 0.0
+        longitude = vet.longitude?.toDouble() ?: 0.0
+    }
+
+    val distanceInMeters = haversineDistance(myLocation, vetLocation)
+    val distanceInKilometers = "%.2f".format(distanceInMeters / 1000)
 
     Column(
     modifier = modifier
@@ -163,8 +178,7 @@ fun VetProfile(
                         )
 
                     Text(
-                        // vet.rangeLocation
-                        text = " km",
+                        text = "$distanceInKilometers km",
                         fontFamily = Poppins,
                         fontSize = 11.sp,
                         color = DarkBlue,
