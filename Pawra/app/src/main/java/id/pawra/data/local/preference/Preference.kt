@@ -27,6 +27,7 @@ class Preference private constructor(private val dataStore: DataStore<Preference
             preferences[LATITUDE] = user.latitude
             preferences[LONGITUDE] = user.longitude
             preferences[EXPIRE] = user.expire
+            preferences[ADDRESS] = user.address
             preferences[IS_LAUNCHED] = user.isLaunched
         }
     }
@@ -42,6 +43,7 @@ class Preference private constructor(private val dataStore: DataStore<Preference
                 preferences[IMAGE] ?: "",
                 preferences[LATITUDE] ?: "",
                 preferences[LONGITUDE] ?: "",
+                preferences[ADDRESS] ?: "",
                 preferences[EXPIRE] ?: "",
                 preferences[IS_LOGIN_KEY] ?: false,
                 preferences[IS_LAUNCHED] ?: false,
@@ -66,11 +68,12 @@ class Preference private constructor(private val dataStore: DataStore<Preference
         private val EMAIL_KEY = stringPreferencesKey("email")
         private val SUMMARY_KEY = stringPreferencesKey("summary")
         private val IMAGE = stringPreferencesKey("image")
-        private val LATITUDE = stringPreferencesKey("LATITUDE")
-        private val LONGITUDE = stringPreferencesKey("LONGITUDE")
-        private val EXPIRE = stringPreferencesKey("EXPIRE")
+        private val LATITUDE = stringPreferencesKey("latitude")
+        private val LONGITUDE = stringPreferencesKey("longitude")
+        private val EXPIRE = stringPreferencesKey("expire")
         private val IS_LOGIN_KEY = booleanPreferencesKey("isLogin")
         private val IS_LAUNCHED = booleanPreferencesKey("isLaunched")
+        private val ADDRESS = stringPreferencesKey("address")
         private val IS_FIRST_LAUNCHED = booleanPreferencesKey("isFirstLaunched")
 
         fun getInstance(dataStore: DataStore<Preferences>): Preference {

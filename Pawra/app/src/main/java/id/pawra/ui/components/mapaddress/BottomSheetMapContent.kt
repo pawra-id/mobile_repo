@@ -26,7 +26,9 @@ import id.pawra.ui.theme.PawraTheme
 
 @Composable
 fun BottomSheetMapContent(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    headAddress: String,
+    fullAddress: String
 ) {
     Column(
         modifier = modifier
@@ -37,7 +39,7 @@ fun BottomSheetMapContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 10.dp),
-            text = "Set your address",
+            text = "Your current address",
             color = Black,
             textAlign = TextAlign.Start,
             fontSize = 20.sp,
@@ -59,7 +61,7 @@ fun BottomSheetMapContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 5.dp),
-                    text = "Jl. Brigjen Katamso No.160",
+                    text = headAddress,
                     color = Black,
                     textAlign = TextAlign.Start,
                     fontWeight = FontWeight.SemiBold,
@@ -68,31 +70,13 @@ fun BottomSheetMapContent(
                 Text(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    text = "Jl. Brigjen Katamso No.160, Keparakan, Kec. Mergangsan, Kota Yogyakarta, Daerah Istimewa Yogyakarta 55131",
+                    text = fullAddress,
                     color = Black,
                     textAlign = TextAlign.Start,
                     fontSize = 13.sp,
                     lineHeight = 18.sp
                 )
             }
-        }
-
-        Button(
-            modifier = Modifier
-                .padding(top = 15.dp)
-                .height(56.dp)
-                .fillMaxWidth(),
-            shape = RoundedCornerShape(10.dp),
-            onClick = {  },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = DarkGreen
-            )
-        ) {
-            Text(
-                text = "Save",
-                fontSize = 15.sp,
-                fontWeight = FontWeight.SemiBold
-            )
         }
     }
 }
@@ -101,6 +85,9 @@ fun BottomSheetMapContent(
 @Preview(showBackground = true)
 fun BottomSheetContentPreview() {
     PawraTheme {
-        BottomSheetMapContent()
+        BottomSheetMapContent(
+            headAddress = "Jl. Brigjen Katamso No.160",
+            fullAddress = "Jl. Brigjen Katamso No.160, Keparakan, Kec. Mergangsan, Kota Yogyakarta, Daerah Istimewa Yogyakarta 55131"
+        )
     }
 }

@@ -73,6 +73,9 @@ fun MapAddressScreen(
     viewModel: MapViewModel = viewModel(
         factory = ViewModelFactory(LocalContext.current)
     ),
+    authViewModel: AuthViewModel = viewModel(
+        factory = ViewModelFactory(LocalContext.current)
+    ),
 ) {
 
     val context = LocalContext.current
@@ -153,7 +156,11 @@ fun MapAddressScreen(
                 )
             }
             is LocationState.LocationAvailable -> {
-                MapAddress(viewModel = viewModel, state = state)
+                MapAddress(
+                    viewModel = viewModel,
+                    state = state,
+                    authViewModel = authViewModel
+                )
             }
         }
     }
@@ -199,7 +206,9 @@ fun MapAddressScreenPreview() {
     PawraTheme {
         MapAddressScreen(
             navController = rememberNavController(),
-            viewModel = MapViewModel()
+            viewModel = viewModel(
+                factory = ViewModelFactory(LocalContext.current)
+            )
         )
     }
 }
