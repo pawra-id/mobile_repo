@@ -13,6 +13,9 @@ data class SignInResponse(
     @field:SerializedName("token_type")
     val tokenType: String? = null,
 
+    @field:SerializedName("expires_in")
+    val expiresIn: String? = null,
+
     val error: String? = null
 )
 
@@ -39,9 +42,9 @@ data class User(
     @field:SerializedName("address")
     val address: String? = null,
 
-    @field:SerializedName("updated_at")
-    val updatedAt: String? = null,
+    @field:SerializedName("latitude")
+    val latitude: String? = null,
 
-    @field:SerializedName("created_at")
-    val createdAt: String? = null
+    @field:SerializedName("longitude")
+    val longitude: String? = null
 )

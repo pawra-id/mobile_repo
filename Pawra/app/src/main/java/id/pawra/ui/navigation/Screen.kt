@@ -13,7 +13,9 @@ sealed class Screen(val route: String) {
     data object Profile : Screen("profile")
 
     // Explore Navigation
-    data object BlogDetail : Screen("blog_detail")
+    data object BlogDetail : Screen("blogs/{blogsId}") {
+        fun createRoute(blogsId: Int) = "blogs/$blogsId"
+    }
 
     // Profile Navigation
     data object EditProfile : Screen("edit_profile")

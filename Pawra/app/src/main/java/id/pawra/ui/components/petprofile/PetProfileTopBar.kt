@@ -168,7 +168,14 @@ fun PetProfileTopBar(
         ResultDialog(
             success = true,
             message = "Successful deletion",
-            setShowDialog = { showResultDialog = it },
+            setShowDialog = {
+                showResultDialog = it
+                navController.navigate(Screen.Home.route) {
+                    popUpTo(Screen.PetProfile.route) {
+                        inclusive = true
+                    }
+                }
+                            },
         )
     }
 }
@@ -185,7 +192,7 @@ fun PetProfileTopBarPreview(
             navController = rememberNavController(),
             petId = 0,
             onDeleteClick = ({
-                petViewModel.deleteDogId()
+                petViewModel.deleteDogId(0)
             })
         )
     }

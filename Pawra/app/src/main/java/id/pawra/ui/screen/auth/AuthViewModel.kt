@@ -1,27 +1,24 @@
 package id.pawra.ui.screen.auth
 
-import android.net.Uri
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import id.pawra.data.repository.AuthRepository
 import id.pawra.data.local.preference.SessionModel
 import id.pawra.data.remote.response.SignInResponse
 import id.pawra.data.remote.response.SignUpResponse
+import id.pawra.data.repository.AuthRepository
 import id.pawra.ui.common.UiState
-import id.pawra.utils.uriToFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
 
 class AuthViewModel(
     private val authRepository: AuthRepository,
@@ -45,7 +42,7 @@ class AuthViewModel(
     val updateProfileState: StateFlow<UiState<SignUpResponse>>
         get() = _updateProfileState
 
-    private val _sessionState: MutableStateFlow<SessionModel> = MutableStateFlow(SessionModel(0, "", false, "", "", "", "", ""))
+    private val _sessionState: MutableStateFlow<SessionModel> = MutableStateFlow(SessionModel(0, "",  "", "", "", "", "", "", "", false))
     val sessionState: StateFlow<SessionModel>
         get() = _sessionState
 
@@ -83,8 +80,7 @@ class AuthViewModel(
         name: String,
         email: String,
         summary: String,
-        image: String,
-        password: String,
+        image: String
     ) {
         viewModelScope.launch {
             _updateProfileState.value = UiState.Loading
@@ -95,7 +91,6 @@ class AuthViewModel(
                 email = email,
                 summary = summary,
                 image = image,
-                password = password
             ).collect { userDetail ->
                 when {
                     userDetail.error != null -> _updateProfileState.value = UiState.Error(userDetail.error)
@@ -111,7 +106,6 @@ class AuthViewModel(
         name: String,
         email: String,
         summary: String,
-        password: String,
         imageUrl: String,
         file: MultipartBody.Part? = null
     ) {
@@ -132,8 +126,8 @@ class AuthViewModel(
                     name = name,
                     email = email,
                     summary = summary,
-                    image = image,
-                    password = password)
+                    image = image
+                )
             }
         }
     }
@@ -147,7 +141,7 @@ class AuthViewModel(
     fun logout() {
         viewModelScope.launch {
             authRepository.logout()
-            _sessionState.value = SessionModel(0, "", false, "", "", "", "", "")
+            _sessionState.value = SessionModel(0, "",  "", "", "", "", "", "", "", false)
         }
     }
 
@@ -319,7 +313,6 @@ class AuthViewModel(
         name: String,
         email: String,
         summary: String,
-        password: String,
         imageUrl: String,
         file: MultipartBody.Part? = null
     ) {
@@ -348,7 +341,6 @@ class AuthViewModel(
                 name = name,
                 email = email,
                 summary = summary,
-                password = password,
                 imageUrl,
                 file
             )

@@ -1,17 +1,20 @@
 package id.pawra.data.repository
 
-import com.google.android.gms.common.api.ApiException
 import id.pawra.data.local.preference.Preference
 import id.pawra.data.local.preference.SessionModel
 import id.pawra.data.remote.response.SignInResponse
 import id.pawra.data.remote.response.SignUpResponse
 import id.pawra.data.remote.retrofit.ApiService
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import okhttp3.MultipartBody
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.HttpException
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 
 class AuthRepository private constructor(
@@ -81,7 +84,9 @@ class AuthRepository private constructor(
         summary: String = "",
         address: String = "",
         image: String = "",
-        password: String = ""
+        latitude: String = "",
+        longitude: String = "",
+        expire: String = ""
     ): Flow<SignUpResponse> {
         try {
             val userData = mutableMapOf<String, Any>()
@@ -90,6 +95,9 @@ class AuthRepository private constructor(
             userData["summary"] = summary
             userData["address"] = address
             userData["image"] = image
+            userData["latitude"] = latitude
+            userData["longitude"] = longitude
+            userData["role"] = ""
 
             val response = apiService.updateProfile("Bearer $token", id, userData)
             val sessionModel = SessionModel(
@@ -100,7 +108,10 @@ class AuthRepository private constructor(
                 email = email,
                 summary = summary,
                 image = image,
-                password = password
+                latitude = latitude,
+                longitude = longitude,
+                expire = expire,
+                isLaunched = true
             )
             preference.saveSession(sessionModel)
 
@@ -151,21 +162,33 @@ class AuthRepository private constructor(
         val sessionModel = SessionModel(
             id = user?.id ?: 0,
             token = response.accessToken ?: "",
-            isLogin = true,
+            expire = response.expiresIn ?: "",
             name = user?.username ?: "",
-            email = user?.email ?: "defaultemail@gmail.com",
-            summary = user?.summary ?: ("I love dogs and all kind of pets.\n" +
-                    "I have one dog, his name is Max. \n" +
-                    "He’s been with me for a year.\n" +
-                    "Playing catch is our favorite activity"),
+            email = user?.email ?: "",
+            summary = user?.summary ?: "Pawra (Pet Anxiety and Welfare Robust Analyzer)",
             image = user?.image ?: "",
-            password = user?.password ?: ""
+            latitude = user?.latitude ?: "",
+            longitude = user?.longitude ?: "",
+            isLogin = true,
+            isLaunched = true
         )
         preference.saveSession(sessionModel)
     }
 
-    fun getSession(): Flow<SessionModel> {
-        return preference.getSession()
+    suspend fun getSession(): Flow<SessionModel> {
+        val session = preference.getSession()
+
+        if (session.first().expire.isNotEmpty()) {
+            val providedDatetimeString = session.first().expire.replace(" ","T")
+            val zonedDateTime = ZonedDateTime.parse(providedDatetimeString, DateTimeFormatter.ISO_ZONED_DATE_TIME)
+                .withZoneSameInstant(ZoneId.of("Asia/Jakarta"))
+
+            if (zonedDateTime < ZonedDateTime.now()) {
+                logout()
+            }
+        }
+
+        return session
     }
 
     suspend fun logout() {

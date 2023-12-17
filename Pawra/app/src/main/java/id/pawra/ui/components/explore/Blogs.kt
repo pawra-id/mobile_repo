@@ -1,5 +1,6 @@
 package id.pawra.ui.components.explore
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,8 +9,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -28,6 +32,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,10 +45,12 @@ import id.pawra.ui.common.UiState
 import id.pawra.ui.components.dialog.ResultDialog
 import id.pawra.ui.components.general.SearchBar
 import id.pawra.ui.components.loading.LoadingBox
+import id.pawra.ui.navigation.Screen
 import id.pawra.ui.screen.explore.BlogsViewModel
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.PawraTheme
+import id.pawra.utils.DateConverter
 
 @Composable
 fun Blogs(
@@ -95,7 +102,7 @@ fun Blogs(
                 )
             },
             modifier = modifier
-                .padding(top = 16.dp, bottom = 16.dp)
+                .padding(top = 16.dp, bottom = 12.dp)
                 .fillMaxWidth()
                 .heightIn(min = 48.dp)
         ) {}
@@ -110,57 +117,81 @@ fun Blogs(
                     isLoading = false
 
                     LazyColumn(
-                        modifier = modifier.weight(1f),
+                        modifier = modifier
+                            .weight(1f)
+                            .padding(vertical = 10.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         items(blogsState.data, key = { it.id }) {data ->
+                            Column(
+                                modifier = modifier
+                                    .fillMaxSize()
+                                    .clip(shape = RoundedCornerShape(15.dp))
+                                    .clickable {
+                                        navController.navigate(Screen.BlogDetail.createRoute(data.id))
+                                    }
+                                    .padding(horizontal = 10.dp, vertical = 15.dp),
+                            ){
+                                Row(
+                                    modifier = modifier.fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    AsyncImage(
+                                        model = data.author?.image ?: "",
+                                        contentDescription = "Admin Profile Picture",
+                                        modifier = modifier
+                                            .size(28.dp)
+                                            .clip(CircleShape),
+                                        contentScale = ContentScale.Crop,
+                                    )
 
-                            Row(
-                                modifier = modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                Text(
-                                    color = Gray,
-                                    fontSize = 13.sp,
-                                    text = "by",
-                                    modifier = modifier.padding(start = 10.dp)
+                                    Text(
+                                        color = Gray,
+                                        fontSize = 13.sp,
+                                        text = "by",
+                                        modifier = modifier.padding(start = 10.dp)
+                                    )
+                                    Text(
+                                        text = data.author?.username ?: "Unknown",
+                                        color = Gray,
+                                        fontSize = 13.sp,
+                                        fontWeight = FontWeight.SemiBold,
+                                        modifier = modifier.padding(start = 5.dp)
+                                    )
+                                }
+
+                                AsyncImage(
+                                    model = data.image,
+                                    contentDescription = data.title,
+                                    modifier = modifier
+                                        .padding(top = 10.dp)
+                                        .height(185.dp)
+                                        .clip(RoundedCornerShape(15.dp))
+                                        .fillMaxWidth(),
+                                    contentScale = ContentScale.Crop,
                                 )
+
                                 Text(
-                                    text = "Admin",
+                                    text = data.title ?: "",
+                                    color = Black,
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    modifier = modifier
+                                        .padding(top = 10.dp)
+                                        .fillMaxWidth()
+                                        .align(Alignment.Start)
+                                )
+
+                                Text(
+                                    text = DateConverter.convertStringToDate(data.createdAt ?: ""),
                                     color = Gray,
                                     fontSize = 13.sp,
-                                    fontWeight = FontWeight.SemiBold,
-                                    modifier = modifier.padding(start = 5.dp)
+                                    textAlign = TextAlign.End,
+                                    modifier = modifier
+                                        .padding(top = 5.dp)
+                                        .fillMaxWidth()
                                 )
                             }
-
-                            AsyncImage(
-                                model = data.image,
-                                contentDescription = data.title,
-                                modifier = modifier
-                                    .padding(top = 10.dp)
-                                    .height(185.dp)
-                                    .clip(RoundedCornerShape(15.dp))
-                                    .fillMaxWidth(),
-                                contentScale = ContentScale.Crop,
-                            )
-
-                            Text(
-                                text = data.title ?: "",
-                                color = Black,
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                modifier = modifier.padding(top = 10.dp)
-                            )
-
-                            Text(
-                                text = data.createdAt ?: "",
-                                color = Gray,
-                                fontSize = 13.sp,
-                                modifier = modifier
-                                    .padding(top = 5.dp)
-                                    .align(Alignment.End)
-                            )
                         }
                     }
                 }

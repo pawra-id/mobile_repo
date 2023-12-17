@@ -7,7 +7,7 @@ sealed class LocationState {
     data object NoPermission: LocationState()
     data object LocationDisabled: LocationState()
     data object LocationLoading: LocationState()
-    data class LocationAvailable(val location: LatLng): LocationState()
+    data class LocationAvailable(val cameraLatLang: LatLng): LocationState()
     data object Error: LocationState()
 }
 

@@ -62,6 +62,7 @@ import androidx.navigation.compose.rememberNavController
 import id.pawra.R
 import id.pawra.data.ViewModelFactory
 import id.pawra.data.local.preference.ChipsModel
+import id.pawra.ui.common.UiState
 import id.pawra.ui.screen.pet.activities.ActivitiesViewModel
 import id.pawra.ui.screen.pet.activities.UpdateActivityFormEvent
 import id.pawra.ui.screen.pet.profile.PetViewModel
@@ -80,36 +81,42 @@ import id.pawra.ui.theme.Red
 @Composable
 fun UpdateActivitiesForm (
     modifier: Modifier = Modifier,
-    petId: Int,
+    activityId: Int,
     navController: NavController,
     activitiesViewModel: ActivitiesViewModel,
-    petViewModel: PetViewModel,
     showDialog: (Boolean) -> Unit,
 ){
     val state = activitiesViewModel.stateUpdateActivity
-    var listDog = listOf<MutableMap<*,*>>()
-
-    LaunchedEffect(Unit){
-        petViewModel.getListDogToAddDogForm(petId)
-    }
-
-    petViewModel.petListState.collectAsState(initial = emptyList()).value.let { dogList ->
-        if (dogList.isNotEmpty()) {
-            listDog = dogList
-            LaunchedEffect(Unit){
-                state.dog = dogList[0]["name"].toString()
-                state.dogId = dogList[0]["id"] as Int
-            }
-        }
-    }
-    val chipDataSnapshotStateList = remember {
-        activitiesViewModel.tagChip
-    }
-    val keyboardController: SoftwareKeyboardController? = LocalSoftwareKeyboardController.current
-    var isExpanded by remember { mutableStateOf(false) }
     val selectedItems = remember {
         mutableStateListOf<String>()
     }
+
+    val chipDataSnapshotStateList = remember {
+        activitiesViewModel.tagChip
+    }
+
+    activitiesViewModel.getDetailActivity(activityId)
+    activitiesViewModel.activityDetailState.collectAsState().value.let { activityDetail ->
+        when(activityDetail) {
+            is UiState.Success -> {
+                LaunchedEffect(Unit){
+                    state.dogId = activityDetail.data.dog?.id ?: 0
+                    state.dog = activityDetail.data.dog?.name ?: ""
+                    state.activity = activityDetail.data.description ?: ""
+                    state.activity = activityDetail.data.description ?: ""
+                    activityDetail.data.tags?.forEach {
+                        activitiesViewModel.tagChip.add(ChipData(it.name ?: ""))
+                        selectedItems.add(it.name ?: "")
+                    }
+                    state.id = activityDetail.data.id
+                }
+            }
+            else -> {}
+        }
+
+    }
+    val keyboardController: SoftwareKeyboardController? = LocalSoftwareKeyboardController.current
+    var isExpanded by remember { mutableStateOf(false) }
 
     Column{
         Text(
@@ -154,28 +161,6 @@ fun UpdateActivitiesForm (
                 },
                 isError = state.dogError != null
             )
-
-            ExposedDropdownMenu(
-                expanded = isExpanded,
-                onDismissRequest = { isExpanded = false }
-            ) {
-                listDog.forEach { item ->
-                    DropdownMenuItem(
-                        text = {
-                            Text(
-                                text= item["name"].toString(),
-                                fontSize = 14.sp,
-                            )
-                        },
-                        onClick = {
-                            state.dog = item["name"].toString()
-                            state.dogId = item["id"] as Int
-                            isExpanded = false
-                            activitiesViewModel.onEventUpdateActivity(UpdateActivityFormEvent.DogChanged(item["name"].toString()))
-                        }
-                    )
-                }
-            }
         }
 
         Text(
@@ -379,7 +364,7 @@ fun UpdateActivitiesForm (
                 .height(50.dp)
         ) {
             Text(
-                text = stringResource(R.string.save),
+                text = stringResource(R.string.update),
                 fontSize = 14.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -398,11 +383,8 @@ fun UpdateActivitiesFormPreview() {
     PawraTheme {
         UpdateActivitiesForm(
             navController = rememberNavController(),
-            petId = 0,
+            activityId = 0,
             activitiesViewModel = viewModel(
-                factory = ViewModelFactory(LocalContext.current)
-            ),
-            petViewModel = viewModel(
                 factory = ViewModelFactory(LocalContext.current)
             ),
             showDialog = {}

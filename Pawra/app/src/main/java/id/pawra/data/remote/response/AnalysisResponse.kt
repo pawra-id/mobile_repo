@@ -48,6 +48,9 @@ data class AnalysisResponseItem(
 	@field:SerializedName("dog_id")
 	val dogId: Int? = null,
 
+	@field:SerializedName("actions")
+	val actions: List<ActionsItem>? = null,
+
 	val error: String? = null
 )
 
@@ -56,4 +59,22 @@ data class ShareAnalysisResponse(
 	val message: String,
 
 	val error: Boolean
+)
+
+data class ActionsItem(
+
+	@field:SerializedName("updated_at")
+	val updatedAt: String? = null,
+
+	@field:SerializedName("action")
+	val action: String? = null,
+
+	@field:SerializedName("description")
+	val description: String? = null,
+
+	@field:SerializedName("created_at")
+	val createdAt: String? = null,
+
+	@field:SerializedName("id")
+	val id: Int? = null
 )

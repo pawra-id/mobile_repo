@@ -41,7 +41,6 @@ import id.pawra.ui.screen.pet.profile.PetViewModel
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.PawraTheme
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun PetMentalHealthScreen(
     modifier: Modifier = Modifier,
@@ -190,7 +189,6 @@ fun PetMentalHealthScreen(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(showBackground = true)
 fun PetMentalHealthScreenPreview() {

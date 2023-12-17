@@ -1,6 +1,5 @@
 package id.pawra.ui.components.blogs
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,25 +20,24 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import id.pawra.data.ViewModelFactory
-import id.pawra.data.local.preference.BlogsData
 import id.pawra.data.remote.response.BlogsResponseItem
 import id.pawra.ui.screen.explore.BlogsViewModel
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.PawraTheme
+import id.pawra.utils.DateConverter
 
 @Composable
 fun BlogDetail(
     blogs: BlogsResponseItem,
     blogsViewModel: BlogsViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ){
-
+    
     Column(
         modifier = modifier
             .padding(bottom = 10.dp)
             .clip(shape = RoundedCornerShape(15.dp))
-            .clickable { }
     ) {
         AsyncImage(
             model = blogs.image,
@@ -63,7 +61,7 @@ fun BlogDetail(
                 text = "by"
             )
             Text(
-                text = "Admin",
+                text = blogs.author?.username ?: "Unknown",
                 color = Gray,
                 fontSize = 13.sp,
                 fontWeight = FontWeight.SemiBold,
@@ -72,7 +70,7 @@ fun BlogDetail(
         }
 
         Text(
-            text = blogs.createdAt ?: "",
+            text = DateConverter.convertStringToDate(blogs.createdAt ?: ""),
             color = Gray,
             fontSize = 13.sp,
             fontWeight = FontWeight.Normal,

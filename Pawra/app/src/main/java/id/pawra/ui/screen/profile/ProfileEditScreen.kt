@@ -34,7 +34,6 @@ import id.pawra.ui.screen.auth.AuthViewModel
 import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.PawraTheme
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ProfileEditScreen(
     modifier: Modifier = Modifier,
@@ -111,7 +110,6 @@ fun ProfileEditScreen(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(showBackground = true)
 fun ProfileEditScreenPreview() {

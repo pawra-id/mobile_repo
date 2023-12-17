@@ -30,6 +30,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import id.pawra.ui.common.NoRippleTheme
 import id.pawra.ui.components.general.SearchBar
 import id.pawra.ui.theme.DarkGreen
@@ -41,7 +43,8 @@ import id.pawra.ui.theme.White
 
 @Composable
 fun MenuSearch(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavController
 ) {
     var activeMenu by remember { mutableStateOf(Menu.MentalHealth.name) }
 
@@ -98,7 +101,10 @@ fun MenuSearch(
             }
         }
 
-        ListExplore(activeMenu)
+        ListExplore(
+            activeMenu,
+            navController = navController
+        )
     }
 }
 
@@ -106,6 +112,8 @@ fun MenuSearch(
 @Preview(showBackground = true)
 fun MenuSearchPreview() {
     PawraTheme {
-        MenuSearch()
+        MenuSearch(
+            navController = rememberNavController()
+        )
     }
 }

@@ -17,7 +17,6 @@ import id.pawra.ui.components.petactivities.PetActivities
 import id.pawra.ui.components.petactivities.PetActivitiesTopBar
 import id.pawra.ui.theme.PawraTheme
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun PetActivitiesScreen(
     modifier: Modifier = Modifier,
@@ -44,7 +43,6 @@ fun PetActivitiesScreen(
 
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(showBackground = true)
 fun PetActivitiesScreenPreview() {

@@ -58,23 +58,6 @@ fun VetProfileScreen(
     }
 
     Column {
-//        val vetData = VetData(
-//            "https://static.vecteezy.com/system/resources/previews/005/857/332/non_2x/funny-portrait-of-cute-corgi-dog-outdoors-free-photo.jpg",
-//            "drh. Humberto Chavez",
-//            2.3,
-//            8,
-//            9,
-//            15,
-//            "Klinik Hewan Purnama",
-//            "Female",
-//            75,
-//            "White, Gold",
-//            "Jl. Brigjen Sudirman No.5, Purbayan, Kec. Mergangsan, Kota Yogyakarta, Daerah Istimewa Yogyakarta 55131",
-//            220.2209029,
-//            2909090.3209302,
-//            listOf("Doctor of Veterinary Medicine (DVM), University of Veterinary Sciences, 2007", "Bachelor of Science in Animal Science, State University, 2003.")
-//        )
-
         VetProfileTopBar()
         Column(
             modifier = modifier

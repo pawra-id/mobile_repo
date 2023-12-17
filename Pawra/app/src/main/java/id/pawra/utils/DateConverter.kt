@@ -8,7 +8,6 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 object DateConverter {
-    @RequiresApi(Build.VERSION_CODES.O)
     fun convertStringToDate(inputDateStr: String): String {
         if (inputDateStr.isEmpty()) return ""
 

@@ -82,6 +82,7 @@ class PetRepository private constructor(
             data["color"] = petData.primaryColor
             data["weight"] = petData.weight
             data["height"] = petData.height
+            data["microchip_id"] = petData.microchipId.toString()
             data["description"] = petData.summary.toString()
             data["image"] = petData.image
 
@@ -145,6 +146,7 @@ class PetRepository private constructor(
             data["gender"] = petData.gender
             data["weight"] = petData.weight
             data["color"] = petData.primaryColor
+            data["microchip_id"] = petData.microchipId.toString()
             data["description"] = petData.summary.toString()
 
             return flow {
@@ -176,7 +178,7 @@ class PetRepository private constructor(
         }
     }
 
-    suspend fun deleteDog(user: SessionModel, petId: Int): Flow<PetResponseItem> {
+    suspend fun deleteDog(user: SessionModel, petId: Int): Flow<String> {
         try {
             return flowOf(apiService.deleteDog("Bearer ${user.token}", petId))
 
@@ -189,18 +191,12 @@ class PetRepository private constructor(
                 "Error parsing JSON"
             }
             return flowOf(
-                PetResponseItem(
-                    id = 0,
-                    error = errorMessage
-                )
+                errorMessage
             )
 
         } catch (e: Exception) {
             return flowOf(
-                PetResponseItem(
-                    id = 0,
-                    error = e.message
-                )
+                e.message ?: ""
             )
         }
     }

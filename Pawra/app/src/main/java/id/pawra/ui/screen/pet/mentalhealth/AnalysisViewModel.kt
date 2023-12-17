@@ -64,7 +64,7 @@ class AnalysisViewModel(
                             _analysisState.value = UiState.Error(analysis.error)
                         }
                         else -> {
-                            _analysisState.value = UiState.Success(analysis.items ?: listOf())
+                            _analysisState.value = UiState.Success(analysis.items?.sortedByDescending { it.createdAt } ?: listOf())
                         }
                     }
                 }

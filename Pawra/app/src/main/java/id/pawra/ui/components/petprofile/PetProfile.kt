@@ -3,6 +3,7 @@ package id.pawra.ui.components.petprofile
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,7 +21,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Female
+import androidx.compose.material.icons.filled.Male
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -43,6 +49,7 @@ import id.pawra.ui.screen.auth.AuthViewModel
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkBlue
 import id.pawra.ui.theme.DarkGreen
+import id.pawra.ui.theme.DarkPink
 import id.pawra.ui.theme.DisabledBlue
 import id.pawra.ui.theme.DisabledGreen
 import id.pawra.ui.theme.DisabledOrange
@@ -51,6 +58,7 @@ import id.pawra.ui.theme.LightGray
 import id.pawra.ui.theme.Orange
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
+import id.pawra.ui.theme.Red
 
 @Composable
 fun PetProfile(
@@ -95,7 +103,8 @@ fun PetProfile(
             }
             Column(
                 modifier = modifier
-                    .padding(vertical = 20.dp)
+                    .padding(vertical = 20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Box(
                     modifier = modifier
@@ -122,19 +131,22 @@ fun PetProfile(
                         .padding(vertical = 5.dp, horizontal = 10.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = pet.gender ?: "",
-                        fontFamily = Poppins,
-                        fontSize = 11.sp,
-                        color = DarkBlue,
-                        fontWeight = FontWeight.Medium,
+                    Icon(
+                        if (pet.gender == "male") Icons.Filled.Male else Icons.Filled.Female,
+                        "Sex Icon",
+                        modifier
+                            .align(Alignment.TopEnd)
+                            .clip(CircleShape)
+                            .size(18.dp),
+                        (if (pet.gender == "male") DarkBlue else DarkPink)
                     )
                 }
             }
 
             Column(
                 modifier = modifier
-                    .padding(vertical = 20.dp)
+                    .padding(vertical = 20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Box(
                     modifier = modifier
@@ -162,7 +174,7 @@ fun PetProfile(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = pet.age.toString(),
+                        text = "${pet.age}y",
                         fontFamily = Poppins,
                         fontSize = 11.sp,
                         color = Orange,
@@ -173,7 +185,8 @@ fun PetProfile(
 
             Column(
                 modifier = modifier
-                    .padding(vertical = 20.dp)
+                    .padding(vertical = 20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Box(
                     modifier = modifier
@@ -239,8 +252,8 @@ fun PetProfile(
 
         LazyRow(
             modifier = Modifier
-                .fillMaxWidth(),
-            contentPadding = PaddingValues(horizontal = 22.dp, vertical = 8.dp),
+                .fillMaxWidth()
+                .padding(PaddingValues(horizontal = 22.dp, vertical = 8.dp)),
             horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             item {
@@ -252,9 +265,9 @@ fun PetProfile(
             item {
                 InfoBox("Height", "${pet.height} inch")
             }
-            // TODO: microchip not provide
+
             item {
-                InfoBox("Microchip ID", "")
+                InfoBox("Microchip ID", pet.microchipId ?: "")
             }
         }
 
