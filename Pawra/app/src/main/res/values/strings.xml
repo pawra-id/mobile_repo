@@ -9,7 +9,7 @@
     <string name="password">Password</string>
     <string name="show_password">Show Password</string>
     <string name="hide_password">Hide Password</string>
-    <string name="name">Name</string>
+    <string name="name">Username</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="accept_terms_services"><![CDATA[Accept terms & services]]></string>
     <string name="forgot_password">Forgot password?</string>

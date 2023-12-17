@@ -1,6 +1,6 @@
 package id.pawra.data.local.preference
 
-data class VetData(
+data class  VetData(
     val image: String,
     val name: String,
     val rangeLocation: Double,

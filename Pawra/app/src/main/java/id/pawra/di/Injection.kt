@@ -7,11 +7,10 @@ import id.pawra.data.local.preference.dataStore
 import id.pawra.data.remote.retrofit.ApiConfig
 import id.pawra.data.remote.retrofit.ApiService
 import id.pawra.data.repository.ActivitiesRepository
+import id.pawra.data.repository.BlogsRepository
 import id.pawra.data.repository.AnalysisRepository
 import id.pawra.data.repository.PetRepository
 import id.pawra.data.repository.VetRepository
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
 
 object Injection {
 
@@ -37,6 +36,11 @@ object Injection {
     fun provideVetRepository(context: Context): VetRepository {
         val apiService = getApiService(context)
         return VetRepository.getInstance(apiService)
+    }
+
+    fun provideBlogsRepository(context: Context): BlogsRepository {
+        val apiService = getApiService(context)
+        return BlogsRepository.getInstance(apiService)
     }
 
     fun provideAnalysisRepository(context: Context): AnalysisRepository {

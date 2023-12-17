@@ -30,21 +30,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import id.pawra.ui.common.NoRippleTheme
 import id.pawra.ui.components.general.SearchBar
 import id.pawra.ui.theme.DarkGreen
+import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.LightGray
 import id.pawra.ui.theme.LightGreen
-import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.White
 
 @Composable
 fun MenuSearch(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavController
 ) {
     var activeMenu by remember { mutableStateOf(Menu.MentalHealth.name) }
-    val query by remember { mutableStateOf("") }
 
     Column(
         modifier = modifier
@@ -99,36 +101,10 @@ fun MenuSearch(
             }
         }
 
-        SearchBar(
-            query = query,
-            onQueryChange = {  },
-            onSearch = {},
-            active = false,
-            onActiveChange = {},
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = null,
-                    tint = Gray
-                )
-            },
-            placeholder = {
-                Text(
-                    "Search",
-                    color = Gray
-                )
-            },
-            modifier = modifier
-                .padding(top = 16.dp, bottom = 16.dp)
-                .fillMaxWidth()
-                .heightIn(min = 48.dp)
-        ) {}
-
-        Column(
-            modifier = modifier.verticalScroll(rememberScrollState())
-        ) {
-            ListExplore(activeMenu)
-        }
+        ListExplore(
+            activeMenu,
+            navController = navController
+        )
     }
 }
 
@@ -136,6 +112,8 @@ fun MenuSearch(
 @Preview(showBackground = true)
 fun MenuSearchPreview() {
     PawraTheme {
-        MenuSearch()
+        MenuSearch(
+            navController = rememberNavController()
+        )
     }
 }

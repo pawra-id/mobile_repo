@@ -1,10 +1,6 @@
 package id.pawra
 
-import android.content.Context
-import android.content.SharedPreferences
-import android.os.Build
 import android.preference.PreferenceManager
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -22,8 +18,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import id.pawra.data.ViewModelFactory
-import id.pawra.data.local.preference.Preference
-import id.pawra.data.local.preference.dataStore
 import id.pawra.ui.components.onboarding.Onboarding
 import id.pawra.ui.navigation.AddButton
 import id.pawra.ui.navigation.BottomNavigation
@@ -52,7 +46,6 @@ import id.pawra.ui.screen.vet.MapAddressScreen
 import id.pawra.ui.screen.vet.VetProfileScreen
 import id.pawra.ui.screen.vet.VetScreen
 import id.pawra.ui.theme.PawraTheme
-import kotlinx.coroutines.flow.first
 
 @Composable
 fun Pawra(
@@ -218,6 +211,17 @@ fun Pawra(
         }
 
         composable(
+            Screen.BlogDetail.route,
+            listOf(navArgument("blogsId") { type = NavType.IntType })
+        ) {
+            val blogsId = it.arguments?.getInt("blogsId") ?: 0
+            BlogScreen(
+                navController = navController,
+                blogsId = blogsId
+            )
+        }
+
+        composable(
             Screen.PetMentalHealthResult.route,
             listOf(navArgument("analysisId") { type = NavType.IntType })
         ) {
@@ -225,12 +229,6 @@ fun Pawra(
             MentalHealthResultScreen(
                 navController = navController,
                 analysisId = analysisId
-            )
-        }
-
-        composable(Screen.BlogDetail.route) {
-            BlogScreen(
-                navController = navController
             )
         }
     }
@@ -276,7 +274,10 @@ fun HomeNav(
             }
 
             composable(Screen.Explore.route) {
-                ExploreScreen(navHomeController = navHomeController)
+                ExploreScreen(
+                    navHomeController = navHomeController,
+                    navController = navController
+                )
             }
 
             composable(Screen.Profile.route) {

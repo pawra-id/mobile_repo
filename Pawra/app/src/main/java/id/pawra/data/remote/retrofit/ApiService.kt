@@ -2,6 +2,8 @@ package id.pawra.data.remote.retrofit
 
 import id.pawra.data.remote.response.ActivitiesResponse
 import id.pawra.data.remote.response.ActivitiesResponseItem
+import id.pawra.data.remote.response.BlogsResponse
+import id.pawra.data.remote.response.BlogsResponseItem
 import id.pawra.data.remote.response.AnalysisResponse
 import id.pawra.data.remote.response.AnalysisResponseItem
 import id.pawra.data.remote.response.PetResponse
@@ -194,4 +196,18 @@ interface ApiService {
         @Header("Authorization") authHeader: String,
         @Path("id") id: Int
     ): ShareAnalysisResponse
+
+    @GET("blogs/")
+    suspend fun getBlogs(
+        @Header("Authorization") authHeader: String,
+        @Query("search") keyword: String? = "",
+        @Query("size") size: Int? = 15,
+        @Query("page") page: Int? = 1
+    ): BlogsResponse
+
+    @GET("blogs/{id}")
+    suspend fun getDetailBlogs(
+        @Header("Authorization") authHeader: String,
+        @Path("id") id: Int
+    ): BlogsResponseItem
 }

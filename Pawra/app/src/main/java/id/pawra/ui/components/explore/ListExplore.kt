@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import id.pawra.data.ViewModelFactory
 import id.pawra.ui.components.loading.LoadingBox
 import id.pawra.ui.screen.pet.activities.ActivitiesViewModel
@@ -24,6 +25,7 @@ import id.pawra.ui.theme.PawraTheme
 @Composable
 fun ListExplore(
     activeMenu: String,
+    navController: NavController,
     modifier: Modifier = Modifier,
     activitiesViewModel: ActivitiesViewModel = viewModel(
         factory = ViewModelFactory(LocalContext.current)
@@ -47,13 +49,14 @@ fun ListExplore(
         modifier = modifier.padding(top = 10.dp)
     ) {
         if (activeMenu == Menu.MentalHealth.name) {
-            (0 until 3).forEach { _ ->
-                SharedMental()
-            }
+            SharedMental(analysisId = 0)
         } else {
-            (0 until 3).forEach { _ ->
-                Blogs(navController = rememberNavController())
-            }
+            Blogs(
+                navController = navController,
+                blogsViewModel = viewModel(
+                    factory = ViewModelFactory(LocalContext.current)
+                )
+            )
         }
     }
 }
@@ -63,7 +66,8 @@ fun ListExplore(
 fun ListExplorePreview() {
     PawraTheme {
         ListExplore(
-            ""
+            "",
+            navController = rememberNavController()
         )
     }
 }
