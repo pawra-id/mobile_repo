@@ -11,6 +11,8 @@ import id.pawra.data.remote.response.PetResponseItem
 import id.pawra.data.remote.response.ShareAnalysisResponse
 import id.pawra.data.remote.response.SignInResponse
 import id.pawra.data.remote.response.SignUpResponse
+import id.pawra.data.remote.response.TagResponse
+import id.pawra.data.remote.response.TagsItem
 import id.pawra.data.remote.response.VetResponse
 import id.pawra.data.remote.response.VetResponseItem
 import okhttp3.MultipartBody
@@ -210,4 +212,10 @@ interface ApiService {
         @Header("Authorization") authHeader: String,
         @Path("id") id: Int
     ): BlogsResponseItem
+
+    @GET("tags/")
+    suspend fun getTags(
+        @Header("Authorization") authHeader: String,
+        @Query("search") keyword: String? = "",
+    ): List<TagsItem>
 }

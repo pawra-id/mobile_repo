@@ -3,6 +3,7 @@ package id.pawra.ui.components.addactivities
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -34,11 +37,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.InputChip
 import androidx.compose.material3.InputChipDefaults
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -68,6 +73,8 @@ import androidx.navigation.compose.rememberNavController
 import id.pawra.R
 import id.pawra.data.ViewModelFactory
 import id.pawra.data.local.preference.ChipsModel
+import id.pawra.ui.common.UiState
+import id.pawra.ui.components.home.Activities
 import id.pawra.ui.screen.pet.activities.ActivitiesViewModel
 import id.pawra.ui.screen.pet.activities.AddActivityFormEvent
 import id.pawra.ui.screen.pet.profile.PetViewModel
@@ -77,11 +84,12 @@ import id.pawra.ui.theme.LightGreen
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
 import id.pawra.ui.theme.Red
+import id.pawra.ui.theme.White
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class,
-    ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class
+    ExperimentalComposeUiApi::class
 )
 @Composable
 fun AddActivitiesForm (
@@ -228,17 +236,6 @@ fun AddActivitiesForm (
                 .padding(bottom = 8.dp),
         )
 
-        val inputList = listOf(
-            ChipsModel(
-                name = "Poop",
-                textExpanded = "poop",
-            ),
-            ChipsModel(
-                name = "Sad",
-                textExpanded = "sad",
-            )
-        )
-
         FlowRow(
             modifier = modifier
                 .drawWithContent {
@@ -271,27 +268,18 @@ fun AddActivitiesForm (
                     .weight(1f),
                 contentAlignment = Alignment.CenterStart
             ) {
-                val bringIntoViewRequester = remember { BringIntoViewRequester() }
-                val coroutineScope = rememberCoroutineScope()
 
                 Column {
                     BasicTextField(
                         value = state.tags,
                         onValueChange = {
-                            activitiesViewModel.onEventAddActivity(AddActivityFormEvent.TagsChanged(it)) },
+                            activitiesViewModel.onEventAddActivity(AddActivityFormEvent.TagsChanged(it))
+                            activitiesViewModel.getTags(it) },
                         singleLine = false,
 
                         modifier = modifier
                             .fillMaxWidth()
-                            .padding(bottom = 8.dp)
-                            .bringIntoViewRequester(bringIntoViewRequester)
-                            .onFocusEvent { focusState ->
-                                if (focusState.isFocused) {
-                                    coroutineScope.launch {
-                                        bringIntoViewRequester.bringIntoView()
-                                    }
-                                }
-                            },
+                            .padding(bottom = 8.dp),
                         textStyle = TextStyle.Default.copy(
                             fontSize = 14.sp,
                             color = Gray,
@@ -341,45 +329,53 @@ fun AddActivitiesForm (
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
 
-            inputList.forEach { item ->
+            activitiesViewModel.tagState.collectAsState().value.let { tagsState ->
+                when (tagsState) {
+                    is UiState.Success -> {
+                        tagsState.data.take(15).forEach { item ->
+                            val isSelected = selectedItems.contains(item.name)
 
-                val isSelected = selectedItems.contains(item.name)
-
-                InputChip(
-                    selected = isSelected,
-                    onClick = {
-                        val chip = ChipData(
-                            text = item.name
-                        )
-                        if (isSelected) {
-                            chipDataSnapshotStateList.remove(chip)
-                            selectedItems.remove(item.name)
-                            activitiesViewModel.onEventAddActivity(AddActivityFormEvent.TagsChanged(state.tags))
-                        } else {
-                            chipDataSnapshotStateList.add(chip)
-                            selectedItems.add(item.name)
-                            activitiesViewModel.onEventAddActivity(AddActivityFormEvent.TagsChanged(state.tags))
-                        }
-                    },
-                    label = { Text(
-                        text = item.name,
-                        color = if (isSelected) DarkGreen else Gray
-                        )
-                    },
-                    colors = InputChipDefaults.inputChipColors(
-                        selectedContainerColor = LightGreen,
-                        selectedLabelColor = DarkGreen
-                    ),
-                    trailingIcon = {
-                        if (isSelected) {
-                            Icon(
-                                Icons.Filled.Done,
-                                contentDescription = "",
-                                Modifier.size(AssistChipDefaults.IconSize)
+                            InputChip(
+                                selected = isSelected,
+                                onClick = {
+                                    val chip = ChipData(
+                                        text = item.name.toString()
+                                    )
+                                    if (isSelected) {
+                                        chipDataSnapshotStateList.remove(chip)
+                                        selectedItems.remove(item.name)
+                                        activitiesViewModel.onEventAddActivity(AddActivityFormEvent.TagsChanged(state.tags))
+                                    } else {
+                                        chipDataSnapshotStateList.add(chip)
+                                        selectedItems.add(item.name.toString())
+                                        activitiesViewModel.onEventAddActivity(AddActivityFormEvent.TagsChanged(state.tags))
+                                        state.tags = ""
+                                    }
+                                },
+                                label = { Text(
+                                    text = item.name.toString(),
+                                    color = if (isSelected) DarkGreen else Gray
+                                )
+                                },
+                                colors = InputChipDefaults.inputChipColors(
+                                    selectedContainerColor = LightGreen,
+                                    selectedLabelColor = DarkGreen
+                                ),
+                                trailingIcon = {
+                                    if (isSelected) {
+                                        Icon(
+                                            Icons.Filled.Done,
+                                            contentDescription = "",
+                                            Modifier.size(AssistChipDefaults.IconSize)
+                                        )
+                                    }
+                                }
                             )
                         }
                     }
-                )
+
+                    else -> {}
+                }
             }
         }
 

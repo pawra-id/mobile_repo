@@ -317,7 +317,7 @@ fun PetProfilePreview() {
         PetProfile(
             pet = PetResponseItem(id=1),
             viewModel = viewModel(
-            factory = ViewModelFactory(LocalContext.current)
+                factory = ViewModelFactory(LocalContext.current)
         ))
     }
 }
