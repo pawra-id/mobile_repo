@@ -13,8 +13,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -45,13 +45,13 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import id.pawra.data.ViewModelFactory
+import id.pawra.data.remote.response.AnalysisResponseItem
 import id.pawra.ui.common.UiState
 import id.pawra.ui.components.dialog.ResultDialog
 import id.pawra.ui.components.general.SearchBar
 import id.pawra.ui.components.loading.LoadingBox
 import id.pawra.ui.navigation.Screen
 import id.pawra.ui.screen.pet.mentalhealth.AnalysisViewModel
-import id.pawra.ui.screen.pet.profile.PetViewModel
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkBlue
 import id.pawra.ui.theme.DarkGreen
@@ -70,34 +70,13 @@ import java.text.NumberFormat
 fun SharedMental(
     modifier: Modifier = Modifier,
     navController: NavController,
-    analysisViewModel: AnalysisViewModel,
-    petViewModel: PetViewModel = viewModel(
-        factory = ViewModelFactory(LocalContext.current)
-    )
+    analysisViewModel: AnalysisViewModel
 ) {
 
     val query by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
         analysisViewModel.getSharedAnalysis("")
-    }
-
-    var dogName by remember { mutableStateOf("") }
-    var dogGender by remember { mutableStateOf("") }
-    var dogImage by remember { mutableStateOf("") }
-
-    petViewModel.petDetailState.collectAsState().value.let { petDetail ->
-        when(petDetail) {
-            is UiState.Success -> {
-                LaunchedEffect(Unit) {
-                    dogName = petDetail.data.name ?: ""
-                    dogGender = petDetail.data.gender ?: ""
-                    dogImage = petDetail.data.image ?: ""
-                }
-            }
-
-            else -> {}
-        }
     }
 
     var isLoading by remember { mutableStateOf(false) }
@@ -142,8 +121,8 @@ fun SharedMental(
                 .heightIn(min = 48.dp)
         ) {}
 
-        analysisViewModel.analysisState.collectAsState().value.let { analysisState ->
-            when (analysisState) {
+        analysisViewModel.sharedAnalysisState.collectAsState().value.let { sharedAnalysis ->
+            when (sharedAnalysis) {
                 is UiState.Loading -> {
                     isLoading = true
                 }
@@ -152,124 +131,33 @@ fun SharedMental(
                     isLoading = false
 
                     LazyColumn(
-                        modifier = modifier
-                            .weight(1f)
-                            .padding(vertical = 10.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        modifier = modifier.weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
-                        items(analysisState.data, key = { it.id }) {data ->
-                            Column(
-                                modifier = modifier
-                                    .fillMaxSize()
-                                    .clip(shape = RoundedCornerShape(15.dp))
-                                    .clickable {
-                                        navController.navigate(Screen.BlogDetail.createRoute(data.id))
-                                    }
-                                    .padding(horizontal = 10.dp, vertical = 15.dp),
-                            ){
-                                Row(
-                                    modifier = modifier
-                                        .height(120.dp)
-                                        .clip(shape = RoundedCornerShape(15.dp))
-                                        .background(White)
-                                        .border(1.dp, DarkGreen, RoundedCornerShape(15.dp))
-                                        .fillMaxWidth()
-                                        .padding(horizontal = 10.dp, vertical = 15.dp),
-                                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                                ) {
-                                    Box(
-                                        modifier = modifier
-                                    ) {
-                                        AsyncImage(
-                                            model = dogImage,
-                                            contentDescription = dogName,
-                                            modifier = modifier
-                                                .size(90.dp)
-                                                .clip(RoundedCornerShape(15.dp))
-                                                .border(1.dp, LightGray, RoundedCornerShape(15.dp)),
-                                            contentScale = ContentScale.Crop
-                                        )
-
-                                        Box(
-                                            modifier = modifier
-                                                .padding(5.dp)
-                                                .align(Alignment.BottomEnd)
-                                        ) {
-                                            Icon(
-                                                if (dogGender == "male") Icons.Filled.Male else Icons.Filled.Female,
-                                                "Sex Icon",
-                                                modifier
-                                                    .align(Alignment.TopEnd)
-                                                    .clip(CircleShape)
-                                                    .background(
-                                                        color = if (dogGender == "male") DisabledBlue else DisabledPink
-                                                    )
-                                                    .padding(vertical = 2.dp, horizontal = 10.dp)
-                                                    .size(18.dp),
-                                                (if (dogGender == "male") DarkBlue else DarkPink)
-                                            )
-                                        }
-
-                                    }
-
-                                    Column(
-                                        modifier = modifier.padding(start = 10.dp),
-                                        verticalArrangement = Arrangement.SpaceBetween
-                                    ) {
-                                        Text(
-                                            text = dogName,
-                                            fontSize = 13.sp,
-                                            fontWeight = FontWeight.SemiBold,
-                                            color = Black
-                                        )
-
-                                        Text(
-                                            text = DateConverter.convertStringToDate(data.createdAt ?: ""),
-                                            fontSize = 11.sp,
-                                            fontWeight = FontWeight.SemiBold,
-                                            color = LightGray
-                                        )
-
-                                        Text(
-                                            text = data.description ?: "",
-                                            fontSize = 13.sp,
-                                            color = Black,
-                                            lineHeight = 18.sp,
-                                            maxLines = 2,
-                                            overflow = TextOverflow.Ellipsis,
-                                            modifier = modifier.weight(1f)
-                                        )
-
-                                        Row(
-                                            horizontalArrangement = Arrangement.spacedBy(10.dp),
-
-                                            ) {
-                                            Text(
-                                                text = NumberFormat.getPercentInstance().format(data.prediction?.toFloat()),
-                                                fontSize = 10.sp,
-                                                color = DarkGreen,
-                                                modifier = modifier
-                                                    .clip(shape = RoundedCornerShape(15.dp))
-                                                    .background(color = DisabledGreen)
-                                                    .padding(
-                                                        vertical = 2.dp,
-                                                        horizontal = 10.dp
-                                                    ),
-                                            )
-                                        }
-                                    }
+                        items(sharedAnalysis.data, key = { it.id }){ data ->
+                            SharedMentalItem(
+                                navController = navController,
+                                analysisViewModel = analysisViewModel,
+                                analysisData = data,
+                                dogImage =  data.dog?.image ?: "",
+                                dogGender = data.dog?.gender ?: "",
+                                dogName = data.dog?.name ?: "",
+                                showDialog = {
+                                    showDialog = it
                                 }
-                            }
+                            )
                         }
                     }
+
                 }
 
                 is UiState.Error -> {
-                    if(showDialog) {
+                    if (showDialog) {
                         isLoading = false
                         ResultDialog(
                             success = false,
-                            message = analysisState.errorMessage,
+                            message = sharedAnalysis.errorMessage,
                             setShowDialog = {
                                 showDialog = it
                             }
@@ -278,7 +166,116 @@ fun SharedMental(
                 }
 
                 else -> {}
+            }
+        }
+    }
+}
 
+@Composable
+fun SharedMentalItem(
+    navController: NavController,
+    analysisViewModel: AnalysisViewModel,
+    analysisData: AnalysisResponseItem,
+    dogImage: String,
+    dogGender: String,
+    dogName: String,
+    showDialog: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
+){
+    Row(
+        modifier = modifier
+            .height(120.dp)
+            .clip(shape = RoundedCornerShape(15.dp))
+            .background(White)
+            .clickable {
+                navController.navigate(
+                    Screen.PetMentalHealthResult.createRoute(
+                        analysisData.id
+                    )
+                )
+            }
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp, vertical = 15.dp),
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        Box(
+            modifier = modifier
+        ) {
+            AsyncImage(
+                model = dogImage,
+                contentDescription = "Dog Image",
+                modifier = modifier
+                    .size(90.dp)
+                    .clip(RoundedCornerShape(15.dp))
+                    .border(1.dp, LightGray, RoundedCornerShape(15.dp)),
+                contentScale = ContentScale.Crop
+            )
+            Box(
+                modifier = modifier
+                    .padding(5.dp)
+                    .align(Alignment.BottomEnd)
+            ) {
+                Icon(
+                    if (dogGender == "male") Icons.Filled.Male else Icons.Filled.Female,
+                    "Sex Icon",
+                    modifier
+                        .align(Alignment.TopEnd)
+                        .clip(CircleShape)
+                        .background(
+                            color = if (dogGender == "male") DisabledBlue else DisabledPink
+                        )
+                        .padding(vertical = 2.dp, horizontal = 10.dp)
+                        .size(18.dp),
+                    (if (dogGender == "male") DarkBlue else DarkPink)
+                )
+            }
+
+        }
+
+        Column(
+            modifier = modifier.padding(start = 10.dp),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = dogName,
+                fontSize = 13.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Black
+            )
+
+            Text(
+                text = DateConverter.convertStringToDate(analysisData.createdAt ?: ""),
+                fontSize = 11.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = LightGray
+            )
+
+            Text(
+                text = analysisData.description ?: "",
+                fontSize = 13.sp,
+                color = Black,
+                lineHeight = 18.sp,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                modifier = modifier.weight(1f)
+            )
+
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+
+                ) {
+                Text(
+                    text = NumberFormat.getPercentInstance().format(analysisData.prediction?.toFloat()),
+                    fontSize = 10.sp,
+                    color = DarkGreen,
+                    modifier = modifier
+                        .clip(shape = RoundedCornerShape(15.dp))
+                        .background(color = DisabledGreen)
+                        .padding(
+                            vertical = 2.dp,
+                            horizontal = 10.dp
+                        ),
+                )
             }
         }
     }
@@ -292,7 +289,7 @@ fun SharedMentalPreview() {
             navController = rememberNavController(),
             analysisViewModel = viewModel(
                 factory = ViewModelFactory(LocalContext.current)
-            ),
+            )
         )
     }
 }

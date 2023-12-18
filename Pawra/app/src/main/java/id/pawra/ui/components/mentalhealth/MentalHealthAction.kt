@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -20,12 +19,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import id.pawra.data.local.preference.MentalHealthData
 import id.pawra.data.remote.response.ActionsItem
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkGreen
-import id.pawra.ui.theme.DisabledGreen
-import id.pawra.ui.theme.LightGray
 import id.pawra.ui.theme.LightGreen
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins

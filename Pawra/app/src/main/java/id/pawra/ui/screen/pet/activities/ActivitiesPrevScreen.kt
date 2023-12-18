@@ -1,7 +1,5 @@
 package id.pawra.ui.screen.pet.activities
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -25,14 +23,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import id.pawra.data.ViewModelFactory
-import id.pawra.data.remote.response.PetResponseItem
 import id.pawra.ui.common.UiState
 import id.pawra.ui.components.addactivities.ActivitiesPrevInfo
 import id.pawra.ui.components.addactivities.ActivitiesPrevTitle
 import id.pawra.ui.components.addactivities.ActivitiesPrevTopBar
 import id.pawra.ui.components.dialog.ResultDialog
 import id.pawra.ui.components.loading.LoadingBox
-import id.pawra.ui.screen.pet.profile.PetViewModel
 import id.pawra.ui.theme.PawraTheme
 
 @Composable
@@ -59,7 +55,7 @@ fun ActivitiesPrevScreen(
     }
 
     Column {
-        ActivitiesPrevTopBar(navController = rememberNavController())
+        ActivitiesPrevTopBar(navController = navController)
 
         Column(
             modifier = modifier

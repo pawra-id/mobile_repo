@@ -1,4 +1,4 @@
-package id.pawra.ui.components.onboarding
+package id.pawra.data.local.preference
 
 import androidx.compose.ui.graphics.Color
 import id.pawra.ui.theme.LightGreen

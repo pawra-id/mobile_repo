@@ -24,7 +24,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import id.pawra.R
 import id.pawra.data.ViewModelFactory
-import id.pawra.di.Injection
 import id.pawra.ui.navigation.Screen
 import id.pawra.ui.screen.auth.AuthViewModel
 import id.pawra.ui.theme.DarkGreen

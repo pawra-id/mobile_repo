@@ -61,7 +61,7 @@ fun PetProfileTopBar(
             .padding(horizontal = 22.dp, vertical = 15.dp),
     ) {
         IconButton(
-            onClick = {  },
+            onClick = { navController.navigateUp() },
             modifier = modifier
                 .background(DisabledGreen, CircleShape)
                 .size(32.dp)
@@ -156,6 +156,8 @@ fun PetProfileTopBar(
             headText = "Delete Confirmation",
             warn = false,
             message = "Are you sure you want to delete this?",
+            yesText = "Yes, delete",
+            cancelText = "Cancel",
             setShowDialog = { showDeleteConfirmation = it },
             action = {
                 onDeleteClick()

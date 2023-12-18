@@ -29,7 +29,6 @@ import id.pawra.ui.components.addactivities.AddActivitiesTitle
 import id.pawra.ui.components.addactivities.AddActivitiesTopBar
 import id.pawra.ui.components.dialog.ResultDialog
 import id.pawra.ui.components.loading.LoadingBox
-import id.pawra.ui.navigation.Screen
 import id.pawra.ui.screen.pet.profile.PetViewModel
 import id.pawra.ui.theme.PawraTheme
 
@@ -59,7 +58,7 @@ fun ActivitiesAddScreen(
     }
 
     Column {
-        AddActivitiesTopBar(navController = rememberNavController())
+        AddActivitiesTopBar(navController = navController)
 
         Column(
             modifier = modifier
@@ -72,7 +71,7 @@ fun ActivitiesAddScreen(
             AddActivitiesTitle()
             Spacer(modifier = Modifier.height(15.dp))
             AddActivitiesForm(
-                navController = rememberNavController(),
+                navController = navController,
                 petId = petId,
                 activitiesViewModel = activitiesViewModel,
                 petViewModel = petViewModel,
@@ -92,6 +91,7 @@ fun ActivitiesAddScreen(
                                 message = "Activity add successfully",
                                 setShowDialog = {
                                     showDialog = it
+                                    navController.navigateUp()
                                 }
                             )
                         }

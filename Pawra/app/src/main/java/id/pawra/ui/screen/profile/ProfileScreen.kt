@@ -1,7 +1,5 @@
 package id.pawra.ui.screen.profile
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,7 +17,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import id.pawra.data.ViewModelFactory
-import id.pawra.di.Injection
 import id.pawra.ui.components.profile.ProfileButton
 import id.pawra.ui.components.profile.ProfilePage
 import id.pawra.ui.components.profile.ProfileTopBar

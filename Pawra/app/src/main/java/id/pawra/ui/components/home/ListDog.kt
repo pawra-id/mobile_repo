@@ -86,7 +86,6 @@ fun ListDog(
                             modifier = modifier
                                 .clip(shape = RoundedCornerShape(15.dp))
                                 .background(White)
-                                .border(1.dp, DarkGreen, RoundedCornerShape(15.dp))
                                 .clickable {
                                     navController.navigate(Screen.PetProfile.createRoute(data.id))
                                 }
@@ -134,7 +133,7 @@ fun ListDog(
                                 fontWeight = FontWeight.SemiBold,
                                 fontSize = 16.sp,
                                 color = Black,
-                                modifier = modifier.padding(top = 5.dp)
+                                modifier = modifier.padding(top = 5.dp).width(90.dp)
                             )
                             Text(
                                 text = data.breed ?: "",

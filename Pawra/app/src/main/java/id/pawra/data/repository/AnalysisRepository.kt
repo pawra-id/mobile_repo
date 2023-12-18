@@ -41,7 +41,7 @@ class AnalysisRepository private constructor(
         }
     }
 
-    suspend fun getSharedAnalysis(user: SessionModel, keyword: String? = ""): Flow<AnalysisResponse> {
+    suspend fun getSharedAnalysis(user: SessionModel, keyword: String): Flow<AnalysisResponse> {
         try {
             val response = apiService.getSharedAnalysis("Bearer ${user.token}", keyword)
             return flowOf(response)

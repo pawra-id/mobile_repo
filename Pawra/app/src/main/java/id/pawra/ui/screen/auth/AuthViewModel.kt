@@ -1,7 +1,5 @@
 package id.pawra.ui.screen.auth
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -42,7 +40,7 @@ class AuthViewModel(
     val updateProfileState: StateFlow<UiState<SignUpResponse>>
         get() = _updateProfileState
 
-    private val _sessionState: MutableStateFlow<SessionModel> = MutableStateFlow(SessionModel(0, "",  "", "", "", "", "", "", "", false))
+    private val _sessionState: MutableStateFlow<SessionModel> = MutableStateFlow(SessionModel(0, "",  "", "", "", "", "", "", "", "", false))
     val sessionState: StateFlow<SessionModel>
         get() = _sessionState
 
@@ -75,8 +73,7 @@ class AuthViewModel(
     }
 
     private fun updateProfile(
-        id: Int,
-        token: String,
+        user: SessionModel,
         name: String,
         email: String,
         summary: String,
@@ -85,12 +82,16 @@ class AuthViewModel(
         viewModelScope.launch {
             _updateProfileState.value = UiState.Loading
             authRepository.updateProfile(
-                id = id,
-                token = token,
+                id = user.id,
+                token = user.token,
                 username = name,
                 email = email,
                 summary = summary,
                 image = image,
+                latitude = user.latitude,
+                longitude = user.longitude,
+                expire = user.expire,
+                address = user.address
             ).collect { userDetail ->
                 when {
                     userDetail.error != null -> _updateProfileState.value = UiState.Error(userDetail.error)
@@ -101,8 +102,7 @@ class AuthViewModel(
     }
 
     private fun uploadImageAndProfile(
-        id: Int,
-        token: String,
+        userInfo: SessionModel,
         name: String,
         email: String,
         summary: String,
@@ -121,12 +121,11 @@ class AuthViewModel(
                 }
 
                 updateProfile(
-                    id = id,
-                    token = token,
-                    name = name,
-                    email = email,
-                    summary = summary,
-                    image = image
+                    userInfo,
+                    name,
+                    email,
+                    summary,
+                    image
                 )
             }
         }
@@ -141,7 +140,7 @@ class AuthViewModel(
     fun logout() {
         viewModelScope.launch {
             authRepository.logout()
-            _sessionState.value = SessionModel(0, "",  "", "", "", "", "", "", "", false)
+            _sessionState.value = SessionModel(0, "",  "", "", "", "", "", "", "", "", false)
         }
     }
 
@@ -308,8 +307,7 @@ class AuthViewModel(
     }
 
     fun updateDataProfile(
-        id: Int,
-        token: String,
+        user: SessionModel,
         name: String,
         email: String,
         summary: String,
@@ -336,11 +334,10 @@ class AuthViewModel(
         } else {
 
             uploadImageAndProfile(
-                id = id,
-                token = token,
-                name = name,
-                email = email,
-                summary = summary,
+                user,
+                name,
+                email,
+                summary,
                 imageUrl,
                 file
             )

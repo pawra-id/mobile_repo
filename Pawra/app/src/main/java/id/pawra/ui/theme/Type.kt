@@ -10,7 +10,7 @@ import id.pawra.R
 val Poppins = FontFamily(
     Font(R.font.poppins_black, FontWeight.Black),
     Font(R.font.poppins_black_italic, FontWeight.Black, FontStyle.Italic),
-    Font(R.font.poppins_bold,FontWeight.Bold,),
+    Font(R.font.poppins_bold,FontWeight.Bold),
     Font(R.font.poppins_bold_italic, FontWeight.Bold, FontStyle.Italic),
     Font(R.font.poppins_extra_bold, FontWeight.ExtraBold),
     Font(R.font.poppins_extra_bold_italic, FontWeight.ExtraBold, FontStyle.Italic),

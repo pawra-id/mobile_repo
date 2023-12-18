@@ -11,11 +11,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import id.pawra.data.ViewModelFactory
-import id.pawra.ui.components.pet.Pet
-import id.pawra.ui.components.pet.PetTopBar
 import id.pawra.ui.components.vets.Vets
 import id.pawra.ui.components.vets.VetsTopBar
-import id.pawra.ui.screen.pet.activities.ActivitiesViewModel
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.White
 
@@ -32,7 +29,9 @@ fun VetScreen(
             .fillMaxSize()
             .background(White)
     ) {
-        VetsTopBar()
+        VetsTopBar(
+            navController = navController
+        )
         Vets(
             navController = navController,
             vetViewModel = vetViewModel

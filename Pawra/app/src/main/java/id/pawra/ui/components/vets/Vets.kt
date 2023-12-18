@@ -1,5 +1,6 @@
 package id.pawra.ui.components.vets
 
+import android.location.Location
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -30,6 +32,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -61,6 +64,11 @@ import id.pawra.ui.theme.LightGray
 import id.pawra.ui.theme.LightGreen
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.White
+import kotlinx.coroutines.launch
+import kotlin.math.asin
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 @Composable
 fun Vets(
@@ -72,7 +80,7 @@ fun Vets(
     var activeFilter by remember { mutableStateOf(FilterVets.Nearest.name) }
 
     LaunchedEffect(Unit){
-        vetViewModel.getVets("")
+        vetViewModel.getVets("", activeFilter)
     }
 
     var isLoading by remember { mutableStateOf(false) }
@@ -100,7 +108,7 @@ fun Vets(
 
             SearchBar(
                 query = query,
-                onQueryChange = vetViewModel::getVets,
+                onQueryChange = { vetViewModel.getVets(it, filter = activeFilter) },
                 onSearch = {},
                 active = false,
                 onActiveChange = {},
@@ -156,6 +164,7 @@ fun Vets(
                             .padding(vertical = 5.dp, horizontal = 25.dp)
                             .clickable {
                                 activeFilter = filter.name
+                                vetViewModel.getVets(query, filter = activeFilter)
                             }
                     ) {
                         Text(
@@ -178,14 +187,34 @@ fun Vets(
                 is UiState.Success -> {
                     isLoading = false
 
+                    val myLocation = Location("myLocation").apply {
+                        latitude = vetViewModel.location.value.latitude
+                        longitude = vetViewModel.location.value.longitude
+                    }
+
+                    val listState = rememberLazyListState()
+                    val coroutineScope = rememberCoroutineScope()
+
                     LazyColumn(
                         modifier = modifier
                             .fillMaxSize()
                             .padding(top = 10.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                        verticalArrangement = Arrangement.spacedBy(10.dp),
+                        state = listState
                     ) {
+                        coroutineScope.launch {
+                            listState.animateScrollToItem(index = 0)
+                        }
+
                         items(vetsState.data, key = { it.id }) { data ->
+                            val vetLocation = Location("vetLocation").apply {
+                                latitude = data.latitude?.toDouble() ?: 0.0
+                                longitude = data.longitude?.toDouble() ?: 0.0
+                            }
+
+                            val distanceInMeters = haversineDistance(myLocation, vetLocation)
+                            val distanceInKilometers = "%.2f".format(distanceInMeters / 1000)
                             Row(
                                 modifier = modifier
                                     .clip(shape = RoundedCornerShape(15.dp))
@@ -239,7 +268,7 @@ fun Vets(
                                         horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start)
                                     ) {
                                         Text(
-                                            text = "2.3 km",
+                                            text = "$distanceInKilometers km",
                                             fontSize = 10.sp,
                                             color = DarkGreen,
                                             modifier = modifier
@@ -251,7 +280,7 @@ fun Vets(
                                         )
 
                                         Text(
-                                            text = "9am - 3pm",
+                                            text = "${data.startWorkHour} - ${data.endWorkHour}",
                                             fontSize = 10.sp,
                                             color = DarkGreen,
                                             modifier = modifier
@@ -287,6 +316,25 @@ fun Vets(
         }
     }
 
+}
+
+
+const val earthRadiusInMeters = 6371000
+
+fun haversineDistance(location1: Location, location2: Location): Double {
+    val lat1 = Math.toRadians(location1.latitude)
+    val lng1 = Math.toRadians(location1.longitude)
+    val lat2 = Math.toRadians(location2.latitude)
+    val lng2 = Math.toRadians(location2.longitude)
+
+    val deltaLat = lat2 - lat1
+    val deltaLng = lng2 - lng1
+
+    val a = sin(deltaLat / 2) * sin(deltaLat / 2) +
+            cos(lat1) * cos(lat2) * sin(deltaLng / 2) * sin(deltaLng / 2)
+    val c = 2 * asin(sqrt(a))
+
+    return c * earthRadiusInMeters
 }
 
 @Composable

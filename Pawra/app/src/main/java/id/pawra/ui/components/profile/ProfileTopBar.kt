@@ -11,12 +11,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
-import id.pawra.R
 import id.pawra.ui.components.addpet.PetAddTopBar
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkGreen

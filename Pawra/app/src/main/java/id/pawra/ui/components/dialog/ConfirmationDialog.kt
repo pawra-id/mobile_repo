@@ -20,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -30,14 +29,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import id.pawra.R
 import id.pawra.ui.theme.DarkBlue
-import id.pawra.ui.theme.DarkGreen
 import id.pawra.ui.theme.DarkYellow
 import id.pawra.ui.theme.DisabledBlue
-import id.pawra.ui.theme.DisabledGreen
-import id.pawra.ui.theme.DisabledRed
 import id.pawra.ui.theme.DisabledYellow
 import id.pawra.ui.theme.PawraTheme
-import id.pawra.ui.theme.Red
+import id.pawra.ui.theme.Poppins
 import id.pawra.ui.theme.White
 
 @Composable
@@ -45,6 +41,8 @@ fun ConfirmationDialog(
     headText: String,
     warn: Boolean,
     message: String,
+    yesText: String,
+    cancelText: String,
     setShowDialog: (Boolean) -> Unit,
     action: () -> Unit
 ) {
@@ -103,7 +101,7 @@ fun ConfirmationDialog(
 
                 ) {
                     Button(
-                        modifier = Modifier.width(100.dp).height(40.dp),
+                        modifier = Modifier.width(120.dp).height(40.dp),
                         shape = RoundedCornerShape(10.dp),
                         onClick = { setShowDialog(false) },
                         colors = ButtonDefaults.buttonColors(
@@ -111,8 +109,10 @@ fun ConfirmationDialog(
                         )
                     ) {
                         Text(
-                            text = "No",
-                            fontSize = 14.sp
+                            text = yesText,
+                            fontSize = 12.sp,
+                            fontFamily = Poppins,
+                            fontWeight = FontWeight.SemiBold
                         )
                     }
 
@@ -124,12 +124,15 @@ fun ConfirmationDialog(
                             setShowDialog(false)
                                   },
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = if (warn) DarkYellow else DarkBlue
+                            containerColor = White
                         )
                     ) {
                         Text(
-                            text = "Yes",
-                            fontSize = 14.sp
+                            text = cancelText,
+                            fontSize = 12.sp,
+                            color = if (warn) DarkYellow else DarkBlue,
+                            fontFamily = Poppins,
+                            fontWeight = FontWeight.SemiBold
                         )
                     }
                 }
@@ -146,6 +149,8 @@ fun ConfirmationDialogPreview() {
             "Confirm Delete",
             true,
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec porttitor quis nisi a fringilla. Etiam tempor orci in nisl consectetur, ac venenatis eros eleifend. Morbi massa odio, rhoncus quis iaculis ullamcorper, vestibulum in enim.",
+            "Yes, delete",
+            "cancel",
             {},
             {})
     }

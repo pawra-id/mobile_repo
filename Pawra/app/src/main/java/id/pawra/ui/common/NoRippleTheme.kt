@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 object NoRippleTheme : RippleTheme {
+
     @Composable
     override fun defaultColor() = Color.Unspecified
 

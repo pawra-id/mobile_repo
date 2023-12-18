@@ -1,15 +1,10 @@
 package id.pawra.ui.components.addactivities
 
 import android.annotation.SuppressLint
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Arrangement.Absolute.Center
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -23,12 +18,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.InputChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -42,15 +31,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import id.pawra.R
 import id.pawra.data.ViewModelFactory
-import id.pawra.data.local.preference.ChipsModel
-import id.pawra.data.local.preference.PetData
 import id.pawra.data.remote.response.ActivitiesResponseItem
-import id.pawra.data.remote.response.PetResponseItem
-import id.pawra.ui.common.UiState
-import id.pawra.ui.components.dialog.ResultDialog
-import id.pawra.ui.components.loading.LoadingBox
-import id.pawra.ui.screen.auth.AuthViewModel
-import id.pawra.ui.screen.pet.activities.ActivitiesViewModel
 import id.pawra.ui.screen.pet.profile.PetViewModel
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkGreen

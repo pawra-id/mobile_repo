@@ -4,9 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import id.pawra.data.remote.response.AnalysisResponse
 import id.pawra.data.remote.response.AnalysisResponseItem
-import id.pawra.data.remote.response.BlogsResponseItem
 import id.pawra.data.remote.response.ShareAnalysisResponse
 import id.pawra.data.repository.AnalysisRepository
 import id.pawra.data.repository.AuthRepository
@@ -35,6 +33,12 @@ class AnalysisViewModel(
         UiState.None)
     val addAnalysisState: StateFlow<UiState<AnalysisResponseItem>>
         get() = _addAnalysisState
+
+    private val _sharedAnalysisState: MutableStateFlow<UiState<List<AnalysisResponseItem>>> = MutableStateFlow(
+        UiState.Loading
+    )
+    val sharedAnalysisState: StateFlow<UiState<List<AnalysisResponseItem>>>
+        get() = _sharedAnalysisState
 
     private val _shareState: MutableStateFlow<ShareAnalysisResponse> = MutableStateFlow(
         ShareAnalysisResponse(
@@ -131,11 +135,10 @@ class AnalysisViewModel(
                 .collect { sharedAnalysis ->
                     when {
                         sharedAnalysis.error != null ->{
-                            _analysisState.value = UiState.Error(sharedAnalysis.error)
+                            _sharedAnalysisState.value = UiState.Error(sharedAnalysis.error)
                         }
                         else -> {
-                            _analysisState.value = UiState.Success(
-                                sharedAnalysis.items as List<AnalysisResponseItem>? ?: listOf())
+                            _sharedAnalysisState.value = UiState.Success(sharedAnalysis.items?.sortedByDescending { it.createdAt } ?: listOf())
                         }
                     }
                 }

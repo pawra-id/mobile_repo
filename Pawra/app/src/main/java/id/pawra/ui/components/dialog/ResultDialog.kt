@@ -1,9 +1,7 @@
 package id.pawra.ui.components.dialog
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,7 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -33,8 +30,8 @@ import id.pawra.ui.theme.DarkGreen
 import id.pawra.ui.theme.DisabledGreen
 import id.pawra.ui.theme.DisabledRed
 import id.pawra.ui.theme.PawraTheme
+import id.pawra.ui.theme.Poppins
 import id.pawra.ui.theme.Red
-import id.pawra.ui.theme.White
 
 @Composable
 fun ResultDialog(
@@ -77,6 +74,7 @@ fun ResultDialog(
                     color = if (success) DarkGreen else Red,
                     textAlign = TextAlign.Center,
                     fontSize = 14.sp,
+                    fontFamily = Poppins,
                     fontWeight = FontWeight.Medium
                 )
 
@@ -92,7 +90,9 @@ fun ResultDialog(
                 ) {
                     Text(
                         text = "OK",
-                        fontSize = 14.sp
+                        fontFamily = Poppins,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.SemiBold
                     )
                 }
             }

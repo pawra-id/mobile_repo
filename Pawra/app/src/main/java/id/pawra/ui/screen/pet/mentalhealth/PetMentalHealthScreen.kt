@@ -1,7 +1,5 @@
 package id.pawra.ui.screen.pet.mentalhealth
 
-import  android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,7 +11,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -57,28 +54,6 @@ fun PetMentalHealthScreen(
     var showDialog by remember { mutableStateOf(false) }
 
     analysisViewModel.getSpecificAnalysis(petId, "")
-
-    LaunchedEffect(Unit) {
-        petViewModel.getDetailDog(petId)
-    }
-
-    var dogName by remember { mutableStateOf("") }
-    var dogGender by remember { mutableStateOf("") }
-    var dogImage by remember { mutableStateOf("") }
-
-    petViewModel.petDetailState.collectAsState().value.let { petDetail ->
-        when(petDetail) {
-            is UiState.Success -> {
-                LaunchedEffect(Unit) {
-                    dogName = petDetail.data.name ?: ""
-                    dogGender = petDetail.data.gender ?: ""
-                    dogImage = petDetail.data.image ?: ""
-                }
-            }
-
-            else -> {}
-        }
-    }
 
     if (isLoading) {
         Column (
@@ -153,7 +128,9 @@ fun PetMentalHealthScreen(
                                         navController = navController,
                                         analysisViewModel = analysisViewModel,
                                         analysisData = data,
-                                        dogImage, dogGender, dogName,
+                                        dogImage =  data.dog?.image ?: "",
+                                        dogGender = data.dog?.gender ?: "",
+                                        dogName = data.dog?.name ?: "",
                                         showDialog = {
                                             showDialog = it
                                         }

@@ -1,7 +1,5 @@
 package id.pawra.ui.components.mentalhealth
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -9,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -55,7 +52,6 @@ import id.pawra.ui.theme.White
 import id.pawra.utils.DateConverter
 import java.text.NumberFormat
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AnalyzeHistory(
     navController: NavController,
@@ -72,7 +68,6 @@ fun AnalyzeHistory(
             .height(120.dp)
             .clip(shape = RoundedCornerShape(15.dp))
             .background(White)
-            .border(1.dp, DarkGreen, RoundedCornerShape(15.dp))
             .clickable {
                 navController.navigate(
                     Screen.PetMentalHealthResult.createRoute(
@@ -89,7 +84,7 @@ fun AnalyzeHistory(
         ) {
             AsyncImage(
                 model = dogImage,
-                contentDescription = "",
+                contentDescription = "Dog Image",
                 modifier = modifier
                     .size(90.dp)
                     .clip(RoundedCornerShape(15.dp))
@@ -190,7 +185,6 @@ fun AnalyzeHistory(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(showBackground = true)
 fun AnalyzeHistoryPreview() {

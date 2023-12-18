@@ -16,7 +16,6 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-
 class AuthRepository private constructor(
     private val apiService: ApiService,
     private val preference: Preference
@@ -111,6 +110,7 @@ class AuthRepository private constructor(
                 latitude = latitude,
                 longitude = longitude,
                 expire = expire,
+                address = address,
                 isLaunched = true
             )
             preference.saveSession(sessionModel)
@@ -170,6 +170,7 @@ class AuthRepository private constructor(
             latitude = user?.latitude ?: "",
             longitude = user?.longitude ?: "",
             isLogin = true,
+            address = user?.address ?: "",
             isLaunched = true
         )
         preference.saveSession(sessionModel)

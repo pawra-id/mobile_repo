@@ -1,7 +1,5 @@
 package id.pawra.ui.screen.pet.activities
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -22,7 +20,6 @@ fun PetActivitiesScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
     petId: Int,
-    activityId: Int,
     activitiesViewModel: ActivitiesViewModel = viewModel(
         factory = ViewModelFactory(LocalContext.current)
     )
@@ -32,12 +29,11 @@ fun PetActivitiesScreen(
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        PetActivitiesTopBar(navController = navController)
+        PetActivitiesTopBar()
         PetActivities(
             navController = navController,
             activitiesViewModel = activitiesViewModel,
             petId = petId,
-            activityId = activityId
         )
     }
 
@@ -49,8 +45,7 @@ fun PetActivitiesScreenPreview() {
     PawraTheme {
         PetActivitiesScreen(
             navController = rememberNavController(),
-            petId = 0,
-            activityId = 0
+            petId = 0
         )
     }
 }

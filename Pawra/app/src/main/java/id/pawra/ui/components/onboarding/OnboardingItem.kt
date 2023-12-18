@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import id.pawra.R
+import id.pawra.data.local.preference.OnBoardingData
 import id.pawra.ui.screen.onboarding.OnBoardingPager
 import id.pawra.ui.screen.onboarding.rememberPagerState
 import id.pawra.ui.theme.DarkGreen

@@ -22,7 +22,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Button
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
@@ -65,7 +64,6 @@ import id.pawra.data.local.preference.ChipsModel
 import id.pawra.ui.common.UiState
 import id.pawra.ui.screen.pet.activities.ActivitiesViewModel
 import id.pawra.ui.screen.pet.activities.UpdateActivityFormEvent
-import id.pawra.ui.screen.pet.profile.PetViewModel
 import id.pawra.ui.theme.DarkGreen
 import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.LightGreen

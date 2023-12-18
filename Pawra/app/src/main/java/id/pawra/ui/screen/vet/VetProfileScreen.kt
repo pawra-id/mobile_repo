@@ -1,6 +1,5 @@
 package id.pawra.ui.screen.vet
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,18 +19,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import id.pawra.data.ViewModelFactory
-import id.pawra.data.local.preference.VetData
 import id.pawra.ui.common.UiState
 import id.pawra.ui.components.dialog.ResultDialog
 import id.pawra.ui.components.loading.LoadingBox
-import id.pawra.ui.components.petprofile.PetProfile
 import id.pawra.ui.components.vetprofile.VetProfile
 import id.pawra.ui.components.vetprofile.VetProfileTopBar
-import id.pawra.ui.components.vets.Vets
-import id.pawra.ui.components.vets.VetsTopBar
-import id.pawra.ui.screen.auth.AuthViewModel
 import id.pawra.ui.theme.PawraTheme
-import id.pawra.ui.theme.White
 
 @Composable
 fun VetProfileScreen(
@@ -58,7 +51,9 @@ fun VetProfileScreen(
     }
 
     Column {
-        VetProfileTopBar()
+        VetProfileTopBar(
+            navController = navController
+        )
         Column(
             modifier = modifier
                 .fillMaxSize()

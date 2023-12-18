@@ -14,7 +14,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import id.pawra.data.ViewModelFactory
@@ -115,11 +114,9 @@ fun Pawra(
             listOf(navArgument("petId") { type = NavType.IntType })
         ) {
             val petId = it.arguments?.getInt("petId") ?: 0
-            val activityId = it.arguments?.getInt("activityId") ?: 0
             PetNav(
                 navController = navController,
                 petId = petId,
-                activityId = activityId
             )
         }
 
@@ -241,9 +238,6 @@ fun HomeNav(
     navHomeController: NavHostController = rememberNavController(),
     navController: NavHostController
 ){
-    val navBackStackEntry by navHomeController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
-
     Scaffold(
         bottomBar = {
             BottomNavigation(navHomeController = navHomeController)
@@ -295,11 +289,7 @@ fun PetNav(
     navPetController: NavHostController = rememberNavController(),
     navController: NavHostController,
     petId: Int,
-    activityId: Int
 ){
-    val navBackStackEntry by navPetController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
-
     Scaffold(
         bottomBar = {
             PetBottomNavigation(navPetController = navPetController)
@@ -325,8 +315,7 @@ fun PetNav(
             composable(Screen.PetActivities.route) {
                 PetActivitiesScreen(
                     navController = navController,
-                    petId = petId,
-                    activityId = activityId
+                    petId = petId
                 )
             }
 

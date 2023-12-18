@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import id.pawra.ui.components.explore.ExploreTopBar
 import id.pawra.ui.components.explore.MenuSearch
 

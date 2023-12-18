@@ -1,7 +1,6 @@
 package id.pawra.ui.components.profile
 
 import android.net.Uri
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,9 +22,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -41,12 +37,10 @@ import androidx.navigation.compose.rememberNavController
 import id.pawra.R
 import id.pawra.data.ViewModelFactory
 import id.pawra.ui.screen.auth.AuthViewModel
-import id.pawra.ui.screen.auth.SignInFormEvent
 import id.pawra.ui.screen.auth.UpdateProfileFormEvent
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkGreen
 import id.pawra.ui.theme.Gray
-import id.pawra.ui.theme.LightGray
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
 import id.pawra.ui.theme.Red
@@ -216,8 +210,7 @@ fun ProfileEditForm(
                     )
                 }
                 viewModel.updateDataProfile(
-                    userInfo.id,
-                    userInfo.token,
+                    userInfo,
                     state.name,
                     state.email,
                     state.summary,

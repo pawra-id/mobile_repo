@@ -1,6 +1,7 @@
 package id.pawra.ui.components.vetprofile
 
 import android.content.Intent
+import android.location.Location
 import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -10,7 +11,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,19 +23,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTimeFilled
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Whatsapp
 import androidx.compose.material.icons.filled.Work
 import androidx.compose.material.icons.outlined.Whatsapp
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -55,8 +49,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
-import coil.compose.rememberImagePainter
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -67,16 +59,14 @@ import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberMarkerState
 import id.pawra.R
 import id.pawra.data.ViewModelFactory
-import id.pawra.data.local.preference.VetData
 import id.pawra.data.remote.response.VetResponseItem
-import id.pawra.ui.screen.auth.AuthViewModel
+import id.pawra.ui.components.vets.haversineDistance
 import id.pawra.ui.screen.vet.VetViewModel
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkBlue
 import id.pawra.ui.theme.DarkGreen
 import id.pawra.ui.theme.DisabledBlue
 import id.pawra.ui.theme.DisabledGreen
-import id.pawra.ui.theme.DisabledOrange
 import id.pawra.ui.theme.DisabledYellow
 import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.LightGray
@@ -85,7 +75,6 @@ import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
 import id.pawra.ui.theme.White
 import id.pawra.utils.CustomMarker
-import java.lang.String
 
 @Composable
 fun VetProfile(
@@ -107,6 +96,19 @@ fun VetProfile(
         scrollGesturesEnabled = false,
         zoomGesturesEnabled = false
     )
+
+    val myLocation = Location("myLocation").apply {
+        latitude = vetViewModel.location.value.latitude
+        longitude = vetViewModel.location.value.longitude
+    }
+
+    val vetLocation = Location("vetLocation").apply {
+        latitude = vet.latitude?.toDouble() ?: 0.0
+        longitude = vet.longitude?.toDouble() ?: 0.0
+    }
+
+    val distanceInMeters = haversineDistance(myLocation, vetLocation)
+    val distanceInKilometers = "%.2f".format(distanceInMeters / 1000)
 
     Column(
     modifier = modifier
@@ -163,8 +165,7 @@ fun VetProfile(
                         )
 
                     Text(
-                        // vet.rangeLocation
-                        text = " km",
+                        text = "$distanceInKilometers km",
                         fontFamily = Poppins,
                         fontSize = 11.sp,
                         color = DarkBlue,
@@ -412,22 +413,6 @@ fun VetProfile(
 @Preview(showBackground = true)
 fun VetProfilePreview() {
     PawraTheme {
-        val vetData = VetData(
-            "https://static.vecteezy.com/system/resources/previews/005/857/332/non_2x/funny-portrait-of-cute-corgi-dog-outdoors-free-photo.jpg",
-            "drh. Humberto Chavez",
-            2.3,
-            8,
-            9,
-            15,
-            "Klinik Hewan Purnama",
-            "Female",
-            75,
-            "White, Gold",
-            "Jl. Brigjen Sudirman No.5, Purbayan, Kec. Mergangsan, Kota Yogyakarta, Daerah Istimewa Yogyakarta 55131",
-            220.2209029,
-            2909090.3209302,
-            listOf("Doctor of Veterinary Medicine (DVM), University of Veterinary Sciences, 2007", "Bachelor of Science in Animal Science, State University, 2003.")
-        )
         VetProfile(
             vet = VetResponseItem(id=0),
             vetViewModel = viewModel(

@@ -39,7 +39,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import id.pawra.R
-import id.pawra.ui.components.onboarding.OnBoardingData
+import id.pawra.data.local.preference.OnBoardingData
 import id.pawra.ui.components.onboarding.Onboarding
 import id.pawra.ui.components.onboarding.PagerIndicator
 import id.pawra.ui.navigation.Screen

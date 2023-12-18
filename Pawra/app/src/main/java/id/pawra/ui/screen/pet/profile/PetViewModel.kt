@@ -2,10 +2,7 @@ package id.pawra.ui.screen.pet.profile
 
 import android.content.Context
 import android.net.Uri
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -513,21 +510,6 @@ class PetViewModel(
                 petRepository.deleteDog(user, petId)
             } catch (e: Exception) {
                 _petDetailState.value = UiState.Error(e.message ?: "Terjadi kesalahan yang tidak diketahui")
-            }
-        }
-    }
-
-    private fun handleDelete(
-        result: PetResponseItem,
-        error: String?,
-        stateFlow: MutableStateFlow<UiState<PetResponseItem>>
-    ) {
-        when {
-            error != null -> {
-                stateFlow.value = UiState.Error(error)
-            }
-            else -> {
-                stateFlow.value = UiState.Success(result)
             }
         }
     }

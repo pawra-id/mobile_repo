@@ -20,7 +20,6 @@ import androidx.navigation.NavController
 import id.pawra.data.ViewModelFactory
 import id.pawra.ui.components.loading.LoadingBox
 import id.pawra.ui.screen.pet.activities.ActivitiesViewModel
-import id.pawra.ui.screen.pet.mentalhealth.AnalysisViewModel
 import id.pawra.ui.theme.PawraTheme
 
 @Composable
@@ -29,9 +28,6 @@ fun ListExplore(
     navController: NavController,
     modifier: Modifier = Modifier,
     activitiesViewModel: ActivitiesViewModel = viewModel(
-        factory = ViewModelFactory(LocalContext.current)
-    ),
-    analysisViewModel: AnalysisViewModel = viewModel(
         factory = ViewModelFactory(LocalContext.current)
     )
 ) {
@@ -55,7 +51,9 @@ fun ListExplore(
         if (activeMenu == Menu.MentalHealth.name) {
             SharedMental(
                 navController = navController,
-                analysisViewModel = analysisViewModel,
+                analysisViewModel = viewModel(
+                    factory = ViewModelFactory(LocalContext.current)
+                )
             )
         } else {
             Blogs(
@@ -67,6 +65,7 @@ fun ListExplore(
         }
     }
 }
+
 
 @Composable
 @Preview(showBackground = true)

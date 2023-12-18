@@ -1,6 +1,5 @@
 package id.pawra.ui.components.mentalhealth
 
-import android.health.connect.datatypes.units.Percentage
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,7 +12,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import id.pawra.data.local.preference.MentalHealthData
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.PawraTheme

@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.rememberNavController
 import id.pawra.ui.navigation.Screen
 import id.pawra.ui.theme.DarkGreen
@@ -41,7 +42,9 @@ import id.pawra.ui.theme.White
 @Composable
 fun Banner(
     modifier: Modifier = Modifier,
-    navController: NavController
+    navHomeController: NavController,
+    navController: NavController,
+    firstPetId: Int,
 ) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
@@ -86,7 +89,7 @@ fun Banner(
             }
             Button(
                 onClick = {
-                    navController.navigate(Screen.PetMentalHealth.route)
+                    navController.navigate(Screen.PetProfile.createRoute(firstPetId))
                 },
                 modifier = modifier
                     .align(Alignment.BottomStart)
@@ -143,7 +146,14 @@ fun Banner(
             }
 
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    navHomeController.navigate(Screen.Explore.route) {
+                        popUpTo(navHomeController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        restoreState = true
+                        launchSingleTop = true
+                    } },
                 modifier = modifier
                     .align(Alignment.BottomEnd)
                     .padding(horizontal = 24.dp, vertical = 14.dp)
@@ -177,7 +187,9 @@ fun Banner(
 fun BannerPreview() {
     PawraTheme {
         Banner(
-            navController = rememberNavController()
+            navHomeController = rememberNavController(),
+            navController = rememberNavController(),
+            firstPetId = 0
         )
     }
 }

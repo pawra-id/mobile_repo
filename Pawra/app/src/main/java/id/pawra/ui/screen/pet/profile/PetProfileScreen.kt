@@ -1,8 +1,6 @@
 package id.pawra.ui.screen.pet.profile
 
 import id.pawra.ui.components.petprofile.PetProfile
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,7 +25,6 @@ import id.pawra.ui.common.UiState
 import id.pawra.ui.components.dialog.ResultDialog
 import id.pawra.ui.components.loading.LoadingBox
 import id.pawra.ui.components.petprofile.PetProfileTopBar
-import id.pawra.ui.navigation.Screen
 import id.pawra.ui.theme.PawraTheme
 
 @Composable

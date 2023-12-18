@@ -47,6 +47,7 @@ import coil.compose.AsyncImage
 import id.pawra.R
 import id.pawra.data.ViewModelFactory
 import id.pawra.ui.common.UiState
+import id.pawra.ui.components.vets.FilterVets
 import id.pawra.ui.navigation.Screen
 import id.pawra.ui.screen.vet.VetViewModel
 import id.pawra.ui.theme.Black
@@ -68,7 +69,7 @@ fun NearbyVets(
     val screenWidth = configuration.screenWidthDp.dp
 
     LaunchedEffect(Unit) {
-        viewModel.getVets("")
+        viewModel.getVets("", FilterVets.Nearest.name)
     }
     var activeVet by remember { mutableIntStateOf(0) }
 

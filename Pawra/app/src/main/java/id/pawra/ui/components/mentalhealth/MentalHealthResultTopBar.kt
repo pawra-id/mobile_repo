@@ -27,7 +27,6 @@ import id.pawra.ui.theme.DisabledGreen
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Red
 
-
 @Composable
 fun MentalHealthResultTopBar (
     modifier: Modifier = Modifier,
@@ -44,7 +43,7 @@ fun MentalHealthResultTopBar (
             .padding(horizontal = 22.dp, vertical = 15.dp),
     ) {
         IconButton(
-            onClick = { },
+            onClick = { navController.navigateUp() },
             modifier = modifier
                 .background(DisabledGreen, CircleShape)
                 .size(32.dp)

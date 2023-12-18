@@ -1,7 +1,5 @@
 package id.pawra.ui.components.home
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -21,21 +19,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
-import id.pawra.data.ViewModelFactory
 import id.pawra.data.remote.response.ActivitiesResponseItem
 import id.pawra.ui.navigation.Screen
-import id.pawra.ui.screen.pet.activities.ActivitiesViewModel
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkGreen
 import id.pawra.ui.theme.DisabledGreen
@@ -55,7 +48,6 @@ fun Activities(
             .height(120.dp)
             .clip(shape = RoundedCornerShape(15.dp))
             .background(White)
-            .border(1.dp, DarkGreen, RoundedCornerShape(15.dp))
             .clickable {
                 navController.navigate(Screen.PetActivitiesPrev.createRoute(data.id))
             }

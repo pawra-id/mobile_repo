@@ -1,6 +1,5 @@
 package id.pawra.ui.screen.vet
 
-import android.location.Location
 import com.google.android.gms.maps.model.LatLng
 
 sealed class LocationState {
