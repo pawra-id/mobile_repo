@@ -32,7 +32,9 @@ fun VetScreen(
             .fillMaxSize()
             .background(White)
     ) {
-        VetsTopBar()
+        VetsTopBar(
+            navController = navController
+        )
         Vets(
             navController = navController,
             vetViewModel = vetViewModel

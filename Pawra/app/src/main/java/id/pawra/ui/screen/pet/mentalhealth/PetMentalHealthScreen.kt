@@ -58,28 +58,6 @@ fun PetMentalHealthScreen(
 
     analysisViewModel.getSpecificAnalysis(petId, "")
 
-    LaunchedEffect(Unit) {
-        petViewModel.getDetailDog(petId)
-    }
-
-    var dogName by remember { mutableStateOf("") }
-    var dogGender by remember { mutableStateOf("") }
-    var dogImage by remember { mutableStateOf("") }
-
-    petViewModel.petDetailState.collectAsState().value.let { petDetail ->
-        when(petDetail) {
-            is UiState.Success -> {
-                LaunchedEffect(Unit) {
-                    dogName = petDetail.data.name ?: ""
-                    dogGender = petDetail.data.gender ?: ""
-                    dogImage = petDetail.data.image ?: ""
-                }
-            }
-
-            else -> {}
-        }
-    }
-
     if (isLoading) {
         Column (
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -153,7 +131,9 @@ fun PetMentalHealthScreen(
                                         navController = navController,
                                         analysisViewModel = analysisViewModel,
                                         analysisData = data,
-                                        dogImage, dogGender, dogName,
+                                        dogImage =  data.dog?.image ?: "",
+                                        dogGender = data.dog?.gender ?: "",
+                                        dogName = data.dog?.name ?: "",
                                         showDialog = {
                                             showDialog = it
                                         }

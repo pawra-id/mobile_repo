@@ -35,10 +35,10 @@ class AnalysisViewModel(
     val addAnalysisState: StateFlow<UiState<AnalysisResponseItem>>
         get() = _addAnalysisState
 
-    private val _sharedAnalysisState: MutableStateFlow<UiState<AnalysisResponse>> = MutableStateFlow(
+    private val _sharedAnalysisState: MutableStateFlow<UiState<List<AnalysisResponseItem>>> = MutableStateFlow(
         UiState.Loading
     )
-    val sharedAnalysisState: StateFlow<UiState<AnalysisResponse>>
+    val sharedAnalysisState: StateFlow<UiState<List<AnalysisResponseItem>>>
         get() = _sharedAnalysisState
 
     private val _shareState: MutableStateFlow<ShareAnalysisResponse> = MutableStateFlow(
@@ -128,17 +128,18 @@ class AnalysisViewModel(
         }
     }
 
-    fun getSharedAnalysis(analysisId: Int) {
+    fun getSharedAnalysis(keyword: String) {
+        _query.value = keyword
         viewModelScope.launch {
             val user = authRepository.getSession().first()
-            analysisRepository.getSharedAnalysis(user, analysisId)
+            analysisRepository.getSharedAnalysis(user, keyword)
                 .collect { sharedAnalysis ->
                     when {
                         sharedAnalysis.error != null ->{
                             _sharedAnalysisState.value = UiState.Error(sharedAnalysis.error)
                         }
                         else -> {
-                            _sharedAnalysisState.value = UiState.Success(sharedAnalysis)
+                            _sharedAnalysisState.value = UiState.Success(sharedAnalysis.items?.sortedByDescending { it.createdAt } ?: listOf())
                         }
                     }
                 }

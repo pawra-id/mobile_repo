@@ -18,6 +18,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import id.pawra.ui.theme.DarkGreen
 import id.pawra.ui.theme.LightGreen
 import id.pawra.ui.theme.PawraTheme
@@ -25,7 +27,8 @@ import id.pawra.ui.theme.White
 
 @Composable
 fun VetProfileTopBar(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavController
 ) {
     Box(
         contentAlignment = Alignment.CenterStart,
@@ -35,7 +38,7 @@ fun VetProfileTopBar(
             .padding(horizontal = 22.dp, vertical = 15.dp),
     ) {
         IconButton(
-            onClick = { /*TODO*/ },
+            onClick = { navController.navigateUp() },
             modifier = modifier
                 .background(LightGreen, CircleShape)
                 .size(32.dp)
@@ -67,6 +70,8 @@ fun VetProfileTopBar(
 @Preview(showBackground = true)
 fun VetProfileTopBarPreview() {
     PawraTheme {
-        VetProfileTopBar()
+        VetProfileTopBar(
+            navController = rememberNavController()
+        )
     }
 }

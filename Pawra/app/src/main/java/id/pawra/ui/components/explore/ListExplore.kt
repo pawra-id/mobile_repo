@@ -49,7 +49,12 @@ fun ListExplore(
         modifier = modifier.padding(top = 10.dp)
     ) {
         if (activeMenu == Menu.MentalHealth.name) {
-            SharedMental(analysisId = 0)
+            SharedMental(
+                navController = navController,
+                analysisViewModel = viewModel(
+                    factory = ViewModelFactory(LocalContext.current)
+                )
+            )
         } else {
             Blogs(
                 navController = navController,

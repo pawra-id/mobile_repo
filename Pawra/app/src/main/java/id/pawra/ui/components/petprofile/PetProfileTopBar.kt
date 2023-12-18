@@ -61,7 +61,7 @@ fun PetProfileTopBar(
             .padding(horizontal = 22.dp, vertical = 15.dp),
     ) {
         IconButton(
-            onClick = {  },
+            onClick = { navController.navigateUp() },
             modifier = modifier
                 .background(DisabledGreen, CircleShape)
                 .size(32.dp)

@@ -115,11 +115,9 @@ fun Pawra(
             listOf(navArgument("petId") { type = NavType.IntType })
         ) {
             val petId = it.arguments?.getInt("petId") ?: 0
-            val activityId = it.arguments?.getInt("activityId") ?: 0
             PetNav(
                 navController = navController,
                 petId = petId,
-                activityId = activityId
             )
         }
 
@@ -295,7 +293,6 @@ fun PetNav(
     navPetController: NavHostController = rememberNavController(),
     navController: NavHostController,
     petId: Int,
-    activityId: Int
 ){
     val navBackStackEntry by navPetController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -325,8 +322,7 @@ fun PetNav(
             composable(Screen.PetActivities.route) {
                 PetActivitiesScreen(
                     navController = navController,
-                    petId = petId,
-                    activityId = activityId
+                    petId = petId
                 )
             }
 

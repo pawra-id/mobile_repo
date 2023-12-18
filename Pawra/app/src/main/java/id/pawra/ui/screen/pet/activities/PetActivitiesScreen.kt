@@ -22,7 +22,6 @@ fun PetActivitiesScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
     petId: Int,
-    activityId: Int,
     activitiesViewModel: ActivitiesViewModel = viewModel(
         factory = ViewModelFactory(LocalContext.current)
     )
@@ -32,12 +31,11 @@ fun PetActivitiesScreen(
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        PetActivitiesTopBar(navController = navController)
+        PetActivitiesTopBar()
         PetActivities(
             navController = navController,
             activitiesViewModel = activitiesViewModel,
             petId = petId,
-            activityId = activityId
         )
     }
 
@@ -49,8 +47,7 @@ fun PetActivitiesScreenPreview() {
     PawraTheme {
         PetActivitiesScreen(
             navController = rememberNavController(),
-            petId = 0,
-            activityId = 0
+            petId = 0
         )
     }
 }
