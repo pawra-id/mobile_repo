@@ -41,9 +41,9 @@ class AnalysisRepository private constructor(
         }
     }
 
-    suspend fun getSharedAnalysis(user: SessionModel, analysisId: Int): Flow<AnalysisResponse> {
+    suspend fun getSharedAnalysis(user: SessionModel, keyword: String? = ""): Flow<AnalysisResponse> {
         try {
-            val response = apiService.getSharedAnalysis("Bearer ${user.token}")
+            val response = apiService.getSharedAnalysis("Bearer ${user.token}", keyword)
             return flowOf(response)
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()

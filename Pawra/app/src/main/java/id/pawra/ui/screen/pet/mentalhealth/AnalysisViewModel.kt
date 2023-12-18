@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import id.pawra.data.remote.response.AnalysisResponse
 import id.pawra.data.remote.response.AnalysisResponseItem
+import id.pawra.data.remote.response.BlogsResponseItem
 import id.pawra.data.remote.response.ShareAnalysisResponse
 import id.pawra.data.repository.AnalysisRepository
 import id.pawra.data.repository.AuthRepository
@@ -34,12 +35,6 @@ class AnalysisViewModel(
         UiState.None)
     val addAnalysisState: StateFlow<UiState<AnalysisResponseItem>>
         get() = _addAnalysisState
-
-    private val _sharedAnalysisState: MutableStateFlow<UiState<AnalysisResponse>> = MutableStateFlow(
-        UiState.Loading
-    )
-    val sharedAnalysisState: StateFlow<UiState<AnalysisResponse>>
-        get() = _sharedAnalysisState
 
     private val _shareState: MutableStateFlow<ShareAnalysisResponse> = MutableStateFlow(
         ShareAnalysisResponse(
@@ -128,17 +123,19 @@ class AnalysisViewModel(
         }
     }
 
-    fun getSharedAnalysis(analysisId: Int) {
+    fun getSharedAnalysis(keyword: String) {
+        _query.value = keyword
         viewModelScope.launch {
             val user = authRepository.getSession().first()
-            analysisRepository.getSharedAnalysis(user, analysisId)
+            analysisRepository.getSharedAnalysis(user, keyword)
                 .collect { sharedAnalysis ->
                     when {
                         sharedAnalysis.error != null ->{
-                            _sharedAnalysisState.value = UiState.Error(sharedAnalysis.error)
+                            _analysisState.value = UiState.Error(sharedAnalysis.error)
                         }
                         else -> {
-                            _sharedAnalysisState.value = UiState.Success(sharedAnalysis)
+                            _analysisState.value = UiState.Success(
+                                sharedAnalysis.items as List<AnalysisResponseItem>? ?: listOf())
                         }
                     }
                 }

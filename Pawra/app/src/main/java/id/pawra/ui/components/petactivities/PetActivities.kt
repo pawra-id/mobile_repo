@@ -1,7 +1,5 @@
 package id.pawra.ui.components.petactivities
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -55,7 +53,6 @@ import id.pawra.data.ViewModelFactory
 import id.pawra.data.remote.response.TagsItem
 import id.pawra.ui.common.NoRippleTheme
 import id.pawra.ui.common.UiState
-import id.pawra.ui.components.dialog.ConfirmationDialog
 import id.pawra.ui.components.dialog.ResultDialog
 import id.pawra.ui.components.general.SearchBar
 import id.pawra.ui.components.loading.LoadingBox
