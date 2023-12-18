@@ -44,12 +44,17 @@ fun MentalHealthResultScreen(
     ),
     petViewModel: PetViewModel = viewModel(
         factory = ViewModelFactory(LocalContext.current)
-    )
+    ),
+    isShared: Boolean
 ) {
     var isLoading by remember { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(false) }
 
-    analysisViewModel.getDetailAnalysis(analysisId)
+    if (isShared) {
+        analysisViewModel.getDetailSharedAnalysis(analysisId)
+    } else {
+        analysisViewModel.getDetailAnalysis(analysisId)
+    }
 
     if (isLoading) {
         Column (
@@ -110,6 +115,7 @@ fun MentalHealthResultScreen(
                                 analysisViewModel = analysisViewModel,
                                 isShared = detailAnalysisState.data.isShared ?: false,
                                 analysisId = detailAnalysisState.data.id,
+                                isSharedScreen = isShared,
                                 setShowDialog = {
                                     showDialog = it
                                 }
@@ -171,7 +177,8 @@ fun MentalHealthResultScreenPreview() {
     PawraTheme {
         MentalHealthResultScreen(
             navController = rememberNavController(),
-            analysisId = 0
+            analysisId = 0,
+            isShared = false
         )
     }
 }

@@ -189,7 +189,7 @@ fun SharedMentalItem(
             .background(White)
             .clickable {
                 navController.navigate(
-                    Screen.PetMentalHealthResult.createRoute(
+                    Screen.PetMentalHealthSharedResult.createRoute(
                         analysisData.id
                     )
                 )

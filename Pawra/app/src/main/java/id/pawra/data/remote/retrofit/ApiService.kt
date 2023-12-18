@@ -179,6 +179,12 @@ interface ApiService {
         @Query("page") page: Int? = 1
     ): AnalysisResponse
 
+    @GET("analysis/shared/{id}")
+    suspend fun getDetailSharedAnalysis(
+        @Header("Authorization") authHeader: String,
+        @Path("id") id: Int
+    ): AnalysisResponseItem
+
     @POST("analysis/")
     suspend fun addAnalysis(
         @Header("Authorization") authHeader: String,

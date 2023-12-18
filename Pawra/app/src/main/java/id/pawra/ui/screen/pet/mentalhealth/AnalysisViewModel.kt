@@ -107,6 +107,23 @@ class AnalysisViewModel(
         }
     }
 
+    fun getDetailSharedAnalysis(analysisId: Int) {
+        viewModelScope.launch {
+            val user = authRepository.getSession().first()
+            analysisRepository.getDetailSharedAnalysis(user, analysisId)
+                .collect { analysisDetailShared ->
+                    when {
+                        analysisDetailShared.error != null ->{
+                            _analysisDetailState.value = UiState.Error(analysisDetailShared.error)
+                        }
+                        else -> {
+                            _analysisDetailState.value = UiState.Success(analysisDetailShared)
+                        }
+                    }
+                }
+        }
+    }
+
     fun shareAnalysis(analysisId: Int) {
         viewModelScope.launch {
             val user = authRepository.getSession().first()
