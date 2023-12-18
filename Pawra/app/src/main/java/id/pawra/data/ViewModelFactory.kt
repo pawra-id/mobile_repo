@@ -21,11 +21,11 @@ import id.pawra.ui.screen.vet.VetViewModel
 class ViewModelFactory (
     private val context: Context,
     private val authRepository: AuthRepository = Injection.provideAuthRepository(context),
-    private val petRepository: PetRepository = Injection.providePetRepository(context),
-    private val activitiesRepository: ActivitiesRepository = Injection.provideActivitiesRepository(context),
-    private val vetRepository: VetRepository = Injection.provideVetRepository(context),
-    private val blogsRepository: BlogsRepository = Injection.provideBlogsRepository(context),
-    private val analysisRepository: AnalysisRepository = Injection.provideAnalysisRepository(context),
+    private val petRepository: PetRepository = Injection.providePetRepository(),
+    private val activitiesRepository: ActivitiesRepository = Injection.provideActivitiesRepository(),
+    private val vetRepository: VetRepository = Injection.provideVetRepository(),
+    private val blogsRepository: BlogsRepository = Injection.provideBlogsRepository(),
+    private val analysisRepository: AnalysisRepository = Injection.provideAnalysisRepository(),
 ): ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")

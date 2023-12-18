@@ -10,6 +10,8 @@ import androidx.lifecycle.viewModelScope
 import id.pawra.data.local.preference.ActivityData
 import id.pawra.data.local.preference.Tags
 import id.pawra.data.remote.response.ActivitiesResponseItem
+import id.pawra.data.remote.response.TagResponse
+import id.pawra.data.remote.response.TagsItem
 import id.pawra.data.repository.AuthRepository
 import id.pawra.data.repository.ActivitiesRepository
 import id.pawra.ui.common.UiState
@@ -46,6 +48,10 @@ class ActivitiesViewModel(
 
     private val _query = mutableStateOf("")
     val query: State<String> get() = _query
+
+    private val _tagState: MutableStateFlow<UiState<List<TagsItem>>> = MutableStateFlow(UiState.Loading)
+    val tagState: StateFlow<UiState<List<TagsItem>>>
+        get() = _tagState
 
     private var activityId by mutableIntStateOf(0)
 
@@ -323,6 +329,27 @@ class ActivitiesViewModel(
                 activitiesRepository.deleteActivity(user, activityId)
             } catch (e: Exception) {
                 _activitiesState.value = UiState.Error("Failed to delete activity: ${e.message}")
+            }
+        }
+    }
+
+    fun getTags(keyword: String) {
+        viewModelScope.launch {
+            val user = authRepository.getSession().first()
+            if (keyword.isNotBlank()) {
+                activitiesRepository.getTags(user, keyword)
+                    .collect { tag ->
+                        when {
+                            tag.error != null ->{
+                                _tagState.value = UiState.Error(tag.error)
+                            }
+                            else -> {
+                                _tagState.value = UiState.Success(tag.tagResponse ?: listOf())
+                            }
+                        }
+                    }
+            } else {
+                _tagState.value = UiState.Success(listOf())
             }
         }
     }

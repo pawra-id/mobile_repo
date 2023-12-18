@@ -13,7 +13,7 @@ class ApiConfig {
 
         private var BASE_URL = "https://pawra-backend-api-2gso7b5r3q-et.a.run.app"
 
-        fun getApiService(context: Context): ApiService {
+        fun getApiService(): ApiService {
 
             val loggingInterceptor = if(DEBUG) {
                 HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
@@ -21,20 +21,8 @@ class ApiConfig {
                 HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE)
             }
 
-//            val userPreference = Preference.getInstance(context.dataStore)
-//            val user = runBlocking { userPreference.getSession().first() }
-
-//            val authInterceptor = Interceptor { chain ->
-//                val req = chain.request()
-//                val requestHeaders = req.newBuilder()
-//                    .addHeader("Authorization", "Bearer ${user.token}")
-//                    .build()
-//                chain.proceed(requestHeaders)
-//            }
-
             val client = OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)
-//                .addInterceptor(authInterceptor)
                 .build()
             val retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
