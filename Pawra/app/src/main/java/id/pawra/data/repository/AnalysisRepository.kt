@@ -98,6 +98,36 @@ class AnalysisRepository private constructor(
         }
     }
 
+    suspend fun getDetailSharedAnalysis(user: SessionModel, analysisId: Int): Flow<AnalysisResponseItem> {
+        try {
+            return flowOf(
+                apiService.getDetailSharedAnalysis("Bearer ${user.token}", analysisId)
+            )
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorMessage = try {
+                val jsonError = errorBody?.let { JSONObject(it) }
+                jsonError?.optString("detail") ?: "Unknown error"
+            } catch (jsonException: JSONException) {
+                "Error parsing JSON"
+            }
+            return flowOf(
+                AnalysisResponseItem(
+                    id = 0,
+                    error = errorMessage
+                )
+            )
+
+        } catch (e: Exception) {
+            return flowOf(
+                AnalysisResponseItem(
+                    id = 0,
+                    error = e.message
+                )
+            )
+        }
+    }
+
     suspend fun addAnalysis(user: SessionModel, petId: Int, days: Int): Flow<AnalysisResponseItem> {
         try {
             val data = mutableMapOf<String, Any>()

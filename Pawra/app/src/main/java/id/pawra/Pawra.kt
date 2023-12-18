@@ -226,7 +226,20 @@ fun Pawra(
             val analysisId = it.arguments?.getInt("analysisId") ?: 0
             MentalHealthResultScreen(
                 navController = navController,
-                analysisId = analysisId
+                analysisId = analysisId,
+                isShared = false
+            )
+        }
+
+        composable(
+            Screen.PetMentalHealthSharedResult.route,
+            listOf(navArgument("analysisId") { type = NavType.IntType })
+        ) {
+            val analysisId = it.arguments?.getInt("analysisId") ?: 0
+            MentalHealthResultScreen(
+                navController = navController,
+                analysisId = analysisId,
+                isShared = true
             )
         }
     }

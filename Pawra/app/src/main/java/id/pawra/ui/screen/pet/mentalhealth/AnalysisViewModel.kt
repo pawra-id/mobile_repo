@@ -4,7 +4,6 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import id.pawra.data.remote.response.AnalysisResponse
 import id.pawra.data.remote.response.AnalysisResponseItem
 import id.pawra.data.remote.response.ShareAnalysisResponse
 import id.pawra.data.repository.AnalysisRepository
@@ -102,6 +101,23 @@ class AnalysisViewModel(
                         }
                         else -> {
                             _analysisDetailState.value = UiState.Success(analysisDetail)
+                        }
+                    }
+                }
+        }
+    }
+
+    fun getDetailSharedAnalysis(analysisId: Int) {
+        viewModelScope.launch {
+            val user = authRepository.getSession().first()
+            analysisRepository.getDetailSharedAnalysis(user, analysisId)
+                .collect { analysisDetailShared ->
+                    when {
+                        analysisDetailShared.error != null ->{
+                            _analysisDetailState.value = UiState.Error(analysisDetailShared.error)
+                        }
+                        else -> {
+                            _analysisDetailState.value = UiState.Success(analysisDetailShared)
                         }
                     }
                 }

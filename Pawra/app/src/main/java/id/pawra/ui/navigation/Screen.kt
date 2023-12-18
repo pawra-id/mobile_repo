@@ -43,6 +43,10 @@ sealed class Screen(val route: String) {
         fun createRoute(analysisId: Int) = "pet_mental_health_result/$analysisId"
     }
 
+    data object PetMentalHealthSharedResult : Screen("pet_mental_health_shared_result/{analysisId}") {
+        fun createRoute(analysisId: Int) = "pet_mental_health_shared_result/$analysisId"
+    }
+
     // Vet Navigation
     data object Vets : Screen("vets")
     data object MapAddress : Screen("map_address")

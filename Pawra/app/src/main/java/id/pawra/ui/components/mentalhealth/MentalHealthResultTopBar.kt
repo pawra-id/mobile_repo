@@ -35,6 +35,7 @@ fun MentalHealthResultTopBar (
     analysisViewModel: AnalysisViewModel,
     isShared : Boolean,
     analysisId: Int,
+    isSharedScreen: Boolean,
     setShowDialog: (Boolean) -> Unit
 ) {
     Box(
@@ -57,29 +58,31 @@ fun MentalHealthResultTopBar (
             )
         }
 
-        Box(
-            modifier = modifier
-                .fillMaxWidth(),
-            contentAlignment = Alignment.BottomEnd
-        ) {
-            IconButton(
+        if (!isSharedScreen) {
+            Box(
                 modifier = modifier
-                    .size(32.dp),
-                onClick = {
-                    if (isShared) {
-                        analysisViewModel.unshareAnalysis(analysisId)
-                    } else {
-                        analysisViewModel.shareAnalysis(analysisId)
-                    }
-                    setShowDialog(true)
-                }
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.BottomEnd
             ) {
-                Icon(
-                    imageVector = Icons.Filled.Share,
-                    contentDescription = "Share",
-                    tint = if (isShared) DarkGreen else Red,
-                    modifier = modifier.size(25.dp),
-                )
+                IconButton(
+                    modifier = modifier
+                        .size(32.dp),
+                    onClick = {
+                        if (isShared) {
+                            analysisViewModel.unshareAnalysis(analysisId)
+                        } else {
+                            analysisViewModel.shareAnalysis(analysisId)
+                        }
+                        setShowDialog(true)
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Share,
+                        contentDescription = "Share",
+                        tint = if (isShared) DarkGreen else Red,
+                        modifier = modifier.size(25.dp),
+                    )
+                }
             }
         }
     }
@@ -96,7 +99,8 @@ fun MentalHealthResultTopBarPreview() {
             ),
             analysisId = 0,
             setShowDialog = {},
-            isShared = false
+            isShared = false,
+            isSharedScreen = false
         )
     }
 }
