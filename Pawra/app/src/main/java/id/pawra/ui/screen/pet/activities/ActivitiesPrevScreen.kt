@@ -59,7 +59,7 @@ fun ActivitiesPrevScreen(
     }
 
     Column {
-        ActivitiesPrevTopBar(navController = rememberNavController())
+        ActivitiesPrevTopBar(navController = navController)
 
         Column(
             modifier = modifier

@@ -59,7 +59,7 @@ fun ActivitiesAddScreen(
     }
 
     Column {
-        AddActivitiesTopBar(navController = rememberNavController())
+        AddActivitiesTopBar(navController = navController)
 
         Column(
             modifier = modifier
@@ -72,7 +72,7 @@ fun ActivitiesAddScreen(
             AddActivitiesTitle()
             Spacer(modifier = Modifier.height(15.dp))
             AddActivitiesForm(
-                navController = rememberNavController(),
+                navController = navController,
                 petId = petId,
                 activitiesViewModel = activitiesViewModel,
                 petViewModel = petViewModel,
@@ -92,6 +92,7 @@ fun ActivitiesAddScreen(
                                 message = "Activity add successfully",
                                 setShowDialog = {
                                     showDialog = it
+                                    navController.navigateUp()
                                 }
                             )
                         }

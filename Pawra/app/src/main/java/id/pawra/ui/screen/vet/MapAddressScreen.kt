@@ -159,7 +159,8 @@ fun MapAddressScreen(
                 MapAddress(
                     viewModel = viewModel,
                     state = state,
-                    authViewModel = authViewModel
+                    authViewModel = authViewModel,
+                    navController = navController
                 )
             }
         }

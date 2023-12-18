@@ -58,7 +58,9 @@ fun VetProfileScreen(
     }
 
     Column {
-        VetProfileTopBar()
+        VetProfileTopBar(
+            navController = navController
+        )
         Column(
             modifier = modifier
                 .fillMaxSize()

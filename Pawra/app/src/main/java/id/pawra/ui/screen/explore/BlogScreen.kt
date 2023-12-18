@@ -52,7 +52,7 @@ fun BlogScreen(
     }
 
     Column {
-        BlogDetailTopBar(navController = rememberNavController())
+        BlogDetailTopBar(navController = navController)
 
         Column(
             modifier = modifier

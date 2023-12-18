@@ -33,6 +33,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -77,7 +78,6 @@ fun PetActivities(
     navController: NavController,
     activitiesViewModel: ActivitiesViewModel,
     petId: Int,
-    activityId: Int,
     modifier: Modifier = Modifier
 ) {
     val query by remember { activitiesViewModel.query }
@@ -89,6 +89,8 @@ fun PetActivities(
 
     var isLoading by remember { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(true) }
+    var showDeleteConfirmation by remember { mutableStateOf(false) }
+    var activityId by remember { mutableIntStateOf(0) }
     var showResultDialog by remember { mutableStateOf(false) }
 
     if (isLoading) {
@@ -212,11 +214,11 @@ fun PetActivities(
                                 modifier = modifier
                                     .clip(shape = RoundedCornerShape(15.dp))
                                     .background(DisabledGreen)
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 20.dp, vertical = 15.dp)
                                     .clickable {
                                         navController.navigate(Screen.PetActivitiesPrev.createRoute(data.id))
-                                    },
+                                    }
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 20.dp, vertical = 15.dp),
                                 horizontalArrangement = Arrangement.spacedBy(20.dp)
                             ) {
                                 Column(
@@ -282,8 +284,8 @@ fun PetActivities(
 
                                     IconButton(
                                         onClick = {
-                                            activitiesViewModel.deleteActivity(data.id)
-                                            showResultDialog = true
+                                            showDeleteConfirmation = true
+                                            activityId = data.id
                                                   },
                                         modifier = modifier
                                             .background(Red, CircleShape)
@@ -320,6 +322,20 @@ fun PetActivities(
         }
     }
 
+    if (showDeleteConfirmation) {
+        ConfirmationDialog(
+            headText = "Delete Confirmation",
+            warn = false,
+            message = "Are you sure you want to delete this?",
+            setShowDialog = { showDeleteConfirmation = it },
+            action = {
+                activitiesViewModel.deleteActivity(activityId)
+                showResultDialog = true
+            }
+        )
+    }
+
+
     if (showResultDialog) {
         ResultDialog(
             success = true,
@@ -347,7 +363,6 @@ fun PetActivitiesPreview(
                 factory = ViewModelFactory(LocalContext.current)
             ),
             petId = 0,
-            activityId = 0
         )
     }
 }

@@ -44,6 +44,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -58,14 +60,17 @@ fun MapAddress(
     modifier: Modifier = Modifier,
     viewModel: MapViewModel,
     authViewModel: AuthViewModel,
-    state: LocationState.LocationAvailable
+    state: LocationState.LocationAvailable,
+    navController: NavController
 ) {
     val mapProperties = MapProperties()
     val uiSettings = MapUiSettings(
-        zoomControlsEnabled = false
+        zoomControlsEnabled = false,
+        compassEnabled = false,
+        mapToolbarEnabled = false
     )
     val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(state.cameraLatLang, 6.5f)
+        position = CameraPosition.fromLatLngZoom(state.cameraLatLang, 8.5f)
     }
 
     authViewModel.getSession()
@@ -96,7 +101,9 @@ fun MapAddress(
         expanded = true,
         content = {
             Column {
-                MapAddressTopBar()
+                MapAddressTopBar(
+                    navController = navController
+                )
 
                 Box(
                     modifier = Modifier.fillMaxSize()
@@ -200,7 +207,8 @@ fun MapAddressPreview() {
             ),
             state = LocationState.LocationAvailable(
                 LatLng(0.0,0.0)
-            )
+            ),
+            navController = rememberNavController()
         )
     }
 }

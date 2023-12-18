@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import id.pawra.data.ViewModelFactory
 import id.pawra.di.Injection
@@ -25,7 +26,8 @@ import id.pawra.ui.theme.Poppins
 
 @Composable
 fun ProfileEditTopBar(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavController
 ) {
     Row(
         modifier = modifier
@@ -49,7 +51,9 @@ fun ProfileEditTopBar(
         IconButton(
             modifier = Modifier
                 .width(90.dp),
-            onClick = { /* Handle setting click */ },
+            onClick = {
+                navController.navigateUp()
+            },
         ) {
             Text(
                 text = "Cancel",
@@ -65,6 +69,8 @@ fun ProfileEditTopBar(
 @Preview(showBackground = true)
 fun ProfileEditTopBarPreview() {
     PawraTheme {
-        ProfileEditTopBar()
+        ProfileEditTopBar(
+            navController = rememberNavController()
+        )
     }
 }

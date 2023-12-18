@@ -36,8 +36,7 @@ import id.pawra.ui.theme.White
 
 @Composable
 fun PetActivitiesTopBar(
-    modifier: Modifier = Modifier,
-    navController: NavController
+    modifier: Modifier = Modifier
 ) {
     Box(
         contentAlignment = Alignment.CenterStart,
@@ -46,20 +45,6 @@ fun PetActivitiesTopBar(
             .fillMaxWidth()
             .padding(horizontal = 22.dp, vertical = 15.dp),
     ) {
-        IconButton(
-            onClick = {  },
-            modifier = modifier
-                .background(DisabledGreen, CircleShape)
-                .size(32.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Filled.ArrowBackIosNew,
-                contentDescription = "Back",
-                tint = DarkGreen,
-                modifier = modifier.size(18.dp)
-            )
-        }
-
         Box(
             modifier = modifier.fillMaxWidth(),
             contentAlignment = Alignment.Center
@@ -79,6 +64,6 @@ fun PetActivitiesTopBar(
 @Preview(showBackground = true)
 fun PetActivitiesTopBarPreview() {
     PawraTheme {
-        PetActivitiesTopBar(navController = rememberNavController())
+        PetActivitiesTopBar()
     }
 }

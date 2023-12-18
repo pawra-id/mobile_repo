@@ -56,7 +56,9 @@ fun ProfileEditScreen(
     }
 
     Column {
-        ProfileEditTopBar()
+        ProfileEditTopBar(
+            navController = navController
+        )
         Spacer(modifier = Modifier.height(16.dp))
         Box(modifier = modifier) {
             Column(
@@ -87,6 +89,7 @@ fun ProfileEditScreen(
                         message = "Update successfully",
                         setShowDialog = {
                             showDialog = it
+                            navController.navigateUp()
                         }
                     )
                 }

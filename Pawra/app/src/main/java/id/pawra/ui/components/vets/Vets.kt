@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -31,6 +32,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -62,6 +64,7 @@ import id.pawra.ui.theme.LightGray
 import id.pawra.ui.theme.LightGreen
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.White
+import kotlinx.coroutines.launch
 import kotlin.math.asin
 import kotlin.math.cos
 import kotlin.math.sin
@@ -189,13 +192,21 @@ fun Vets(
                         longitude = vetViewModel.location.value.longitude
                     }
 
+                    val listState = rememberLazyListState()
+                    val coroutineScope = rememberCoroutineScope()
+
                     LazyColumn(
                         modifier = modifier
                             .fillMaxSize()
                             .padding(top = 10.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                        verticalArrangement = Arrangement.spacedBy(10.dp),
+                        state = listState
                     ) {
+                        coroutineScope.launch {
+                            listState.animateScrollToItem(index = 0)
+                        }
+
                         items(vetsState.data, key = { it.id }) { data ->
                             val vetLocation = Location("vetLocation").apply {
                                 latitude = data.latitude?.toDouble() ?: 0.0

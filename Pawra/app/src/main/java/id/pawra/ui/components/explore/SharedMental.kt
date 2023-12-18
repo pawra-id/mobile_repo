@@ -1,7 +1,5 @@
 package id.pawra.ui.components.explore
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -9,11 +7,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -29,6 +29,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,10 +42,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import id.pawra.data.ViewModelFactory
 import id.pawra.data.remote.response.AnalysisResponseItem
+import id.pawra.ui.common.UiState
+import id.pawra.ui.components.dialog.ResultDialog
 import id.pawra.ui.components.general.SearchBar
+import id.pawra.ui.components.loading.LoadingBox
 import id.pawra.ui.navigation.Screen
 import id.pawra.ui.screen.pet.mentalhealth.AnalysisViewModel
 import id.pawra.ui.theme.Black
@@ -61,20 +66,30 @@ import id.pawra.ui.theme.White
 import id.pawra.utils.DateConverter
 import java.text.NumberFormat
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SharedMental(
     modifier: Modifier = Modifier,
-    analysisViewModel: AnalysisViewModel = viewModel(
-        factory = ViewModelFactory(LocalContext.current)
-    ),
-    analysisId: Int
+    navController: NavController,
+    analysisViewModel: AnalysisViewModel
 ) {
-    val query by remember { mutableStateOf("") }
-    val sharedAnalysisState by analysisViewModel.sharedAnalysisState.collectAsState()
+
+    val query by remember { analysisViewModel.query }
 
     LaunchedEffect(Unit) {
-        analysisViewModel.getSharedAnalysis(analysisId = analysisId)
+        analysisViewModel.getSharedAnalysis("")
+    }
+
+    var isLoading by remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(true) }
+
+    if (isLoading) {
+        Column (
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = modifier.fillMaxSize()
+        ) {
+            LoadingBox()
+        }
     }
 
     Column(
@@ -82,8 +97,7 @@ fun SharedMental(
     ) {
         SearchBar(
             query = query,
-            onQueryChange = {
-            },
+            onQueryChange = analysisViewModel::getSharedAnalysis,
             onSearch = {
             },
             active = false,
@@ -107,26 +121,56 @@ fun SharedMental(
                 .heightIn(min = 48.dp)
         ) {}
 
-        LazyColumn(
-            modifier = modifier.weight(1f),
-        ) {
-//            items(items = sharedAnalysisState.data?.items ?: emptyList<AnalysisResponseItem>()) { sharedAnalysisItem ->
-//                SharedMentalItem(
-//                    navController = rememberNavController(),
-//                    analysisViewModel = viewModel(
-//                        factory = ViewModelFactory(LocalContext.current)
-//                    ),
-//                    analysisData = AnalysisResponseItem(id=0),
-//                    "",
-//                    "",
-//                    "",
-//                    {}
-//                )
-//            }
+        analysisViewModel.sharedAnalysisState.collectAsState().value.let { sharedAnalysis ->
+            when (sharedAnalysis) {
+                is UiState.Loading -> {
+                    isLoading = true
+                }
+
+                is UiState.Success -> {
+                    isLoading = false
+
+                    LazyColumn(
+                        modifier = modifier.weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        items(sharedAnalysis.data, key = { it.id }){ data ->
+                            SharedMentalItem(
+                                navController = navController,
+                                analysisViewModel = analysisViewModel,
+                                analysisData = data,
+                                dogImage =  data.dog?.image ?: "",
+                                dogGender = data.dog?.gender ?: "",
+                                dogName = data.dog?.name ?: "",
+                                showDialog = {
+                                    showDialog = it
+                                }
+                            )
+                        }
+                    }
+
+                }
+
+                is UiState.Error -> {
+                    if (showDialog) {
+                        isLoading = false
+                        ResultDialog(
+                            success = false,
+                            message = sharedAnalysis.errorMessage,
+                            setShowDialog = {
+                                showDialog = it
+                            }
+                        )
+                    }
+                }
+
+                else -> {}
+            }
         }
     }
 }
-@RequiresApi(Build.VERSION_CODES.O)
+
 @Composable
 fun SharedMentalItem(
     navController: NavController,
@@ -138,13 +182,11 @@ fun SharedMentalItem(
     showDialog: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ){
-
     Row(
         modifier = modifier
             .height(120.dp)
             .clip(shape = RoundedCornerShape(15.dp))
             .background(White)
-            .border(1.dp, DarkGreen, RoundedCornerShape(15.dp))
             .clickable {
                 navController.navigate(
                     Screen.PetMentalHealthResult.createRoute(
@@ -161,7 +203,7 @@ fun SharedMentalItem(
         ) {
             AsyncImage(
                 model = dogImage,
-                contentDescription = "",
+                contentDescription = "Dog Image",
                 modifier = modifier
                     .size(90.dp)
                     .clip(RoundedCornerShape(15.dp))
@@ -240,14 +282,15 @@ fun SharedMentalItem(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(showBackground = true)
 fun SharedMentalPreview() {
     PawraTheme {
-        SharedMental(analysisViewModel = viewModel(
-            factory = ViewModelFactory(LocalContext.current)),
-            analysisId = 0
+        SharedMental(
+            navController = rememberNavController(),
+            analysisViewModel = viewModel(
+                factory = ViewModelFactory(LocalContext.current)
             )
+        )
     }
 }

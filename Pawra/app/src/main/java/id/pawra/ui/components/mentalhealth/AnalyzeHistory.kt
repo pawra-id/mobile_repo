@@ -89,7 +89,7 @@ fun AnalyzeHistory(
         ) {
             AsyncImage(
                 model = dogImage,
-                contentDescription = "",
+                contentDescription = "Dog Image",
                 modifier = modifier
                     .size(90.dp)
                     .clip(RoundedCornerShape(15.dp))

@@ -51,6 +51,9 @@ data class AnalysisResponseItem(
 	@field:SerializedName("actions")
 	val actions: List<ActionsItem>? = null,
 
+	@field:SerializedName("dog")
+	val dog: PetResponseItem? = null,
+
 	val error: String? = null
 )
 
