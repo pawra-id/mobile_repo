@@ -43,9 +43,9 @@ fun AddButton(
             containerColor = LightGreen,
             contentColor = DarkGreen,
         ) {
-            Icon(Icons.Filled.Edit, "Add Story")
+            Icon(Icons.Filled.Edit, "Add Activities")
             Text(
-                text = "Note",
+                text = "Activities",
                 fontFamily = Poppins,
                 fontSize = 15.sp,
                 modifier = modifier.padding(start = 20.dp, end = 15.dp).align(Alignment.CenterVertically)

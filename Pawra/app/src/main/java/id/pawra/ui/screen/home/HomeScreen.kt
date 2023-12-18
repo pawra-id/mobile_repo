@@ -14,7 +14,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -57,9 +62,22 @@ fun HomeScreen(
         factory = ViewModelFactory(LocalContext.current)
     )
 ) {
+    var firstPetId by remember {
+        mutableIntStateOf(0)
+    }
+
     viewModel.getSession()
     LaunchedEffect(Unit) {
         activitiesViewModel.getActivities()
+        petViewModel.getListDogToAddDogForm(firstPetId)
+    }
+
+    petViewModel.petListState.collectAsState(initial = emptyList()).value.let { dogList ->
+        if (dogList.isNotEmpty()) {
+            LaunchedEffect(Unit){
+                firstPetId = dogList[0]["id"] as Int
+            }
+        }
     }
 
     Column(
@@ -79,7 +97,9 @@ fun HomeScreen(
                 .fillMaxSize()
         ) {
             item { Banner(
-                navController = navController
+                navHomeController = navHomeController,
+                navController = navController,
+                firstPetId = firstPetId
             ) }
             item { ListDog(
                 navController = navController,

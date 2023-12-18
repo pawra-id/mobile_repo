@@ -239,9 +239,6 @@ fun HomeNav(
     navHomeController: NavHostController = rememberNavController(),
     navController: NavHostController
 ){
-    val navBackStackEntry by navHomeController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
-
     Scaffold(
         bottomBar = {
             BottomNavigation(navHomeController = navHomeController)
@@ -294,9 +291,6 @@ fun PetNav(
     navController: NavHostController,
     petId: Int,
 ){
-    val navBackStackEntry by navPetController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
-
     Scaffold(
         bottomBar = {
             PetBottomNavigation(navPetController = navPetController)
