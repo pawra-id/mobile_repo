@@ -4,6 +4,7 @@ import id.pawra.data.local.preference.ActivityData
 import id.pawra.data.local.preference.SessionModel
 import id.pawra.data.remote.response.ActivitiesResponse
 import id.pawra.data.remote.response.ActivitiesResponseItem
+import id.pawra.data.remote.response.TagResponse
 import id.pawra.data.remote.retrofit.ApiService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -201,6 +202,37 @@ class ActivitiesRepository private constructor(
         } catch (e: Exception) {
             return flowOf(
                 e.message ?: ""
+            )
+        }
+    }
+
+    suspend fun getTags(user: SessionModel, keyword: String? = ""): Flow<TagResponse> {
+        try {
+            val response = apiService.getTags("Bearer ${user.token}", keyword)
+            return flowOf(
+                TagResponse(
+                    tagResponse = response
+                )
+            )
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorMessage = try {
+                val jsonError = errorBody?.let { JSONObject(it) }
+                jsonError?.optString("detail") ?: "Unknown error"
+            } catch (jsonException: JSONException) {
+                "Error parsing JSON"
+            }
+            return flowOf(
+                TagResponse(
+                    error = errorMessage
+                )
+            )
+
+        } catch (e: Exception) {
+            return flowOf(
+                TagResponse(
+                    error = e.message
+                )
             )
         }
     }

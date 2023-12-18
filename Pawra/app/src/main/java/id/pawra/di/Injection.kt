@@ -14,37 +14,37 @@ import id.pawra.data.repository.VetRepository
 
 object Injection {
 
-    private fun getApiService(context: Context): ApiService {
-        return ApiConfig.getApiService(context)
+    private fun getApiService(): ApiService {
+        return ApiConfig.getApiService()
     }
 
     fun provideAuthRepository(context: Context): AuthRepository {
-        val apiService = getApiService(context)
+        val apiService = getApiService()
         return AuthRepository.getInstance(apiService, Preference.getInstance(context.dataStore))
     }
 
-    fun providePetRepository(context: Context): PetRepository {
-        val apiService = getApiService(context)
+    fun providePetRepository(): PetRepository {
+        val apiService = getApiService()
         return PetRepository.getInstance(apiService)
     }
 
-    fun provideActivitiesRepository(context: Context): ActivitiesRepository {
-        val apiService = getApiService(context)
+    fun provideActivitiesRepository(): ActivitiesRepository {
+        val apiService = getApiService()
         return ActivitiesRepository.getInstance(apiService)
     }
 
-    fun provideVetRepository(context: Context): VetRepository {
-        val apiService = getApiService(context)
+    fun provideVetRepository(): VetRepository {
+        val apiService = getApiService()
         return VetRepository.getInstance(apiService)
     }
 
-    fun provideBlogsRepository(context: Context): BlogsRepository {
-        val apiService = getApiService(context)
+    fun provideBlogsRepository(): BlogsRepository {
+        val apiService = getApiService()
         return BlogsRepository.getInstance(apiService)
     }
 
-    fun provideAnalysisRepository(context: Context): AnalysisRepository {
-        val apiService = getApiService(context)
+    fun provideAnalysisRepository(): AnalysisRepository {
+        val apiService = getApiService()
         return AnalysisRepository.getInstance(apiService)
     }
 }

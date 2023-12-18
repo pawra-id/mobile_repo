@@ -29,7 +29,7 @@ fun Maps(
     ),
     location: LatLng,
 
-) {
+    ) {
     vetViewModel.getVets("", "")
     GoogleMap(
         modifier = Modifier.fillMaxSize(),
@@ -49,10 +49,10 @@ fun Maps(
                     vetsState.data.forEach { data ->
                         Marker(
                             state = rememberMarkerState(position =
-                                LatLng(
-                                    data.latitude?.toDouble() ?: 0.0,
-                                    data.longitude?.toDouble() ?: 0.0
-                                )
+                            LatLng(
+                                data.latitude?.toDouble() ?: 0.0,
+                                data.longitude?.toDouble() ?: 0.0
+                            )
                             ),
                             title = data.name ?: "",
                             snippet = data.address ?: "",

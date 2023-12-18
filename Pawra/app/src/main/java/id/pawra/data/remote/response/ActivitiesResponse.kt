@@ -44,15 +44,3 @@ data class ActivitiesResponseItem(
 
 	val error: String? = null
 )
-
-data class TagsItem(
-
-	@field:SerializedName("name")
-	val name: String? = null,
-
-	@field:SerializedName("created_at")
-	val createdAt: String? = null,
-
-	@field:SerializedName("id")
-	val id: Int
-)
