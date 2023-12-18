@@ -50,7 +50,7 @@ fun PetAddScreen(
             }
         }
 
-        PetAddTopBar(navController = rememberNavController())
+        PetAddTopBar(navController = navController)
         Column(
             modifier = modifier
                 .fillMaxSize()
@@ -60,7 +60,7 @@ fun PetAddScreen(
             verticalArrangement = Arrangement.Top,
         ) {
             PetAdd(
-                navController = rememberNavController(),
+                navController = navController,
                 showDialog = { showDialog = it },
                 petViewModel = petViewModel
             )
@@ -79,6 +79,7 @@ fun PetAddScreen(
                             message = "Dog created successfully",
                             setShowDialog = {
                                 showDialog = it
+                                navController.navigateUp()
                             }
                         )
                     }
