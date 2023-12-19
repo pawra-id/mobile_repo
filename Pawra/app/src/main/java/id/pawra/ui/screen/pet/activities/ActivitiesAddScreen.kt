@@ -88,7 +88,7 @@ fun ActivitiesAddScreen(
                             isLoading = false
                             ResultDialog(
                                 success = true,
-                                message = "Activity add successfully",
+                                message = "Success! your dog activity successfully created",
                                 setShowDialog = {
                                     showDialog = it
                                     navController.navigateUp()

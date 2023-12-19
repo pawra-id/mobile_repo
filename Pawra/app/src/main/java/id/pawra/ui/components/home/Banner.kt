@@ -45,9 +45,7 @@ import id.pawra.ui.theme.White
 @Composable
 fun Banner(
     modifier: Modifier = Modifier,
-    navHomeController: NavController,
-    navController: NavController,
-    firstPetId: Int,
+    navHomeController: NavController
 ) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
@@ -102,7 +100,13 @@ fun Banner(
 
             Button(
                 onClick = {
-                    navController.navigate(Screen.PetProfile.createRoute(firstPetId))
+                    navHomeController.navigate(Screen.Pet.route) {
+                        popUpTo(navHomeController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        restoreState = true
+                        launchSingleTop = true
+                    }
                 },
                 modifier = modifier
                     .align(Alignment.BottomStart)
@@ -200,9 +204,7 @@ fun Banner(
 fun BannerPreview() {
     PawraTheme {
         Banner(
-            navHomeController = rememberNavController(),
-            navController = rememberNavController(),
-            firstPetId = 0
+            navHomeController = rememberNavController()
         )
     }
 }

@@ -79,7 +79,7 @@ fun PetUpdateScreen(
                     isLoading = false
                     ResultDialog(
                         success = true,
-                        message = "Dog updated successfully",
+                        message = "Success! your dog profile has been updated",
                         setShowDialog = {
                             showDialog = it
                             navController.navigateUp()

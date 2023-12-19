@@ -76,7 +76,7 @@ fun PetAddScreen(
                         isLoading = false
                         ResultDialog(
                             success = true,
-                            message = "Dog created successfully",
+                            message = "Great! your new dog was successfully created",
                             setShowDialog = {
                                 showDialog = it
                                 navController.navigateUp()

@@ -1,5 +1,6 @@
 package id.pawra.ui.screen.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,6 +40,7 @@ import id.pawra.ui.screen.pet.profile.PetViewModel
 import id.pawra.ui.screen.vet.VetViewModel
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.PawraTheme
+import id.pawra.ui.theme.White
 
 @Composable
 fun HomeScreen(
@@ -58,27 +60,15 @@ fun HomeScreen(
         factory = ViewModelFactory(LocalContext.current)
     )
 ) {
-    var firstPetId by remember {
-        mutableIntStateOf(0)
-    }
-
     viewModel.getSession()
     LaunchedEffect(Unit) {
         activitiesViewModel.getActivities()
-        petViewModel.getListDogToAddDogForm(firstPetId)
-    }
-
-    petViewModel.petListState.collectAsState(initial = emptyList()).value.let { dogList ->
-        if (dogList.isNotEmpty()) {
-            LaunchedEffect(Unit){
-                firstPetId = dogList[0]["id"] as Int
-            }
-        }
     }
 
     Column(
         modifier = modifier
             .fillMaxSize()
+            .background(White)
     ) {
         Row {
             viewModel.sessionState.collectAsState().value.let { userInfo ->
@@ -93,9 +83,7 @@ fun HomeScreen(
                 .fillMaxSize()
         ) {
             item { Banner(
-                navHomeController = navHomeController,
-                navController = navController,
-                firstPetId = firstPetId
+                navHomeController = navHomeController
             ) }
             item { ListDog(
                 navController = navController,

@@ -89,7 +89,7 @@ fun ActivitiesUpdateScreen(
                     isLoading = false
                     ResultDialog(
                         success = true,
-                        message = "Activity updated successfully",
+                        message = "Success! your dog activity successfully updated",
                         setShowDialog = {
                             showDialog = it
                         }

@@ -78,7 +78,7 @@ fun ProfileEditScreen(
                     isLoading = false
                     ResultDialog(
                         success = true,
-                        message = "Update successfully",
+                        message = "Success! your profile has been updated",
                         setShowDialog = {
                             showDialog = it
                             navController.navigateUp()

@@ -89,7 +89,8 @@ fun NearbyVets(
 
             Text(
                 text = "more",
-                color = Gray, fontFamily = Poppins, fontSize = 13.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Gray, fontFamily = Poppins, fontSize = 16.sp,
                 modifier = modifier
                     .clip(shape = RoundedCornerShape(15.dp))
                     .clickable {

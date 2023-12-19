@@ -30,13 +30,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImagePainter.State.Empty.painter
 import coil.compose.rememberAsyncImagePainter
 import id.pawra.R
 import id.pawra.data.ViewModelFactory
@@ -89,7 +93,9 @@ fun ListDog(
                                 .clickable {
                                     navController.navigate(Screen.PetProfile.createRoute(data.id))
                                 }
+                                .padding(5.dp)
                                 .fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Box(
                                 modifier = modifier
@@ -132,12 +138,21 @@ fun ListDog(
                                 fontWeight = FontWeight.SemiBold,
                                 fontSize = 16.sp,
                                 color = Black,
-                                modifier = modifier.padding(top = 5.dp).width(90.dp)
+                                modifier = modifier.padding(top = 5.dp).width(90.dp),
+                                textAlign = TextAlign.Start,
+                                style = TextStyle(
+                                    platformStyle = PlatformTextStyle(
+                                        includeFontPadding = false,
+                                    ),
+                                ),
                             )
                             Text(
                                 text = data.breed ?: "",
                                 fontSize = 11.sp,
                                 color = Gray,
+                                modifier = modifier.width(90.dp).padding(bottom = 5.dp),
+                                textAlign = TextAlign.Start,
+                                lineHeight = 12.sp
                             )
                             Text(
                                 text = stringResource(id = R.string.dog_age, data.age ?: 0),
@@ -146,29 +161,40 @@ fun ListDog(
                                 modifier = modifier
                                     .clip(shape = RoundedCornerShape(15.dp))
                                     .background(color = DisabledGreen)
-                                    .padding(vertical = 2.dp, horizontal = 10.dp),
+                                    .padding(vertical = 2.dp, horizontal = 10.dp)
+                                    .align(Alignment.Start),
+                                textAlign = TextAlign.Start
                             )
                         }
                     }
                     item {
-                        Box(
+                        Column(
                             modifier = modifier
-                                .height(90.dp)
-                                .width(90.dp)
                                 .clip(shape = RoundedCornerShape(15.dp))
-                                .background(color = DisabledGreen)
+                                .background(White)
                                 .clickable {
                                     navController.navigate(Screen.PetAdd.route)
-                                },
+                                }
+                                .padding(5.dp)
+                                .fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Icon(
-                                Icons.Filled.Add,
-                                "Add Dog",
-                                tint = LightGreen,
+                            Box(
                                 modifier = modifier
-                                    .size(44.dp)
-                                    .align(Alignment.Center)
-                            )
+                                    .height(90.dp)
+                                    .width(90.dp)
+                                    .clip(shape = RoundedCornerShape(15.dp))
+                                    .background(color = DisabledGreen),
+                            ) {
+                                Icon(
+                                    Icons.Filled.Add,
+                                    "Add Dog",
+                                    tint = LightGreen,
+                                    modifier = modifier
+                                        .size(44.dp)
+                                        .align(Alignment.Center)
+                                )
+                            }
                         }
                     }
                 }
