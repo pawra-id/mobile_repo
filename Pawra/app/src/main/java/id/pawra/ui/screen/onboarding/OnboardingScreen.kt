@@ -12,8 +12,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -79,6 +80,8 @@ fun OnBoardingPager(
         ) {
             Column(
                 modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
             ) {
 
                 Spacer(modifier = Modifier.height(20.dp))
@@ -102,7 +105,8 @@ fun OnBoardingPager(
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
-                            .size(500.dp, 270.dp)
+                            .height(270.dp)
+                            .fillMaxWidth()
                             .background(Color.White)
                     ) {
                         PagerIndicator(items = item, currentPage = pagerState.currentPage)
