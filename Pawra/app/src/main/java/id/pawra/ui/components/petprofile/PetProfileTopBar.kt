@@ -47,6 +47,7 @@ fun PetProfileTopBar(
     modifier: Modifier = Modifier,
     navController: NavController,
     petId: Int,
+    petName: String,
     onDeleteClick: () -> Unit
 ) {
     var displayMenu by remember { mutableStateOf(false)}
@@ -155,7 +156,7 @@ fun PetProfileTopBar(
         ConfirmationDialog(
             headText = "Delete Confirmation",
             warn = false,
-            message = "Are you sure you want to delete this?",
+            message = "Are you sure you want to delete this dog?",
             yesText = "Yes, delete",
             cancelText = "Cancel",
             setShowDialog = { showDeleteConfirmation = it },
@@ -169,7 +170,7 @@ fun PetProfileTopBar(
     if (showResultDialog) {
         ResultDialog(
             success = true,
-            message = "Successful deletion",
+            message = "Deleted! your dog $petName was successfully deleted",
             setShowDialog = {
                 showResultDialog = it
                 navController.navigate(Screen.Home.route) {
@@ -193,6 +194,7 @@ fun PetProfileTopBarPreview(
         PetProfileTopBar(
             navController = rememberNavController(),
             petId = 0,
+            petName = "",
             onDeleteClick = ({
                 petViewModel.deleteDogId(0)
             })

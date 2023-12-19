@@ -44,6 +44,8 @@ fun PetProfileScreen(
     var isLoading by remember { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(true) }
 
+    var petName by remember { mutableStateOf("") }
+
     if (isLoading) {
         Column (
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -60,7 +62,8 @@ fun PetProfileScreen(
             onDeleteClick = ({
                 petViewModel.deleteDogId(petId)
             }),
-            petId = petId
+            petId = petId,
+            petName = petName
         )
 
         Column(
@@ -74,6 +77,7 @@ fun PetProfileScreen(
                 when (petDetailState) {
                     is UiState.Success -> {
                         isLoading = false
+                        petName = petDetailState.data.name ?: ""
                         PetProfile(
                             pet = petDetailState.data
                         )

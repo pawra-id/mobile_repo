@@ -324,7 +324,7 @@ fun PetActivities(
         ConfirmationDialog(
             headText = "Delete Confirmation",
             warn = false,
-            message = "Are you sure you want to delete this?",
+            message = "Are you sure you want to delete this activity?",
             yesText = "Yes, delete",
             cancelText = "Cancel",
             setShowDialog = { showDeleteConfirmation = it },
@@ -339,7 +339,7 @@ fun PetActivities(
     if (showResultDialog) {
         ResultDialog(
             success = true,
-            message = "Successful deletion",
+            message = "Deleted! your activity was successfully deleted",
             setShowDialog = {
                 showResultDialog = it
                 activitiesViewModel.getSpecificActivities(petId, "", activeFilter)
