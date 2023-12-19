@@ -28,6 +28,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import id.pawra.data.ViewModelFactory
 import id.pawra.ui.common.UiState
+import id.pawra.ui.components.dialog.ConfirmationDialog
 import id.pawra.ui.components.dialog.ResultDialog
 import id.pawra.ui.components.loading.LoadingBox
 import id.pawra.ui.components.general.BottomSheet
@@ -77,7 +78,7 @@ fun MentalHealthResultScreen(
         analysisViewModel.shareState.collectAsState().value.let { data ->
             ResultDialog(
                 success = !data.error,
-                message = data.message,
+                message = "Success! ${data.message}",
                 setShowDialog = {
                     showDialog = it
                 }

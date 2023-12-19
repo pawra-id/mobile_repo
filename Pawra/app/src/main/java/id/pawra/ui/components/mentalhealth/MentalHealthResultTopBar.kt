@@ -12,6 +12,10 @@ import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -21,6 +25,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import id.pawra.data.ViewModelFactory
+import id.pawra.ui.components.dialog.ConfirmationDialog
 import id.pawra.ui.screen.pet.mentalhealth.AnalysisViewModel
 import id.pawra.ui.theme.DarkGreen
 import id.pawra.ui.theme.DisabledGreen
@@ -37,6 +42,31 @@ fun MentalHealthResultTopBar (
     isSharedScreen: Boolean,
     setShowDialog: (Boolean) -> Unit
 ) {
+    var showConfirmationDialog by remember { mutableStateOf(false) }
+
+    if (showConfirmationDialog) {
+        val result = if (isShared) "unshare" else "share"
+        ConfirmationDialog(
+            headText = "${
+                if (isShared) "Unshare" else "Share"
+            } Confirmation",
+            warn = false,
+            message = "Are you sure you want to $result this analyze result?",
+            yesText = "Yes, $result",
+            cancelText = "Cancel",
+            setShowDialog = { showConfirmationDialog = it },
+            action = {
+                if (isShared) {
+                    analysisViewModel.unshareAnalysis(analysisId)
+                } else {
+                    analysisViewModel.shareAnalysis(analysisId)
+                }
+
+                setShowDialog(true)
+            }
+        )
+    }
+
     Box(
         contentAlignment = Alignment.CenterStart,
         modifier = modifier
@@ -67,12 +97,7 @@ fun MentalHealthResultTopBar (
                     modifier = modifier
                         .size(32.dp),
                     onClick = {
-                        if (isShared) {
-                            analysisViewModel.unshareAnalysis(analysisId)
-                        } else {
-                            analysisViewModel.shareAnalysis(analysisId)
-                        }
-                        setShowDialog(true)
+                        showConfirmationDialog = true
                     }
                 ) {
                     Icon(

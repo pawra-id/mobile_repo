@@ -112,7 +112,7 @@ fun MapAddressScreen(
                     warn = true,
                     message = "We need location to continue",
                     yesText = "Yes, enable",
-                    cancelText = "don't enable",
+                    cancelText = "Don't enable",
                     setShowDialog = {
                         showDialog = it
                     },

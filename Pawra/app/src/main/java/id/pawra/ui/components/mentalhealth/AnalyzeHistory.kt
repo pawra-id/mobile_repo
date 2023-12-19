@@ -20,6 +20,10 @@ import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,6 +41,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import id.pawra.data.ViewModelFactory
 import id.pawra.data.remote.response.AnalysisResponseItem
+import id.pawra.ui.components.dialog.ConfirmationDialog
 import id.pawra.ui.navigation.Screen
 import id.pawra.ui.screen.pet.mentalhealth.AnalysisViewModel
 import id.pawra.ui.theme.Black
@@ -67,6 +72,31 @@ fun AnalyzeHistory(
     showDialog: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var showConfirmationDialog by remember { mutableStateOf(false) }
+
+    if (showConfirmationDialog) {
+        val result = if (analysisData.isShared == true) "unshare" else "share"
+        ConfirmationDialog(
+            headText = "${
+                if (analysisData.isShared == true) "Unshare" else "Share" 
+            } Confirmation",
+            warn = false,
+            message = "Are you sure you want to $result this analyze result?",
+            yesText = "Yes, $result",
+            cancelText = "Cancel",
+            setShowDialog = { showConfirmationDialog = it },
+            action = {
+                if (analysisData.isShared == true) {
+                    analysisViewModel.unshareAnalysis(analysisData.id)
+                } else {
+                    analysisViewModel.shareAnalysis(analysisData.id)
+                }
+
+                showDialog(true)
+            }
+        )
+    }
+
     Row(
         modifier = modifier
             .height(120.dp)
@@ -129,12 +159,7 @@ fun AnalyzeHistory(
                     .clip(CircleShape)
                     .size(24.dp)
                     .clickable {
-                        if (analysisData.isShared == true) {
-                            analysisViewModel.unshareAnalysis(analysisData.id)
-                        } else {
-                            analysisViewModel.shareAnalysis(analysisData.id)
-                        }
-                        showDialog(true)
+                        showConfirmationDialog = true
                     },
                 (if (analysisData.isShared == true) DarkGreen else Red)
             )

@@ -28,12 +28,14 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import id.pawra.data.ViewModelFactory
 import id.pawra.ui.common.UiState
+import id.pawra.ui.components.dialog.ConfirmationDialog
 import id.pawra.ui.components.dialog.ResultDialog
 import id.pawra.ui.components.loading.LoadingBox
 import id.pawra.ui.components.mentalhealth.Analyze
 import id.pawra.ui.components.mentalhealth.AnalyzeHistory
 import id.pawra.ui.components.mentalhealth.EmptyAnalyzeHistory
 import id.pawra.ui.components.mentalhealth.MentalHealthTopBar
+import id.pawra.ui.navigation.Screen
 import id.pawra.ui.screen.pet.profile.PetViewModel
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.PawraTheme
@@ -69,7 +71,7 @@ fun PetMentalHealthScreen(
         analysisViewModel.shareState.collectAsState().value.let { data ->
             ResultDialog(
                 success = !data.error,
-                message = data.message,
+                message = "Success! ${data.message}",
                 setShowDialog = {
                     showDialog = it
                 }

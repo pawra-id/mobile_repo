@@ -35,6 +35,7 @@ fun ProfileButton(
     viewModel: AuthViewModel = viewModel(
         factory = ViewModelFactory(LocalContext.current)
     ),
+    setShowDialog: (Boolean) -> Unit,
     navController: NavController
 ){
 
@@ -70,12 +71,7 @@ fun ProfileButton(
 
         Button(
             onClick = {
-                viewModel.logout()
-                navController.navigate(Screen.SignIn.route){
-                    popUpTo(navController.graph.id){
-                        inclusive = true
-                    }
-                }
+                setShowDialog(true)
             },
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
@@ -102,6 +98,9 @@ fun ProfileButton(
 @Preview(showBackground = true)
 fun ProfileButtonPreview() {
     PawraTheme {
-        ProfileButton(navController = rememberNavController())
+        ProfileButton(
+            navController = rememberNavController(),
+            setShowDialog = {}
+        )
     }
 }
