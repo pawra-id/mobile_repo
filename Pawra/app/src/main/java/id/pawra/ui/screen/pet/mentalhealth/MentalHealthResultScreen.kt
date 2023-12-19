@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -16,8 +17,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -32,7 +37,9 @@ import id.pawra.ui.components.mentalhealth.MentalHealthResultGraph
 import id.pawra.ui.components.mentalhealth.MentalHealthResultTitle
 import id.pawra.ui.components.mentalhealth.MentalHealthResultTopBar
 import id.pawra.ui.screen.pet.profile.PetViewModel
+import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.PawraTheme
+import id.pawra.ui.theme.Poppins
 
 @Composable
 fun MentalHealthResultScreen(
@@ -105,7 +112,7 @@ fun MentalHealthResultScreen(
                             Column(
                                 modifier = modifier
                                     .fillMaxSize()
-                                    .padding(start = 22.dp, end = 22.dp, bottom = 56.dp )
+                                    .padding(start = 22.dp, end = 22.dp, bottom = 56.dp)
                                     .verticalScroll(rememberScrollState()),
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 verticalArrangement = Arrangement.Top,
@@ -122,6 +129,17 @@ fun MentalHealthResultScreen(
                                 MentalHealthResult(
                                     percentage = percentage,
                                     descriptionResult = detailAnalysisState.data.description ?: ""
+                                )
+
+                                Text(
+                                    text = "swipe up to see recommended actions",
+                                    modifier = Modifier.padding(top = 25.dp, bottom = 15.dp),
+                                    color = (Gray),
+                                    fontFamily = Poppins,
+                                    fontSize = 13.sp,
+                                    textAlign = TextAlign.Center,
+                                    fontWeight = FontWeight.Bold,
+                                    fontStyle = FontStyle.Italic
                                 )
                             }
                         }
