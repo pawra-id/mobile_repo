@@ -1,4 +1,4 @@
-package id.pawra.ui.components.mentalhealth
+package id.pawra.ui.components.explore
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -18,12 +18,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import id.pawra.R
-import id.pawra.ui.theme.LightGray
 import id.pawra.ui.theme.Gray
+import id.pawra.ui.theme.LightGray
 import id.pawra.ui.theme.PawraTheme
 
 @Composable
-fun EmptyAnalyzeHistory(
+fun EmptySharedMentalHealth(
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -32,13 +32,13 @@ fun EmptyAnalyzeHistory(
         modifier = modifier.fillMaxHeight()
     ) {
         Image(
-            painter = painterResource(id = R.drawable.menu_pet_mental_health),
-            contentDescription = "Empty Analyze",
+            painter = painterResource(id = R.drawable.menu_explore),
+            contentDescription = "Empty Shared Mental Health",
             colorFilter = ColorFilter.tint(LightGray),
             modifier = modifier.size(120.dp)
         )
         Text(
-            text = "Your history is empty!",
+            text = "Shared mental health is empty!",
             fontSize = 16.sp,
             fontWeight = FontWeight.SemiBold,
             color = Gray,
@@ -46,7 +46,7 @@ fun EmptyAnalyzeHistory(
                 .padding(top = 20.dp)
         )
         Text(
-            text = "analyzing your dog's mental health to get a list history ",
+            text = "Let's share your dog's analysis results for all users to see",
             fontSize = 12.sp,
             color = Gray,
             textAlign = TextAlign.Center
@@ -56,8 +56,8 @@ fun EmptyAnalyzeHistory(
 
 @Composable
 @Preview(showBackground = true)
-fun EmptyAnalyzeHistoryPreview() {
+fun EmptySharedMentalHealthPreview() {
     PawraTheme {
-        EmptyAnalyzeHistory()
+        EmptySharedMentalHealth()
     }
 }

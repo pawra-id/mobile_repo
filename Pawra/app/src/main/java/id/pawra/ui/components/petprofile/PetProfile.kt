@@ -48,6 +48,7 @@ import id.pawra.ui.theme.DarkPink
 import id.pawra.ui.theme.DisabledBlue
 import id.pawra.ui.theme.DisabledGreen
 import id.pawra.ui.theme.DisabledOrange
+import id.pawra.ui.theme.DisabledPink
 import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.LightGray
 import id.pawra.ui.theme.Orange
@@ -121,7 +122,9 @@ fun PetProfile(
                 Box(
                     modifier = modifier
                         .clip(shape = RoundedCornerShape(20.dp))
-                        .background(DisabledBlue)
+                        .background(
+                            color = if (pet.gender == "male") DisabledBlue else DisabledPink
+                        )
                         .padding(vertical = 5.dp, horizontal = 10.dp),
                     contentAlignment = Alignment.Center
                 ) {
@@ -254,10 +257,10 @@ fun PetProfile(
                 InfoBox("Color", pet.color ?: "")
             }
             item {
-                InfoBox("Weight", "${pet.weight} pound")
+                InfoBox("Weight", "${pet.weight} kg")
             }
             item {
-                InfoBox("Height", "${pet.height} inch")
+                InfoBox("Height", "${pet.height} cm")
             }
 
             item {

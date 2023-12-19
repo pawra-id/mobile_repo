@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -140,35 +141,44 @@ fun SharedMental(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
-                        items(sharedAnalysis.data, key = { it.id }){ data ->
-                            val percentage = data.prediction?.toFloat()?.times(100) ?: 0f
-                            var color = Red
-                            var disableColor = DisabledRed
+                        if (sharedAnalysis.data.isNotEmpty()) {
+                            items(sharedAnalysis.data, key = { it.id }){ data ->
+                                val percentage = data.prediction?.toFloat()?.times(100) ?: 0f
+                                var color = Red
+                                var disableColor = DisabledRed
 
-                            if (percentage.toInt() < 25) {
-                                color = DarkGreen
-                                disableColor = DisabledGreen
-                            } else if(percentage.toInt() < 50) {
-                                color = DarkBlue
-                                disableColor = DisabledBlue
-                            } else if(percentage.toInt() < 75) {
-                                color = DarkYellow
-                                disableColor = DisabledYellow
-                            }
-
-                            SharedMentalItem(
-                                navController = navController,
-                                analysisViewModel = analysisViewModel,
-                                analysisData = data,
-                                dogImage =  data.dog?.image ?: "",
-                                dogGender = data.dog?.gender ?: "",
-                                dogName = data.dog?.name ?: "",
-                                color = color,
-                                disableColor = disableColor,
-                                showDialog = {
-                                    showDialog = it
+                                if (percentage.toInt() < 25) {
+                                    color = DarkGreen
+                                    disableColor = DisabledGreen
+                                } else if(percentage.toInt() < 50) {
+                                    color = DarkBlue
+                                    disableColor = DisabledBlue
+                                } else if(percentage.toInt() < 75) {
+                                    color = DarkYellow
+                                    disableColor = DisabledYellow
                                 }
-                            )
+
+                                SharedMentalItem(
+                                    navController = navController,
+                                    analysisViewModel = analysisViewModel,
+                                    analysisData = data,
+                                    dogImage =  data.dog?.image ?: "",
+                                    dogGender = data.dog?.gender ?: "",
+                                    dogName = data.dog?.name ?: "",
+                                    color = color,
+                                    disableColor = disableColor,
+                                    showDialog = {
+                                        showDialog = it
+                                    }
+                                )
+                            }
+                        }
+                        else {
+                            item {
+                                EmptyBlogs(
+                                    modifier.fillMaxHeight(1f)
+                                )
+                            }
                         }
                     }
 
