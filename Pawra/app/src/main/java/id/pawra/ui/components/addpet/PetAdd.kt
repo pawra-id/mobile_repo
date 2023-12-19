@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -68,7 +67,6 @@ import id.pawra.ui.theme.DarkGreen
 import id.pawra.ui.theme.DisabledGreen
 import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.LightGray
-import id.pawra.ui.theme.LightGreen
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
 import id.pawra.ui.theme.Red
@@ -86,7 +84,7 @@ fun PetAdd(
     val state = petViewModel.addDogValidationState
     val context = LocalContext.current
 
-    val painter = rememberAsyncImagePainter(state.file.ifEmpty { R.drawable.ic_pet }
+    val painter = rememberAsyncImagePainter(state.file.ifEmpty { R.drawable.ic_photo }
     )
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -264,7 +262,9 @@ fun PetAdd(
             ) {
                 Text(
                     text = stringResource(R.string.neutred),
-                    modifier = modifier.weight(1f),
+                    modifier = modifier
+                        .weight(1f)
+                        .padding(top = 8.dp, bottom = 8.dp),
                     color = Gray,
                     fontFamily = Poppins,
                     fontWeight = FontWeight.Medium,
@@ -323,10 +323,10 @@ fun PetAdd(
                         fontFamily = Poppins
                     ),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = LightGreen,
-                        unfocusedContainerColor = LightGreen,
-                        disabledContainerColor = LightGreen,
-                        errorContainerColor = LightGreen,
+                        focusedContainerColor = DisabledGreen,
+                        unfocusedContainerColor = DisabledGreen,
+                        disabledContainerColor = DisabledGreen,
+                        errorContainerColor = DisabledGreen,
                         cursorColor = Black,
                         focusedBorderColor = (DarkGreen),
                         unfocusedBorderColor = (DarkGreen),
@@ -387,10 +387,10 @@ fun PetAdd(
                         fontFamily = Poppins
                     ),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = LightGreen,
-                        unfocusedContainerColor = LightGreen,
-                        disabledContainerColor = LightGreen,
-                        errorContainerColor = LightGreen,
+                        focusedContainerColor = DisabledGreen,
+                        unfocusedContainerColor = DisabledGreen,
+                        disabledContainerColor = DisabledGreen,
+                        errorContainerColor = DisabledGreen,
                         cursorColor = Black,
                         focusedBorderColor = (DarkGreen),
                         unfocusedBorderColor = (DarkGreen),
@@ -440,10 +440,10 @@ fun PetAdd(
                             ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)
                         },
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedContainerColor = LightGreen,
-                            unfocusedContainerColor = LightGreen,
-                            disabledContainerColor = LightGreen,
-                            errorContainerColor = LightGreen,
+                            focusedContainerColor = DisabledGreen,
+                            unfocusedContainerColor = DisabledGreen,
+                            disabledContainerColor = DisabledGreen,
+                            errorContainerColor = DisabledGreen,
                             unfocusedBorderColor = DarkGreen,
                         ),
                         textStyle = TextStyle(
@@ -520,10 +520,10 @@ fun PetAdd(
                         fontFamily = Poppins
                     ),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = LightGreen,
-                        unfocusedContainerColor = LightGreen,
-                        disabledContainerColor = LightGreen,
-                        errorContainerColor = LightGreen,
+                        focusedContainerColor = DisabledGreen,
+                        unfocusedContainerColor = DisabledGreen,
+                        disabledContainerColor = DisabledGreen,
+                        errorContainerColor = DisabledGreen,
                         cursorColor = Black,
                         focusedBorderColor = (DarkGreen),
                         unfocusedBorderColor = (DarkGreen),

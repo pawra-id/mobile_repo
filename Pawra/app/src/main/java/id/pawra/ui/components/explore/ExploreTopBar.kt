@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -46,7 +46,7 @@ fun ExploreTopBar(
             onClick = {},
         ) {
             Icon(
-                imageVector = Icons.Filled.Settings,
+                imageVector = Icons.Filled.Language,
                 contentDescription = null,
                 tint = Black
             )

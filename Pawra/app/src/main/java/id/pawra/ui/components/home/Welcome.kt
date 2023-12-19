@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -87,7 +88,7 @@ fun Welcome(
             onClick = { /* Handle setting click */ },
         ) {
             Icon(
-                imageVector = Icons.Filled.Settings,
+                imageVector = Icons.Filled.Language,
                 contentDescription = "settings",
                 tint = Black
             )
