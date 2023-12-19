@@ -89,27 +89,8 @@ fun MentalHealthResultScreen(
                     expanded = false,
                     content = {
                         Column {
-                            petViewModel.getDetailDog(detailAnalysisState.data.dogId ?: 0)
-
-                            var dogName by remember { mutableStateOf("") }
-                            var dogGender by remember { mutableStateOf("") }
-                            var dogImage by remember { mutableStateOf("") }
-
-                            petViewModel.petDetailState.collectAsState().value.let { petDetail ->
-                                when (petDetail) {
-                                    is UiState.Success -> {
-                                        LaunchedEffect(Unit) {
-                                            dogName = petDetail.data.name ?: ""
-                                            dogGender = petDetail.data.gender ?: ""
-                                            dogImage = petDetail.data.image ?: ""
-                                        }
-                                    }
-
-                                    else -> {}
-                                }
-                            }
-
                             isLoading = false
+
                             MentalHealthResultTopBar(
                                 navController = navController,
                                 analysisViewModel = analysisViewModel,
@@ -131,7 +112,7 @@ fun MentalHealthResultScreen(
                             ) {
 
                                 MentalHealthResultTitle(
-                                    petName = dogName
+                                    petName = detailAnalysisState.data.dog?.name ?: ""
                                 )
                                 val percentage =
                                     detailAnalysisState.data.prediction?.toFloat()?.times(100) ?: 0f

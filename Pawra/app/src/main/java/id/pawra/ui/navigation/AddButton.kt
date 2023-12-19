@@ -45,7 +45,7 @@ fun AddButton(
             Icon(
                 imageVector = Icons.Default.Edit,
                 contentDescription = "Add Activities",
-                modifier = Modifier.size(25.dp)
+                modifier = Modifier.size(22.dp)
             )
             Text(
                 text = "Activities",
