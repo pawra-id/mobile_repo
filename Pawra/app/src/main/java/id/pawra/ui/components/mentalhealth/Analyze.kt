@@ -59,6 +59,7 @@ fun Analyze(
     petId: Int
 ) {
     var showDialog by remember { mutableStateOf(false) }
+    var showResultDialog by remember { mutableStateOf(false) }
     var isLoadingAnalyze by remember { mutableStateOf(false) }
 
     if (isLoadingAnalyze) {
@@ -76,6 +77,9 @@ fun Analyze(
             analysisViewModel = analysisViewModel,
             setShowDialog = {
                 showDialog = it
+            },
+            setShowResultDialog = {
+                showResultDialog = it
             },
             petId = petId
         )
@@ -120,13 +124,13 @@ fun Analyze(
                 }
 
                 is UiState.Error -> {
-                    if (showDialog) {
+                    if (showResultDialog) {
                         isLoadingAnalyze = false
                         ResultDialog(
                             success = false,
                             message = addAnalyzeState.errorMessage,
                             setShowDialog = {
-                                showDialog = it
+                                showResultDialog = it
                             }
                         )
                     }

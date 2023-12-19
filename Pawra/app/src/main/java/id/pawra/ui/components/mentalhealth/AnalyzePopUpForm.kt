@@ -49,6 +49,7 @@ fun AnalyzePopUpForm(
     modifier: Modifier = Modifier,
     analysisViewModel: AnalysisViewModel,
     setShowDialog: (Boolean) -> Unit,
+    setShowResultDialog: (Boolean) -> Unit,
     petId: Int
 ) {
     var lastXDays by rememberSaveable { mutableStateOf("") }
@@ -128,6 +129,7 @@ fun AnalyzePopUpForm(
                         onClick = {
                             setShowDialog(false)
                             analysisViewModel.addAnalysis(petId, lastXDays.toInt())
+                            setShowResultDialog(true)
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = DarkGreen
@@ -155,6 +157,7 @@ fun AnalyzePopUpFormPreview() {
                 factory = ViewModelFactory(LocalContext.current)
             ),
             setShowDialog = {},
+            setShowResultDialog = {},
             petId = 0
         )
     }

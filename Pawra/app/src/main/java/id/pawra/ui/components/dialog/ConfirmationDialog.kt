@@ -101,7 +101,7 @@ fun ConfirmationDialog(
 
                 ) {
                     Button(
-                        modifier = Modifier.width(120.dp).height(40.dp),
+                        modifier = Modifier.width(130.dp).height(40.dp),
                         shape = RoundedCornerShape(10.dp),
                         onClick = { setShowDialog(false) },
                         colors = ButtonDefaults.buttonColors(
@@ -118,7 +118,7 @@ fun ConfirmationDialog(
                     }
 
                     Button(
-                        modifier = Modifier.width(120.dp).height(40.dp),
+                        modifier = Modifier.width(130.dp).height(40.dp),
                         shape = RoundedCornerShape(10.dp),
                         onClick = {
                             action()
