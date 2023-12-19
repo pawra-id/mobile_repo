@@ -68,7 +68,7 @@ fun SignInForm(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = stringResource(R.string.name),
+            text = stringResource(R.string.username),
             color = Gray,
             fontSize = 14.sp,
             modifier = modifier

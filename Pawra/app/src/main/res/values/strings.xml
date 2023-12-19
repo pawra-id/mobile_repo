@@ -9,7 +9,7 @@
     <string name="password">Password</string>
     <string name="show_password">Show Password</string>
     <string name="hide_password">Hide Password</string>
-    <string name="name">Username</string>
+    <string name="name">Name</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="accept_terms_services"><![CDATA[Accept terms & services]]></string>
     <string name="forgot_password">Forgot password?</string>
@@ -30,7 +30,7 @@
     <string name="onboarding2_desc">Connecting with other dog owners through apps can be a great way to share experiences, tips, and even arrange playdates for your dogs.</string>
     <string name="onboarding3_subtitle">Share Your Dog Health Status to Others</string>
     <string name="onboarding3_desc">Sharing your dog\'s health status with others is an important step to ensure the well-being of your pet, seek support, or inform others about any changes in your dog\'s condition.</string>
-    <string name="username">username</string>
+    <string name="username">Username</string>
     <string name="save">Save</string>
     <string name="update">Update</string>
     <string name="submit">Submit\n</string>

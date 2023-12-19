@@ -299,6 +299,15 @@ fun PetUpdate(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
+                Text(
+                    text = stringResource(R.string.neutred),
+                    modifier = modifier.weight(1f),
+                    color = Gray,
+                    fontFamily = Poppins,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 13.sp,
+                )
+
                 Switch(
                     checked = state.neutered,
                     onCheckedChange = { petViewModel.onEventUpdateDog(DogUpdateFormEvent.DogNeuteredChanged(it)) },
@@ -313,15 +322,6 @@ fun PetUpdate(
                         uncheckedTrackColor = LightGray,
                     )
                 )
-
-                Text(
-                    text = stringResource(R.string.neutred),
-                    modifier = modifier.weight(1f),
-                    color = Gray,
-                    fontFamily = Poppins,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 13.sp,
-                )
             }
 
             Row(
@@ -329,6 +329,15 @@ fun PetUpdate(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
+                Text(
+                    text = stringResource(R.string.age),
+                    modifier = modifier.weight(1f),
+                    color = Gray,
+                    fontFamily = Poppins,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 13.sp,
+                )
+
                 OutlinedTextField(
                     value = state.year,
                     onValueChange = { petViewModel.onEventUpdateDog(DogUpdateFormEvent.DogYearChanged(it)) },
@@ -369,15 +378,6 @@ fun PetUpdate(
                     },
                     isError = state.yearError != null
                 )
-
-                Text(
-                    text = stringResource(R.string.age),
-                    modifier = modifier.weight(1f),
-                    color = Gray,
-                    fontFamily = Poppins,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 13.sp,
-                )
             }
         }
 
@@ -398,17 +398,17 @@ fun PetUpdate(
                     fontSize = 13.sp,
                     modifier = modifier
                         .fillMaxWidth(),
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Start
                 )
 
                 OutlinedTextField(
                     value = state.height,
                     onValueChange = { petViewModel.onEventUpdateDog(DogUpdateFormEvent.DogHeightChanged(it)) },
                     modifier = Modifier
-                        .width(100.dp),
+                        .fillMaxWidth(),
                     suffix = {
                         Text(
-                            text = "inch",
+                            text = "cm",
                             fontSize = 11.sp,
                             color = Black,
                             fontFamily = Poppins
@@ -456,7 +456,7 @@ fun PetUpdate(
                     fontSize = 13.sp,
                     modifier = modifier
                         .fillMaxWidth(),
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Start
                 )
 
 
@@ -469,7 +469,7 @@ fun PetUpdate(
                         onValueChange = {},
                         modifier = Modifier
                             .menuAnchor()
-                            .width(130.dp),
+                            .fillMaxWidth(),
                         readOnly = true,
                         shape = RoundedCornerShape(10.dp),
                         trailingIcon = {
@@ -534,17 +534,17 @@ fun PetUpdate(
                     fontSize = 13.sp,
                     modifier = modifier
                         .fillMaxWidth(),
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Start
                 )
 
                 OutlinedTextField(
                     value = state.weight,
                     onValueChange = { petViewModel.onEventUpdateDog(DogUpdateFormEvent.DogWeightChanged(it)) },
                     modifier = Modifier
-                        .width(100.dp),
+                        .fillMaxWidth(),
                     suffix = {
                         Text(
-                            text = "pound",
+                            text = "kg",
                             fontSize = 11.sp,
                             color = Black,
                             fontFamily = Poppins

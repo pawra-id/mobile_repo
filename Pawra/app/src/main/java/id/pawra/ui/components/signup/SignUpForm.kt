@@ -72,7 +72,7 @@ fun SignUpForm(
         val state = viewModel.stateSignUp
 
         Text(
-            text = stringResource(R.string.name),
+            text = stringResource(R.string.username),
             color = Gray,
             fontSize = 14.sp,
             modifier = modifier
