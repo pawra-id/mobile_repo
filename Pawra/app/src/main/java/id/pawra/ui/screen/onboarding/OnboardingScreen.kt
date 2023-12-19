@@ -1,6 +1,6 @@
 package id.pawra.ui.screen.onboarding
 
-import android.preference.PreferenceManager
+import  android.preference.PreferenceManager
 import androidx.annotation.FloatRange
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

@@ -105,25 +105,6 @@ fun ConfirmationDialog(
                         shape = RoundedCornerShape(10.dp),
                         onClick = { setShowDialog(false) },
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = if (warn) DarkYellow else DarkBlue
-                        )
-                    ) {
-                        Text(
-                            text = yesText,
-                            fontSize = 12.sp,
-                            fontFamily = Poppins,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    }
-
-                    Button(
-                        modifier = Modifier.width(100.dp).height(40.dp),
-                        shape = RoundedCornerShape(10.dp),
-                        onClick = {
-                            action()
-                            setShowDialog(false)
-                                  },
-                        colors = ButtonDefaults.buttonColors(
                             containerColor = White
                         )
                     ) {
@@ -131,6 +112,25 @@ fun ConfirmationDialog(
                             text = cancelText,
                             fontSize = 12.sp,
                             color = if (warn) DarkYellow else DarkBlue,
+                            fontFamily = Poppins,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+
+                    Button(
+                        modifier = Modifier.width(120.dp).height(40.dp),
+                        shape = RoundedCornerShape(10.dp),
+                        onClick = {
+                            action()
+                            setShowDialog(false)
+                                  },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = if (warn) DarkYellow else DarkBlue
+                        )
+                    ) {
+                        Text(
+                            text = yesText,
+                            fontSize = 12.sp,
                             fontFamily = Poppins,
                             fontWeight = FontWeight.SemiBold
                         )
