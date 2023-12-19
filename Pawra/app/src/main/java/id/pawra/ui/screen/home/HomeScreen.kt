@@ -60,22 +60,9 @@ fun HomeScreen(
         factory = ViewModelFactory(LocalContext.current)
     )
 ) {
-    var firstPetId by remember {
-        mutableIntStateOf(0)
-    }
-
     viewModel.getSession()
     LaunchedEffect(Unit) {
         activitiesViewModel.getActivities()
-        petViewModel.getListDogToAddDogForm(firstPetId)
-    }
-
-    petViewModel.petListState.collectAsState(initial = emptyList()).value.let { dogList ->
-        if (dogList.isNotEmpty()) {
-            LaunchedEffect(Unit){
-                firstPetId = dogList[0]["id"] as Int
-            }
-        }
     }
 
     Column(
@@ -96,9 +83,7 @@ fun HomeScreen(
                 .fillMaxSize()
         ) {
             item { Banner(
-                navHomeController = navHomeController,
-                navController = navController,
-                firstPetId = firstPetId
+                navHomeController = navHomeController
             ) }
             item { ListDog(
                 navController = navController,
