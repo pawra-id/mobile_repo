@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -206,97 +207,106 @@ fun PetActivities(
                             listState.animateScrollToItem(index = 0)
                         }
 
-                        items(activitiesState.data, key = { it.id }) { data ->
-                            val listTags: List<TagsItem> = data.tags ?: listOf()
-                            Row(
-                                modifier = modifier
-                                    .clip(shape = RoundedCornerShape(15.dp))
-                                    .background(DisabledGreen)
-                                    .clickable {
-                                        navController.navigate(Screen.PetActivitiesPrev.createRoute(data.id))
-                                    }
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 20.dp, vertical = 15.dp),
-                                horizontalArrangement = Arrangement.spacedBy(20.dp)
-                            ) {
-                                Column(
-                                    modifier = modifier.weight(1f)
+                        if (activitiesState.data.isNotEmpty()) {
+                            items(activitiesState.data, key = { it.id }) { data ->
+                                val listTags: List<TagsItem> = data.tags ?: listOf()
+                                Row(
+                                    modifier = modifier
+                                        .clip(shape = RoundedCornerShape(15.dp))
+                                        .background(DisabledGreen)
+                                        .clickable {
+                                            navController.navigate(Screen.PetActivitiesPrev.createRoute(data.id))
+                                        }
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 20.dp, vertical = 15.dp),
+                                    horizontalArrangement = Arrangement.spacedBy(20.dp)
                                 ) {
-                                    Text(
-                                        text = DateConverter.convertStringToDate(data.createdAt ?: ""),
-                                        fontSize = 11.sp,
-                                        color = DarkGreen,
-                                        fontWeight = FontWeight.SemiBold,
-                                    )
-
-                                    Text(
-                                        text = data.description ?: "",
-                                        fontSize = 13.sp,
-                                        color = DarkGreen,
-                                        maxLines = 2,
-                                        lineHeight = 18.sp,
-                                        overflow = TextOverflow.Ellipsis,
-                                        modifier = modifier.padding(bottom = 10.dp)
-                                    )
-
-                                    LazyRow(
-                                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                                    Column(
+                                        modifier = modifier.weight(1f)
                                     ) {
-                                        items(listTags, key = { it.id }) { tag ->
-                                            Text(
-                                                text = tag.name ?: "",
-                                                fontSize = 10.sp,
-                                                color = DisabledGreen,
+                                        Text(
+                                            text = DateConverter.convertStringToDate(data.createdAt ?: ""),
+                                            fontSize = 11.sp,
+                                            color = DarkGreen,
+                                            fontWeight = FontWeight.SemiBold,
+                                        )
+
+                                        Text(
+                                            text = data.description ?: "",
+                                            fontSize = 13.sp,
+                                            color = DarkGreen,
+                                            maxLines = 2,
+                                            lineHeight = 18.sp,
+                                            overflow = TextOverflow.Ellipsis,
+                                            modifier = modifier.padding(bottom = 10.dp)
+                                        )
+
+                                        LazyRow(
+                                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                                        ) {
+                                            items(listTags, key = { it.id }) { tag ->
+                                                Text(
+                                                    text = tag.name ?: "",
+                                                    fontSize = 10.sp,
+                                                    color = DisabledGreen,
+                                                    modifier = modifier
+                                                        .clip(shape = RoundedCornerShape(15.dp))
+                                                        .background(
+                                                            color = DarkGreen
+                                                        )
+                                                        .padding(vertical = 2.dp, horizontal = 10.dp),
+                                                )
+                                            }
+
+                                        }
+                                    }
+
+                                    Column(
+                                        modifier = modifier,
+                                        verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically),
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        IconButton(
+                                            onClick = {
+                                                navController.navigate(Screen.PetActivitiesUpdate.createRoute(data.id))
+                                            },
+                                            modifier = modifier
+                                                .background(DarkGreen, CircleShape)
+                                                .size(35.dp)
+                                        ) {
+                                            Icon(
+                                                painterResource(id = R.drawable.edit_square),
+                                                "Edit Activity",
+                                                tint = White,
                                                 modifier = modifier
-                                                    .clip(shape = RoundedCornerShape(15.dp))
-                                                    .background(
-                                                        color = DarkGreen
-                                                    )
-                                                    .padding(vertical = 2.dp, horizontal = 10.dp),
                                             )
                                         }
 
+                                        IconButton(
+                                            onClick = {
+                                                showDeleteConfirmation = true
+                                                activityId = data.id
+                                            },
+                                            modifier = modifier
+                                                .background(Red, CircleShape)
+                                                .size(35.dp)
+                                        ) {
+                                            Icon(
+                                                painterResource(id = R.drawable.delete_rounded),
+                                                "Delete Activity",
+                                                tint = White,
+                                                modifier = modifier
+                                            )
+                                        }
                                     }
                                 }
-
-                                Column(
-                                    modifier = modifier,
-                                    verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically),
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-                                    IconButton(
-                                        onClick = {
-                                            navController.navigate(Screen.PetActivitiesUpdate.createRoute(data.id))
-                                        },
-                                        modifier = modifier
-                                            .background(DarkGreen, CircleShape)
-                                            .size(35.dp)
-                                    ) {
-                                        Icon(
-                                            painterResource(id = R.drawable.edit_square),
-                                            "Edit Activity",
-                                            tint = White,
-                                            modifier = modifier
-                                        )
-                                    }
-
-                                    IconButton(
-                                        onClick = {
-                                            showDeleteConfirmation = true
-                                            activityId = data.id
-                                                  },
-                                        modifier = modifier
-                                            .background(Red, CircleShape)
-                                            .size(35.dp)
-                                    ) {
-                                        Icon(
-                                            painterResource(id = R.drawable.delete_rounded),
-                                            "Delete Activity",
-                                            tint = White,
-                                            modifier = modifier
-                                        )
-                                    }
-                                }
+                            }
+                        }
+                        else {
+                            item {
+                                EmptyPetActivities(
+                                    modifier.fillMaxHeight(1f)
+                                )
                             }
                         }
                     }

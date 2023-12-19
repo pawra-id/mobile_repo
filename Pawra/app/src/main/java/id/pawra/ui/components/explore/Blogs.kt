@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -121,74 +122,84 @@ fun Blogs(
                             .padding(vertical = 10.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        items(blogsState.data, key = { it.id }) {data ->
-                            Column(
-                                modifier = modifier
-                                    .fillMaxSize()
-                                    .clip(shape = RoundedCornerShape(15.dp))
-                                    .clickable {
-                                        navController.navigate(Screen.BlogDetail.createRoute(data.id))
+
+                        if (blogsState.data.isNotEmpty()) {
+                            items(blogsState.data, key = { it.id }) {data ->
+                                Column(
+                                    modifier = modifier
+                                        .fillMaxSize()
+                                        .clip(shape = RoundedCornerShape(15.dp))
+                                        .clickable {
+                                            navController.navigate(Screen.BlogDetail.createRoute(data.id))
+                                        }
+                                        .padding(horizontal = 10.dp, vertical = 15.dp),
+                                ){
+                                    Row(
+                                        modifier = modifier.fillMaxWidth(),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                    ) {
+                                        AsyncImage(
+                                            model = data.author?.image ?: "",
+                                            contentDescription = "Admin Profile Picture",
+                                            modifier = modifier
+                                                .size(28.dp)
+                                                .clip(CircleShape),
+                                            contentScale = ContentScale.Crop,
+                                        )
+
+                                        Text(
+                                            color = Gray,
+                                            fontSize = 13.sp,
+                                            text = "by",
+                                            modifier = modifier.padding(start = 10.dp)
+                                        )
+                                        Text(
+                                            text = data.author?.username ?: "Unknown",
+                                            color = Gray,
+                                            fontSize = 13.sp,
+                                            fontWeight = FontWeight.SemiBold,
+                                            modifier = modifier.padding(start = 5.dp)
+                                        )
                                     }
-                                    .padding(horizontal = 10.dp, vertical = 15.dp),
-                            ){
-                                Row(
-                                    modifier = modifier.fillMaxWidth(),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                ) {
+
                                     AsyncImage(
-                                        model = data.author?.image ?: "",
-                                        contentDescription = "Admin Profile Picture",
+                                        model = data.image,
+                                        contentDescription = data.title,
                                         modifier = modifier
-                                            .size(28.dp)
-                                            .clip(CircleShape),
+                                            .padding(top = 10.dp)
+                                            .height(185.dp)
+                                            .clip(RoundedCornerShape(15.dp))
+                                            .fillMaxWidth(),
                                         contentScale = ContentScale.Crop,
                                     )
 
                                     Text(
-                                        color = Gray,
-                                        fontSize = 13.sp,
-                                        text = "by",
-                                        modifier = modifier.padding(start = 10.dp)
-                                    )
-                                    Text(
-                                        text = data.author?.username ?: "Unknown",
-                                        color = Gray,
-                                        fontSize = 13.sp,
+                                        text = data.title ?: "",
+                                        color = Black,
+                                        fontSize = 16.sp,
                                         fontWeight = FontWeight.SemiBold,
-                                        modifier = modifier.padding(start = 5.dp)
+                                        modifier = modifier
+                                            .padding(top = 10.dp)
+                                            .fillMaxWidth()
+                                            .align(Alignment.Start)
+                                    )
+
+                                    Text(
+                                        text = DateConverter.convertStringToDate(data.createdAt ?: ""),
+                                        color = Gray,
+                                        fontSize = 13.sp,
+                                        textAlign = TextAlign.End,
+                                        modifier = modifier
+                                            .padding(top = 5.dp)
+                                            .fillMaxWidth()
                                     )
                                 }
-
-                                AsyncImage(
-                                    model = data.image,
-                                    contentDescription = data.title,
-                                    modifier = modifier
-                                        .padding(top = 10.dp)
-                                        .height(185.dp)
-                                        .clip(RoundedCornerShape(15.dp))
-                                        .fillMaxWidth(),
-                                    contentScale = ContentScale.Crop,
-                                )
-
-                                Text(
-                                    text = data.title ?: "",
-                                    color = Black,
-                                    fontSize = 16.sp,
-                                    fontWeight = FontWeight.SemiBold,
-                                    modifier = modifier
-                                        .padding(top = 10.dp)
-                                        .fillMaxWidth()
-                                        .align(Alignment.Start)
-                                )
-
-                                Text(
-                                    text = DateConverter.convertStringToDate(data.createdAt ?: ""),
-                                    color = Gray,
-                                    fontSize = 13.sp,
-                                    textAlign = TextAlign.End,
-                                    modifier = modifier
-                                        .padding(top = 5.dp)
-                                        .fillMaxWidth()
+                            }
+                        }
+                        else {
+                            item {
+                                EmptyBlogs(
+                                    modifier.fillMaxHeight(1f)
                                 )
                             }
                         }

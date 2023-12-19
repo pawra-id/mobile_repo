@@ -99,7 +99,7 @@ fun MapAddressScreen(
                     warn = true,
                     message = "We need location permission to continue",
                     yesText = "Yes, allow",
-                    cancelText = "Don't allow",
+                    cancelText = "Cancel",
                     setShowDialog = {
                         showDialog = it
                     },

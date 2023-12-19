@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -34,6 +35,7 @@ import id.pawra.ui.components.home.Banner
 import id.pawra.ui.components.home.ListDog
 import id.pawra.ui.components.home.NearbyVets
 import id.pawra.ui.components.home.Welcome
+import id.pawra.ui.components.petactivities.EmptyPetActivities
 import id.pawra.ui.screen.auth.AuthViewModel
 import id.pawra.ui.screen.pet.activities.ActivitiesViewModel
 import id.pawra.ui.screen.pet.profile.PetViewModel
@@ -119,11 +121,26 @@ fun HomeScreen(
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 verticalArrangement = Arrangement.spacedBy(10.dp)
                             ){
-                                for (item in activitiesState.data.take(10)) {
-                                    key(item) {
-                                        Activities(
-                                            data = item,
-                                            navController = navController,
+                                if (activitiesState.data.isNotEmpty()) {
+                                    for (item in activitiesState.data.take(10)) {
+                                        key(item) {
+                                            Activities(
+                                                data = item,
+                                                navController = navController,
+                                            )
+                                        }
+                                    }
+                                }
+                                else {
+                                    Column(
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .padding(horizontal = 22.dp, vertical = 10.dp),
+                                        verticalArrangement = Arrangement.Center,
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        EmptyPetActivities(
+                                            modifier = Modifier.fillMaxHeight(1f)
                                         )
                                     }
                                 }
