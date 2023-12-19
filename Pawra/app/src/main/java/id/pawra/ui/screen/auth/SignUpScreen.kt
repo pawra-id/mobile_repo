@@ -24,6 +24,7 @@ import id.pawra.ui.components.loading.LoadingBox
 import id.pawra.ui.components.signup.SignUpFooter
 import id.pawra.ui.components.signup.SignUpForm
 import id.pawra.ui.components.signup.SignUpHeader
+import id.pawra.ui.navigation.Screen
 
 @Composable
 fun SignUpScreen(
@@ -74,9 +75,14 @@ fun SignUpScreen(
                             isLoading = false
                             ResultDialog(
                                 success = true,
-                                message = "User created successfully",
+                                message = "Thanks! your account has been successfully created",
                                 setShowDialog = {
                                     showDialog = it
+                                    navController.navigate(Screen.SignIn.route) {
+                                        popUpTo(Screen.SignUp.route) {
+                                            inclusive = true
+                                        }
+                                    }
                                 }
                             )
                         }
