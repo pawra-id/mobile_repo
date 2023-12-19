@@ -41,6 +41,7 @@ fun Onboarding(navController: NavController) {
                 stringResource(R.string.onboarding_title),
                 stringResource(R.string.onboarding1_subtitle),
                 stringResource(R.string.onboarding1_desc),
+                stringResource(R.string.note),
                 backgroundColor = (LightGreen),
                 mainColor = (DarkGreen),
             )
@@ -52,6 +53,7 @@ fun Onboarding(navController: NavController) {
                 stringResource(R.string.onboarding_title),
                 stringResource(R.string.onboarding2_subtitle),
                 stringResource(R.string.onboarding2_desc),
+                stringResource(R.string.note),
                 backgroundColor = (LightGreen),
                 mainColor = (DarkGreen),
             )
@@ -63,6 +65,7 @@ fun Onboarding(navController: NavController) {
                 stringResource(R.string.onboarding_title),
                 stringResource(R.string.onboarding3_subtitle),
                 stringResource(R.string.onboarding3_desc),
+                "",
                 backgroundColor = (LightGreen),
                 mainColor = (DarkGreen),
             )

@@ -8,6 +8,7 @@ data class OnBoardingData(
     val title: String,
     val subtitle: String,
     val desc: String,
+    val note: String,
     val backgroundColor:Color,
     val mainColor: Color = LightGreen
 )

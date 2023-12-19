@@ -195,7 +195,7 @@ fun SharedMentalItem(
                 )
             }
             .fillMaxWidth()
-            .padding(horizontal = 10.dp, vertical = 15.dp),
+            .padding(horizontal = 10.dp, vertical = 10.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         Box(

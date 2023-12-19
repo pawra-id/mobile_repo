@@ -50,7 +50,7 @@ fun ProfileScreen(
 
             ProfileButton(navController = navController)
 
-            Spacer(modifier = Modifier.height(28.dp))
+            Spacer(modifier = Modifier.height(35.dp))
         }
     }
 }

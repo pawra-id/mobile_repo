@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -151,8 +152,19 @@ fun OnBoardingPager(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
                             .background(Color.White)
-                            .padding(bottom = 200.dp)
+                            .padding(bottom = 10.dp)
                     ){
+                        Text(
+                            text = item[pagerState.currentPage].note,
+                            modifier = Modifier.padding(top = 20.dp, start = 30.dp, end = 30.dp, bottom = 10.dp),
+                            color = (Gray),
+                            fontFamily = Poppins,
+                            fontSize = 13.sp,
+                            textAlign = TextAlign.Center,
+                            fontWeight = FontWeight.Medium,
+                            fontStyle = FontStyle.Italic
+                        )
+
                         Button(
                             enabled = pagerState.currentPage == 2,
                             onClick = {
@@ -168,7 +180,7 @@ fun OnBoardingPager(
                             shape = RoundedCornerShape(10.dp),
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(top = 30.dp, start = 30.dp, end = 30.dp)
+                                .padding(start = 30.dp, end = 30.dp, bottom = 50.dp)
                                 .height(50.dp)
                         ) {
                             Text(

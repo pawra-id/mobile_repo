@@ -89,8 +89,7 @@ fun ListDog(
                                 .clickable {
                                     navController.navigate(Screen.PetProfile.createRoute(data.id))
                                 }
-                                .fillMaxWidth()
-                                .padding(horizontal = 10.dp, vertical = 15.dp),
+                                .fillMaxWidth(),
                         ) {
                             Box(
                                 modifier = modifier

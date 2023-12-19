@@ -1,5 +1,6 @@
 package id.pawra.ui.components.home
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.rememberNavController
+import id.pawra.R
 import id.pawra.ui.navigation.Screen
 import id.pawra.ui.theme.DarkGreen
 import id.pawra.ui.theme.DisabledGreen
@@ -87,6 +90,16 @@ fun Banner(
                 )
 
             }
+
+            Image(
+                painter = painterResource(id = R.drawable.dog_banner),
+                contentDescription = null,
+                modifier = modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(end = 8.dp)
+                    .height(90.dp)
+            )
+
             Button(
                 onClick = {
                     navController.navigate(Screen.PetProfile.createRoute(firstPetId))

@@ -59,4 +59,5 @@
     <string name="menu_dog_activities">Menu Dog Activities</string>
     <string name="menu_dog_mental_health">Menu Dog Mental Health</string>
     <string name="required">* Field is required</string>
+    <string name="note">swipe image to continue</string>
 </resources>

@@ -1,12 +1,10 @@
 package id.pawra.ui.components.signin
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -23,13 +21,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,7 +35,6 @@ import id.pawra.R
 import id.pawra.data.ViewModelFactory
 import id.pawra.ui.screen.auth.AuthViewModel
 import id.pawra.ui.screen.auth.SignInFormEvent
-import id.pawra.ui.theme.DarkGreen
 import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
@@ -54,7 +48,7 @@ fun SignInForm(
     navController: NavController
 ) {
     val state = viewModel.stateSignIn
-    val context = LocalContext.current
+//    val context = LocalContext.current
 
     Column(
         modifier = modifier
@@ -150,21 +144,21 @@ fun SignInForm(
             isError = state.passwordError != null
         )
 
-        ClickableText(
-            text = AnnotatedString(stringResource(R.string.forgot_password)),
-            style = TextStyle(
-                color = DarkGreen,
-                fontWeight = FontWeight.SemiBold,
-                fontFamily = Poppins,
-                textDecoration = TextDecoration.Underline
-            ),
-            onClick = {
+//        ClickableText(
+//            text = AnnotatedString(stringResource(R.string.forgot_password)),
+//            style = TextStyle(
+//                color = DarkGreen,
+//                fontWeight = FontWeight.SemiBold,
+//                fontFamily = Poppins,
+//                textDecoration = TextDecoration.Underline
+//            ),
+//            onClick = {
 //                TODO: set route to forgot password screen
 //                navController.navigate("")
-                Toast.makeText(context, "not developed yet", Toast.LENGTH_SHORT).show()
-            },
-            modifier = modifier.align(Alignment.End)
-        )
+//                Toast.makeText(context, "not developed yet", Toast.LENGTH_SHORT).show()
+//            },
+//            modifier = modifier.align(Alignment.End)
+//        )
 
         Button(
             onClick = {

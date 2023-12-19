@@ -94,7 +94,7 @@ fun PercentageCircleProgressBar(percentage: Float, modifier: Modifier = Modifier
             val canvasHeight = size.height - 32.dp.toPx()
 
             val strokeWidth = 60.dp.toPx()
-            val startAngle = 0f
+            val startAngle = -90f
             val sweepAngle = 360f * (percentage / 100)
 
             val offsetX = (size.width - canvasWidth) / 2
@@ -138,7 +138,7 @@ fun PercentageCircleProgressBar(percentage: Float, modifier: Modifier = Modifier
 fun MentalHealthResultGraphPreview() {
     PawraTheme {
         MentalHealthResultGraph(
-            percentage = 78f
+            percentage = 11f
         )
     }
 }
