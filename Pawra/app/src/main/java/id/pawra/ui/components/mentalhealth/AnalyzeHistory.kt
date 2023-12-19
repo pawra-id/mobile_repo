@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -42,9 +43,12 @@ import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkBlue
 import id.pawra.ui.theme.DarkGreen
 import id.pawra.ui.theme.DarkPink
+import id.pawra.ui.theme.DarkYellow
 import id.pawra.ui.theme.DisabledBlue
 import id.pawra.ui.theme.DisabledGreen
 import id.pawra.ui.theme.DisabledPink
+import id.pawra.ui.theme.DisabledRed
+import id.pawra.ui.theme.DisabledYellow
 import id.pawra.ui.theme.LightGray
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Red
@@ -167,13 +171,32 @@ fun AnalyzeHistory(
                     horizontalArrangement = Arrangement.spacedBy(10.dp),
 
                     ) {
+
+                    val percentage = analysisData.prediction?.toFloat()?.times(100) ?: 0f
+                    val color: Color
+                    val disableColor: Color
+
+                    if (percentage.toInt() < 25) {
+                        color = DarkGreen
+                        disableColor = DisabledGreen
+                    } else if(percentage.toInt() < 50) {
+                        color = DarkBlue
+                        disableColor = DisabledBlue
+                    } else if(percentage.toInt() < 75) {
+                        color = DarkYellow
+                        disableColor = DisabledYellow
+                    } else {
+                        color = Red
+                        disableColor = DisabledRed
+                    }
+
                     Text(
-                        text = NumberFormat.getPercentInstance().format(analysisData.prediction?.toFloat()),
+                        text = "${NumberFormat.getPercentInstance().format(analysisData.prediction?.toFloat())} has depression",
                         fontSize = 10.sp,
-                        color = DarkGreen,
+                        color = color,
                         modifier = modifier
                             .clip(shape = RoundedCornerShape(15.dp))
-                            .background(color = DisabledGreen)
+                            .background(color = disableColor)
                             .padding(
                                 vertical = 2.dp,
                                 horizontal = 10.dp

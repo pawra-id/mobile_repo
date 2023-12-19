@@ -33,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -56,12 +57,16 @@ import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkBlue
 import id.pawra.ui.theme.DarkGreen
 import id.pawra.ui.theme.DarkPink
+import id.pawra.ui.theme.DarkYellow
 import id.pawra.ui.theme.DisabledBlue
 import id.pawra.ui.theme.DisabledGreen
 import id.pawra.ui.theme.DisabledPink
+import id.pawra.ui.theme.DisabledRed
+import id.pawra.ui.theme.DisabledYellow
 import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.LightGray
 import id.pawra.ui.theme.PawraTheme
+import id.pawra.ui.theme.Red
 import id.pawra.ui.theme.White
 import id.pawra.utils.DateConverter
 import java.text.NumberFormat
@@ -136,6 +141,21 @@ fun SharedMental(
                         verticalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
                         items(sharedAnalysis.data, key = { it.id }){ data ->
+                            val percentage = data.prediction?.toFloat()?.times(100) ?: 0f
+                            var color = Red
+                            var disableColor = DisabledRed
+
+                            if (percentage.toInt() < 25) {
+                                color = DarkGreen
+                                disableColor = DisabledGreen
+                            } else if(percentage.toInt() < 50) {
+                                color = DarkBlue
+                                disableColor = DisabledBlue
+                            } else if(percentage.toInt() < 75) {
+                                color = DarkYellow
+                                disableColor = DisabledYellow
+                            }
+
                             SharedMentalItem(
                                 navController = navController,
                                 analysisViewModel = analysisViewModel,
@@ -143,6 +163,8 @@ fun SharedMental(
                                 dogImage =  data.dog?.image ?: "",
                                 dogGender = data.dog?.gender ?: "",
                                 dogName = data.dog?.name ?: "",
+                                color = color,
+                                disableColor = disableColor,
                                 showDialog = {
                                     showDialog = it
                                 }
@@ -179,6 +201,8 @@ fun SharedMentalItem(
     dogImage: String,
     dogGender: String,
     dogName: String,
+    color: Color,
+    disableColor: Color,
     showDialog: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ){
@@ -264,13 +288,14 @@ fun SharedMentalItem(
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
 
                 ) {
+
                 Text(
-                    text = NumberFormat.getPercentInstance().format(analysisData.prediction?.toFloat()),
+                    text = "${NumberFormat.getPercentInstance().format(analysisData.prediction?.toFloat())} has depression",
                     fontSize = 10.sp,
-                    color = DarkGreen,
+                    color = color,
                     modifier = modifier
                         .clip(shape = RoundedCornerShape(15.dp))
-                        .background(color = DisabledGreen)
+                        .background(color = disableColor)
                         .padding(
                             vertical = 2.dp,
                             horizontal = 10.dp

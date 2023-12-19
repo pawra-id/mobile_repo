@@ -90,10 +90,10 @@ fun ListDog(
                             modifier = modifier
                                 .clip(shape = RoundedCornerShape(15.dp))
                                 .background(White)
-                                .padding(5.dp)
                                 .clickable {
                                     navController.navigate(Screen.PetProfile.createRoute(data.id))
                                 }
+                                .padding(5.dp)
                                 .fillMaxWidth(),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
@@ -172,10 +172,10 @@ fun ListDog(
                             modifier = modifier
                                 .clip(shape = RoundedCornerShape(15.dp))
                                 .background(White)
-                                .padding(5.dp)
                                 .clickable {
                                     navController.navigate(Screen.PetAdd.route)
                                 }
+                                .padding(5.dp)
                                 .fillMaxWidth(),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
