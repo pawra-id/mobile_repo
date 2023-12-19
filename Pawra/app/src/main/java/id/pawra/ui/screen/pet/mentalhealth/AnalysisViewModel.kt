@@ -1,7 +1,9 @@
 package id.pawra.ui.screen.pet.mentalhealth
 
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import id.pawra.data.remote.response.AnalysisResponseItem
