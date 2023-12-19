@@ -1,5 +1,6 @@
 package id.pawra.ui.screen.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,6 +40,7 @@ import id.pawra.ui.screen.pet.profile.PetViewModel
 import id.pawra.ui.screen.vet.VetViewModel
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.PawraTheme
+import id.pawra.ui.theme.White
 
 @Composable
 fun HomeScreen(
@@ -79,6 +81,7 @@ fun HomeScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
+            .background(White)
     ) {
         Row {
             viewModel.sessionState.collectAsState().value.let { userInfo ->
