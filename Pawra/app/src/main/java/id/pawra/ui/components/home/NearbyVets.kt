@@ -172,20 +172,27 @@ fun NearbyVets(
                             Text(
                                 text = vetDetailState.data.name ?: "",
                                 fontSize = 16.sp,
-                                fontWeight = FontWeight.SemiBold,
+                                fontWeight = FontWeight.Bold,
                                 color = DarkGreen
                             )
                             Text(
-                                text =  vetDetailState.data.address ?: "",
+                                text = vetDetailState.data.clinicName ?: "",
                                 fontSize = 11.sp,
+                                fontWeight = FontWeight.Medium,
+                                color = DarkGreen
+                            )
+                            Text(
+                                text = "${vetDetailState.data.startWorkHour} - ${vetDetailState.data.endWorkHour}",
+                                fontSize = 9.sp,
+                                color = DarkGreen,
+                                fontWeight = FontWeight.Medium,
+                                modifier = modifier.padding(bottom = 15.dp)
+                            )
+                            Text(
+                                text = vetDetailState.data.address ?: "",
+                                fontSize = 13.sp,
                                 fontStyle = FontStyle.Italic,
                                 color = DarkGreen
-                            )
-                            Text(
-                                text = vetDetailState.data.description ?: "",
-                                fontSize = 13.sp,
-                                color = DarkGreen,
-                                modifier = modifier.padding(top = 10.dp)
                             )
                             Button(
                                 onClick = {

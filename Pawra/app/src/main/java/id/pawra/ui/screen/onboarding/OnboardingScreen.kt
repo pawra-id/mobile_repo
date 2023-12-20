@@ -2,6 +2,7 @@ package id.pawra.ui.screen.onboarding
 
 import  android.preference.PreferenceManager
 import androidx.annotation.FloatRange
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -44,6 +45,7 @@ import id.pawra.ui.components.onboarding.Onboarding
 import id.pawra.ui.components.onboarding.PagerIndicator
 import id.pawra.ui.navigation.Screen
 import id.pawra.ui.theme.BottomCardShape
+import id.pawra.ui.theme.DarkGreen
 import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.LightGreen
 import id.pawra.ui.theme.PawraTheme
@@ -162,36 +164,40 @@ fun OnBoardingPager(
                 ) {
                     Text(
                         text = item[pagerState.currentPage].note,
-                        modifier = Modifier.padding(top = 15.dp, start = 30.dp, end = 30.dp),
-                        color = (Gray),
+                        modifier = Modifier
+                            .padding(top = 15.dp, start = 30.dp, end = 30.dp)
+                            .fillMaxWidth(),
+                        color = DarkGreen,
                         fontFamily = Poppins,
                         fontSize = 13.sp,
                         textAlign = TextAlign.Center,
-                        fontWeight = FontWeight.Medium,
+                        fontWeight = FontWeight.Bold,
                         fontStyle = FontStyle.Italic
                     )
-                    Button(
-                        enabled = pagerState.currentPage == 2,
-                        onClick = {
-                            PreferenceManager.getDefaultSharedPreferences(context).edit()
-                                .putBoolean("IS_FIRST_LAUNCHED", false)
-                                .apply()
-                            navController.navigate(Screen.SignUp.route) {
-                                popUpTo(Screen.OnBoarding.route) {
-                                    inclusive = true
+                    
+                    AnimatedVisibility(visible = pagerState.currentPage == 2) {
+                        Button(
+                            onClick = {
+                                PreferenceManager.getDefaultSharedPreferences(context).edit()
+                                    .putBoolean("IS_FIRST_LAUNCHED", false)
+                                    .apply()
+                                navController.navigate(Screen.SignUp.route) {
+                                    popUpTo(Screen.OnBoarding.route) {
+                                        inclusive = true
+                                    }
                                 }
-                            }
-                        },
-                        shape = RoundedCornerShape(10.dp),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 10.dp, start = 30.dp, end = 30.dp, bottom = 10.dp)
-                            .height(50.dp)
-                    ) {
-                        Text(
-                            text = "Next",
-                            fontSize = 13.sp
-                        )
+                            },
+                            shape = RoundedCornerShape(10.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 10.dp, start = 30.dp, end = 30.dp, bottom = 10.dp)
+                                .height(50.dp)
+                        ) {
+                            Text(
+                                text = "Next",
+                                fontSize = 13.sp
+                            )
+                        }
                     }
                 }
             }
