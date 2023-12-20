@@ -370,6 +370,7 @@ fun VetProfile(
                 .padding(horizontal = 22.dp, vertical = 15.dp)
                 .background(White, RoundedCornerShape(10.dp))
                 .border(2.dp, DarkGreen, RoundedCornerShape(10.dp))
+                .fillMaxHeight()
         ) {
             Box(
                 modifier = Modifier
@@ -403,7 +404,7 @@ fun VetProfile(
                 lineHeight = 18.sp,
                 color = Black,
                 modifier = modifier
-                    .padding(horizontal = 15.dp)
+                    .padding(horizontal = 15.dp, vertical = 10.dp)
             )
         }
     }
