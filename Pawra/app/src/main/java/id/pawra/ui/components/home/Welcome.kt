@@ -9,11 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Language
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -49,8 +44,8 @@ fun Welcome(
             .padding(
                 start = 22.dp,
                 end = 22.dp,
-                top = 10.dp,
-                bottom = 10.dp
+                top = 20.dp,
+                bottom = 20.dp
             )
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
@@ -89,17 +84,6 @@ fun Welcome(
                 modifier = modifier.height(14.dp)
             )
         }
-
-        IconButton(
-            onClick = { /* Handle setting click */ },
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Language,
-                contentDescription = "settings",
-                tint = Black
-            )
-        }
-
     }
 }
 

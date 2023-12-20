@@ -92,6 +92,7 @@ fun ActivitiesUpdateScreen(
                         message = "Success! your dog activity successfully updated",
                         setShowDialog = {
                             showDialog = it
+                            navController.navigateUp()
                         }
                     )
                 }

@@ -90,6 +90,7 @@ fun AddActivitiesForm (
 
     LaunchedEffect(Unit){
         petViewModel.getListDogToAddDogForm(petId)
+        activitiesViewModel.getTags("")
     }
 
     petViewModel.petListState.collectAsState(initial = emptyList()).value.let { dogList ->
@@ -242,6 +243,7 @@ fun AddActivitiesForm (
                         chipDataSnapshotStateList.remove(item)
                         selectedItems.remove(item.text)
                         activitiesViewModel.onEventAddActivity(AddActivityFormEvent.TagsChanged(state.tags))
+                        activitiesViewModel.getTags("")
                     }
                 }
             }
@@ -285,7 +287,7 @@ fun AddActivitiesForm (
                                         chipDataSnapshotStateList.add(chip)
                                         activitiesViewModel.onEventAddActivity(AddActivityFormEvent.TagsChanged(""))
                                     }
-                                    state.tags = ""
+                                    activitiesViewModel.getTags("")
                                     keyboardController?.show()
                                 }
                             }
@@ -334,8 +336,8 @@ fun AddActivitiesForm (
                                         chipDataSnapshotStateList.add(chip)
                                         selectedItems.add(item.name.toString())
                                         activitiesViewModel.onEventAddActivity(AddActivityFormEvent.TagsChanged(state.tags))
-                                        state.tags = ""
                                     }
+                                    activitiesViewModel.getTags("")
                                 },
                                 label = { Text(
                                     text = item.name.toString(),

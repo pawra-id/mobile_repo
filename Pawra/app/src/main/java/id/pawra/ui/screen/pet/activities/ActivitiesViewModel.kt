@@ -336,21 +336,18 @@ class ActivitiesViewModel(
     fun getTags(keyword: String) {
         viewModelScope.launch {
             val user = authRepository.getSession().first()
-            if (keyword.isNotBlank()) {
-                activitiesRepository.getTags(user, keyword)
-                    .collect { tag ->
-                        when {
-                            tag.error != null ->{
-                                _tagState.value = UiState.Error(tag.error)
-                            }
-                            else -> {
-                                _tagState.value = UiState.Success(tag.tagResponse ?: listOf())
-                            }
+            activitiesRepository.getTags(user, keyword)
+                .collect { tag ->
+                    when {
+                        tag.error != null ->{
+                            _tagState.value = UiState.Error(tag.error)
+                        }
+                        else -> {
+                            _tagState.value = UiState.Success(tag.tagResponse ?: listOf())
                         }
                     }
-            } else {
-                _tagState.value = UiState.Success(listOf())
-            }
+                }
+
         }
     }
 }

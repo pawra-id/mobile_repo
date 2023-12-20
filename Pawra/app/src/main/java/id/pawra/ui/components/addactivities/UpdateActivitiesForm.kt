@@ -107,6 +107,7 @@ fun UpdateActivitiesForm (
                         selectedItems.add(it.name ?: "")
                     }
                     state.id = activityDetail.data.id
+                    activitiesViewModel.getTags("")
                 }
             }
             else -> {}
@@ -206,17 +207,6 @@ fun UpdateActivitiesForm (
                 .padding(bottom = 8.dp),
         )
 
-        val inputList = listOf(
-            ChipsModel(
-                name = "Poop",
-                textExpanded = "poop",
-            ),
-            ChipsModel(
-                name = "Sad",
-                textExpanded = "sad",
-            )
-        )
-
         FlowRow(
             modifier = modifier
                 .drawWithContent {
@@ -238,6 +228,7 @@ fun UpdateActivitiesForm (
                         chipDataSnapshotStateList.remove(item)
                         selectedItems.remove(item.text)
                         activitiesViewModel.onEventUpdateActivity(UpdateActivityFormEvent.TagsChanged(state.tags))
+                        activitiesViewModel.getTags("")
                     }
                 }
             }
@@ -252,7 +243,8 @@ fun UpdateActivitiesForm (
                 BasicTextField(
                     value = state.tags,
                     onValueChange = {
-                        activitiesViewModel.onEventUpdateActivity(UpdateActivityFormEvent.TagsChanged(it)) },
+                        activitiesViewModel.onEventUpdateActivity(UpdateActivityFormEvent.TagsChanged(it))
+                        activitiesViewModel.getTags(it) },
                     singleLine = false,
 
                     modifier = modifier
@@ -278,7 +270,7 @@ fun UpdateActivitiesForm (
                                     chipDataSnapshotStateList.add(chip)
                                     activitiesViewModel.onEventUpdateActivity(UpdateActivityFormEvent.TagsChanged(""))
                                 }
-                                state.tags = ""
+                                activitiesViewModel.getTags("")
                                 keyboardController?.show()
                             }
                         }
@@ -306,45 +298,58 @@ fun UpdateActivitiesForm (
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
 
-            inputList.forEach { item ->
+            activitiesViewModel.tagState.collectAsState().value.let { tagsState ->
+                when (tagsState) {
+                    is UiState.Success -> {
+                        tagsState.data.take(15).forEach { item ->
+                            val isSelected = selectedItems.contains(item.name)
 
-                val isSelected = selectedItems.contains(item.name)
-
-                InputChip(
-                    selected = isSelected,
-                    onClick = {
-                        val chip = ChipData(
-                            text = item.name
-                        )
-                        if (isSelected) {
-                            chipDataSnapshotStateList.remove(chip)
-                            selectedItems.remove(item.name)
-                            activitiesViewModel.onEventUpdateActivity(UpdateActivityFormEvent.TagsChanged(state.tags))
-                        } else {
-                            chipDataSnapshotStateList.add(chip)
-                            selectedItems.add(item.name)
-                            activitiesViewModel.onEventUpdateActivity(UpdateActivityFormEvent.TagsChanged(state.tags))
-                        }
-                    },
-                    label = { Text(
-                        text = item.name,
-                        color = if (isSelected) DarkGreen else Gray
-                    )
-                    },
-                    colors = InputChipDefaults.inputChipColors(
-                        selectedContainerColor = LightGreen,
-                        selectedLabelColor = DarkGreen
-                    ),
-                    trailingIcon = {
-                        if (isSelected) {
-                            Icon(
-                                Icons.Filled.Done,
-                                contentDescription = "",
-                                Modifier.size(AssistChipDefaults.IconSize)
+                            InputChip(
+                                selected = isSelected,
+                                onClick = {
+                                    val chip = ChipData(
+                                        text = item.name.toString()
+                                    )
+                                    if (isSelected) {
+                                        chipDataSnapshotStateList.remove(chip)
+                                        selectedItems.remove(item.name)
+                                        activitiesViewModel.onEventUpdateActivity(
+                                            UpdateActivityFormEvent.TagsChanged(state.tags)
+                                        )
+                                    } else {
+                                        chipDataSnapshotStateList.add(chip)
+                                        selectedItems.add(item.name.toString())
+                                        activitiesViewModel.onEventUpdateActivity(
+                                            UpdateActivityFormEvent.TagsChanged(state.tags)
+                                        )
+                                    }
+                                    activitiesViewModel.getTags("")
+                                },
+                                label = {
+                                    Text(
+                                        text = item.name.toString(),
+                                        color = if (isSelected) DarkGreen else Gray
+                                    )
+                                },
+                                colors = InputChipDefaults.inputChipColors(
+                                    selectedContainerColor = LightGreen,
+                                    selectedLabelColor = DarkGreen
+                                ),
+                                trailingIcon = {
+                                    if (isSelected) {
+                                        Icon(
+                                            Icons.Filled.Done,
+                                            contentDescription = "",
+                                            Modifier.size(AssistChipDefaults.IconSize)
+                                        )
+                                    }
+                                }
                             )
                         }
                     }
-                )
+
+                    else -> {}
+                }
             }
         }
 
