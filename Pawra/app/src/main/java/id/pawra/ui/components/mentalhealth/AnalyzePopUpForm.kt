@@ -127,9 +127,11 @@ fun AnalyzePopUpForm(
                             .fillMaxWidth(),
                         shape = RoundedCornerShape(10.dp),
                         onClick = {
-                            setShowDialog(false)
-                            analysisViewModel.addAnalysis(petId, lastXDays.toInt())
-                            setShowResultDialog(true)
+                            if (lastXDays.isNotEmpty()) {
+                                setShowDialog(false)
+                                analysisViewModel.addAnalysis(petId, lastXDays.toInt())
+                                setShowResultDialog(true)
+                            }
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = DarkGreen

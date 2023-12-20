@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.InputChip
+import androidx.compose.material3.InputChipDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -36,6 +37,7 @@ import id.pawra.ui.screen.pet.profile.PetViewModel
 import id.pawra.ui.theme.Black
 import id.pawra.ui.theme.DarkGreen
 import id.pawra.ui.theme.Gray
+import id.pawra.ui.theme.LightGreen
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
 import id.pawra.utils.DateConverter
@@ -135,8 +137,11 @@ fun ActivitiesPrevInfo (
                     label = { Text(
                         text = item.name ?: "",
                         color = DarkGreen
+                    ) },
+                    colors = InputChipDefaults.inputChipColors(
+                        selectedContainerColor = LightGreen,
+                        selectedLabelColor = DarkGreen
                     )
-                    }
                 )
             }
         }
