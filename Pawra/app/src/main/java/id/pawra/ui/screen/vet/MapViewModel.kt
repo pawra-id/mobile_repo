@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 
+@Suppress("DEPRECATION")
 class MapViewModel(
     private val authRepository: AuthRepository
 ): ViewModel() {

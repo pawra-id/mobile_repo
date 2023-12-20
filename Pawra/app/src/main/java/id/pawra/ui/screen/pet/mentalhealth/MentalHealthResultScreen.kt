@@ -8,7 +8,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,10 +27,9 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import id.pawra.data.ViewModelFactory
 import id.pawra.ui.common.UiState
-import id.pawra.ui.components.dialog.ConfirmationDialog
 import id.pawra.ui.components.dialog.ResultDialog
-import id.pawra.ui.components.loading.LoadingBox
 import id.pawra.ui.components.general.BottomSheet
+import id.pawra.ui.components.loading.LoadingBox
 import id.pawra.ui.components.mentalhealth.MentalHealthAction
 import id.pawra.ui.components.mentalhealth.MentalHealthResult
 import id.pawra.ui.components.mentalhealth.MentalHealthResultGraph

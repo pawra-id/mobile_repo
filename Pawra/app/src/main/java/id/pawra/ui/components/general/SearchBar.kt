@@ -91,7 +91,7 @@ fun SearchBar(
                             color = LightGray,
                             shape = RoundedCornerShape(size = 15.dp)
                         )
-                        .padding(horizontal = 16.dp, vertical = 12.dp) // inner padding
+                        .padding(horizontal = 16.dp, vertical = 12.dp)
 
                 ) {
                     Box(

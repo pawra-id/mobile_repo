@@ -146,11 +146,11 @@ fun ConfirmationDialog(
 fun ConfirmationDialogPreview() {
     PawraTheme {
         ConfirmationDialog(
-            "Confirm Delete",
+            "",
             true,
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec porttitor quis nisi a fringilla. Etiam tempor orci in nisl consectetur, ac venenatis eros eleifend. Morbi massa odio, rhoncus quis iaculis ullamcorper, vestibulum in enim.",
-            "Yes, delete",
-            "cancel",
+            "",
+            "",
+            "",
             {},
             {})
     }

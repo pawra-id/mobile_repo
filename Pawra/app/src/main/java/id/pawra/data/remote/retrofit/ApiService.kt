@@ -41,11 +41,6 @@ interface ApiService {
         @Field("password") password: String
     ): SignInResponse
 
-    @POST("token/refresh")
-    suspend fun refreshToken(
-        @Body body: MutableMap<String, Any>
-    ): SignInResponse
-
     @PUT("users/{id}")
     suspend fun updateProfile(
         @Header("Authorization") authHeader: String,

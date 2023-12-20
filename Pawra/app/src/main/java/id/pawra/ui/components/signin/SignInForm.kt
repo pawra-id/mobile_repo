@@ -143,22 +143,6 @@ fun SignInForm(
             isError = state.passwordError != null
         )
 
-//        ClickableText(
-//            text = AnnotatedString(stringResource(R.string.forgot_password)),
-//            style = TextStyle(
-//                color = DarkGreen,
-//                fontWeight = FontWeight.SemiBold,
-//                fontFamily = Poppins,
-//                textDecoration = TextDecoration.Underline
-//            ),
-//            onClick = {
-//                TODO: set route to forgot password screen
-//                navController.navigate("")
-//                Toast.makeText(context, "not developed yet", Toast.LENGTH_SHORT).show()
-//            },
-//            modifier = modifier.align(Alignment.End)
-//        )
-
         Button(
             onClick = {
                 viewModel.onEventSignIn(SignInFormEvent.Submit)

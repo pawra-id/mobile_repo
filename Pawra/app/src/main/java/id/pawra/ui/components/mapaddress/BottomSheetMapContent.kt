@@ -81,8 +81,8 @@ fun BottomSheetMapContent(
 fun BottomSheetContentPreview() {
     PawraTheme {
         BottomSheetMapContent(
-            headAddress = "Jl. Brigjen Katamso No.160",
-            fullAddress = "Jl. Brigjen Katamso No.160, Keparakan, Kec. Mergangsan, Kota Yogyakarta, Daerah Istimewa Yogyakarta 55131"
+            headAddress = "",
+            fullAddress = ""
         )
     }
 }

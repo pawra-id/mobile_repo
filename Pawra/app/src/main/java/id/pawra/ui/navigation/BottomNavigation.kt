@@ -53,7 +53,7 @@ fun BottomNavigation(
             val currentRoute = navBackStackEntry?.destination?.route
 
             if (currentRoute == Screen.Home.route){
-                BackPressSample()
+                DoubleBackPress()
             }
 
             val navigationItems = listOf(
@@ -120,12 +120,12 @@ fun BottomNavigation(
 }
 
 sealed class BackPress {
-    object Idle : BackPress()
-    object InitialTouch : BackPress()
+    data object Idle : BackPress()
+    data object InitialTouch : BackPress()
 }
 
 @Composable
-private fun BackPressSample() {
+private fun DoubleBackPress() {
     var showToast by remember { mutableStateOf(false) }
 
     var backPressState by remember { mutableStateOf<BackPress>(BackPress.Idle) }

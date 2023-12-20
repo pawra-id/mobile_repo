@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package id.pawra.ui.screen.onboarding
 
 import  android.preference.PreferenceManager

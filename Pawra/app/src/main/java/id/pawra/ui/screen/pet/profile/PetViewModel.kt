@@ -132,7 +132,7 @@ class PetViewModel(
     private fun addDog(
         name: String,
         breed: String,
-        neutred: Boolean,
+        neutered: Boolean,
         age: Int,
         height: Int,
         gender: String,
@@ -154,7 +154,7 @@ class PetViewModel(
                         name = name,
                         image = result,
                         breed = breed,
-                        neutred = neutred,
+                        neutered = neutered,
                         age = age,
                         height = height,
                         gender = gender,
@@ -349,7 +349,7 @@ class PetViewModel(
                     name = name,
                     image = image,
                     breed = breed,
-                    neutred = neutered,
+                    neutered = neutered,
                     age = age,
                     height = height,
                     gender = gender,
@@ -509,7 +509,7 @@ class PetViewModel(
                 val user = authRepository.getSession().first()
                 petRepository.deleteDog(user, petId)
             } catch (e: Exception) {
-                _petDetailState.value = UiState.Error(e.message ?: "Terjadi kesalahan yang tidak diketahui")
+                _petDetailState.value = UiState.Error(e.message ?: "Unknown Error")
             }
         }
     }

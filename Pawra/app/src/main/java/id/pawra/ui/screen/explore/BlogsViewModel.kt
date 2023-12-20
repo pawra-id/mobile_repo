@@ -42,8 +42,7 @@ class BlogsViewModel (
                             _blogsState.value = UiState.Error(blogs.error)
                         }
                         else -> {
-                            _blogsState.value = UiState.Success(
-                                blogs.items as List<BlogsResponseItem>? ?: listOf())
+                            _blogsState.value = UiState.Success(blogs.items ?: listOf())
                         }
                     }
                 }

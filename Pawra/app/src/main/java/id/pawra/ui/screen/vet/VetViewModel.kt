@@ -94,7 +94,7 @@ class VetViewModel(
     }
 
     private fun calculateDistance(userLat: Double, userLng: Double, location: Locations): Double {
-        val earthRadius = 6371000 // meters
+        val earthRadius = 6371000
 
         val lat1 = Math.toRadians(userLat)
         val lat2 = Math.toRadians(location.latitude)

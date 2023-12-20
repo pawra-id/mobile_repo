@@ -10,10 +10,9 @@ import androidx.lifecycle.viewModelScope
 import id.pawra.data.local.preference.ActivityData
 import id.pawra.data.local.preference.Tags
 import id.pawra.data.remote.response.ActivitiesResponseItem
-import id.pawra.data.remote.response.TagResponse
 import id.pawra.data.remote.response.TagsItem
-import id.pawra.data.repository.AuthRepository
 import id.pawra.data.repository.ActivitiesRepository
+import id.pawra.data.repository.AuthRepository
 import id.pawra.ui.common.UiState
 import id.pawra.ui.components.addactivities.ChipData
 import id.pawra.ui.components.petactivities.FilterActivities

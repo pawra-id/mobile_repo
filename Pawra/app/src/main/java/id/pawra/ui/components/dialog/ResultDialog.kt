@@ -104,6 +104,8 @@ fun ResultDialog(
 @Preview(showBackground = true)
 fun ResultDialogPreview() {
     PawraTheme {
-        ResultDialog(true, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec porttitor quis nisi a fringilla. Etiam tempor orci in nisl consectetur, ac venenatis eros eleifend. Morbi massa odio, rhoncus quis iaculis ullamcorper, vestibulum in enim.", {})
+        ResultDialog(true,
+            ""
+        ) {}
     }
 }

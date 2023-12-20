@@ -4,7 +4,7 @@ data class PetData(
     val image: String,
     val name: String,
     val breed: String,
-    val neutred: Boolean,
+    val neutered: Boolean,
     val age: Int,
     val height: Int,
     val gender: String,

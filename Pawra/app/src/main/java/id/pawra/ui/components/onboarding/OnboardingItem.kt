@@ -100,7 +100,7 @@ fun PagerIndicator(currentPage: Int, items: List<OnBoardingData>) {
 
 @Composable
 fun Indicator(isSelected: Boolean, color: Color) {
-    val width = animateDpAsState(targetValue = if (isSelected) 40.dp else 10.dp, label = "animasi on boarding",
+    val width = animateDpAsState(targetValue = if (isSelected) 40.dp else 10.dp, label = "animation on boarding",
     )
 
     Box(

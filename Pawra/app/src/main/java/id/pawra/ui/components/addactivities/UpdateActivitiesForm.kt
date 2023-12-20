@@ -60,7 +60,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import id.pawra.R
 import id.pawra.data.ViewModelFactory
-import id.pawra.data.local.preference.ChipsModel
 import id.pawra.ui.common.UiState
 import id.pawra.ui.screen.pet.activities.ActivitiesViewModel
 import id.pawra.ui.screen.pet.activities.UpdateActivityFormEvent

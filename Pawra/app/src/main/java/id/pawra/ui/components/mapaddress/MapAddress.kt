@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package id.pawra.ui.components.mapaddress
 
 import android.app.Activity

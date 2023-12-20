@@ -17,7 +17,7 @@ data class BlogsResponse(
 	val page: Int? = null,
 
 	@field:SerializedName("items")
-	val items: List<BlogsResponseItem?>? = null,
+	val items: List<BlogsResponseItem>? = null,
 
 	val error: String? = null
 )

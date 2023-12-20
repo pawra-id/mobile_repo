@@ -78,7 +78,7 @@ class PetRepository private constructor(
             data["gender"] = petData.gender
             data["age"] = petData.age
             data["breed"] = petData.breed
-            data["neutered"] = petData.neutred
+            data["neutered"] = petData.neutered
             data["color"] = petData.primaryColor
             data["weight"] = petData.weight
             data["height"] = petData.height
@@ -140,7 +140,7 @@ class PetRepository private constructor(
             data["image"] = petData.image
             data["name"] = petData.name
             data["breed"] = petData.breed
-            data["neutered"] = petData.neutred
+            data["neutered"] = petData.neutered
             data["age"] = petData.age
             data["height"] = petData.height
             data["gender"] = petData.gender
