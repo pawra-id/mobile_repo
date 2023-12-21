@@ -20,9 +20,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import id.pawra.R
+import id.pawra.data.local.preference.OnBoardingData
 import id.pawra.ui.screen.onboarding.OnBoardingPager
 import id.pawra.ui.screen.onboarding.rememberPagerState
 import id.pawra.ui.theme.DarkGreen
+import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.LightGreen
 import kotlinx.coroutines.DelicateCoroutinesApi
 
@@ -39,6 +41,7 @@ fun Onboarding(navController: NavController) {
                 stringResource(R.string.onboarding_title),
                 stringResource(R.string.onboarding1_subtitle),
                 stringResource(R.string.onboarding1_desc),
+                stringResource(R.string.note),
                 backgroundColor = (LightGreen),
                 mainColor = (DarkGreen),
             )
@@ -50,6 +53,7 @@ fun Onboarding(navController: NavController) {
                 stringResource(R.string.onboarding_title),
                 stringResource(R.string.onboarding2_subtitle),
                 stringResource(R.string.onboarding2_desc),
+                stringResource(R.string.note),
                 backgroundColor = (LightGreen),
                 mainColor = (DarkGreen),
             )
@@ -61,6 +65,7 @@ fun Onboarding(navController: NavController) {
                 stringResource(R.string.onboarding_title),
                 stringResource(R.string.onboarding3_subtitle),
                 stringResource(R.string.onboarding3_desc),
+                "",
                 backgroundColor = (LightGreen),
                 mainColor = (DarkGreen),
             )
@@ -74,7 +79,7 @@ fun Onboarding(navController: NavController) {
             initialPage = 0,
         )
 
-
+        
         OnBoardingPager(
             item = items, pagerState = pagerState, navController
         )
@@ -95,7 +100,7 @@ fun PagerIndicator(currentPage: Int, items: List<OnBoardingData>) {
 
 @Composable
 fun Indicator(isSelected: Boolean, color: Color) {
-    val width = animateDpAsState(targetValue = if (isSelected) 40.dp else 10.dp, label = "animasi on boarding",
+    val width = animateDpAsState(targetValue = if (isSelected) 40.dp else 10.dp, label = "animation on boarding",
     )
 
     Box(
@@ -105,7 +110,7 @@ fun Indicator(isSelected: Boolean, color: Color) {
             .width(width.value)
             .clip(CircleShape)
             .background(
-                if (isSelected) color else Color.Gray.copy(alpha = 0.5f)
+                if (isSelected) color else Gray.copy(alpha = 0.5f)
             )
     )
 }

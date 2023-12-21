@@ -1,7 +1,6 @@
 package id.pawra.data.remote.retrofit
 
 import id.pawra.BuildConfig.DEBUG
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -11,10 +10,9 @@ class ApiConfig {
 
     companion object {
 
-//      TODO: change into Pawra REST API
-        private var BASE_URL = "https://story-api.dicoding.dev/v1/"
+        private var BASE_URL = "https://pawra-backend-api-2gso7b5r3q-et.a.run.app"
 
-        fun getApiService(token: String): ApiService {
+        fun getApiService(): ApiService {
 
             val loggingInterceptor = if(DEBUG) {
                 HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
@@ -22,17 +20,8 @@ class ApiConfig {
                 HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE)
             }
 
-            val authInterceptor = Interceptor { chain ->
-                val req = chain.request()
-                val requestHeaders = req.newBuilder()
-                    .addHeader("Authorization", "Bearer $token")
-                    .build()
-                chain.proceed(requestHeaders)
-            }
-
             val client = OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)
-                .addInterceptor(authInterceptor)
                 .build()
             val retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)

@@ -7,7 +7,6 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -20,6 +19,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import id.pawra.R
 import id.pawra.ui.navigation.Screen
+import id.pawra.ui.theme.DarkGreen
+import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
 
@@ -52,12 +53,12 @@ fun HaveAccountText(
     val annotatedString = buildAnnotatedString {
         append(str)
         addStyle(
-            style = SpanStyle(color = colorResource(id = R.color.gray)
+            style = SpanStyle(color = Gray
             ), start = 0, end = startSignInIndex - 1
         )
         addStyle(
             style = SpanStyle(
-                color = colorResource(id = R.color.dark_green),
+                color = DarkGreen,
                 fontWeight = FontWeight.SemiBold,
                 textDecoration = TextDecoration.Underline
             ), start = startSignInIndex, end = endSignInIndex

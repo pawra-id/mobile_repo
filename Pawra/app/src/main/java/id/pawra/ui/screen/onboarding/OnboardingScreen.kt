@@ -1,6 +1,10 @@
+@file:Suppress("DEPRECATION")
+
 package id.pawra.ui.screen.onboarding
 
+import  android.preference.PreferenceManager
 import androidx.annotation.FloatRange
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -11,8 +15,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -23,8 +28,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,14 +42,14 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import id.pawra.R
-import id.pawra.ui.components.onboarding.OnBoardingData
+import id.pawra.data.local.preference.OnBoardingData
 import id.pawra.ui.components.onboarding.Onboarding
 import id.pawra.ui.components.onboarding.PagerIndicator
-import id.pawra.ui.components.signup.SignUpFooter
 import id.pawra.ui.navigation.Screen
 import id.pawra.ui.theme.BottomCardShape
+import id.pawra.ui.theme.DarkGreen
+import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.LightGreen
-import id.pawra.ui.theme.MobileGray
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -56,50 +62,45 @@ fun OnBoardingPager(
     pagerState: PagerState,
     navController: NavController
 ) {
+    val context = LocalContext.current
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(LightGreen),
+        contentAlignment = Alignment.TopCenter,
     ) {
+
+        Image(
+            painter = painterResource(id = R.drawable.background_onboarding),
+            contentDescription = "Background Image",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize(),
+        )
+
         Box(
             modifier = Modifier
-                .fillMaxSize()
-                .background(LightGreen),
-            contentAlignment = Alignment.Center
+                .fillMaxSize(),
+            contentAlignment = Alignment.TopCenter
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.background_onboarding),
-                contentDescription = "Background Image",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize(),
-            )
-        }
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+            ) {
 
-        LazyColumn(
-            modifier = Modifier
-                .background(Color.Transparent)
-        ) {
-            item {
                 Spacer(modifier = Modifier.height(20.dp))
-                HorizontalPager(state = pagerState) { page ->
-                    Box(
-                        contentAlignment = Alignment.TopCenter,
-                        modifier = Modifier
-                            .fillMaxSize()
-                    ) {
-                        Image(
-                            painter = painterResource(id = item[page].image),
-                            contentDescription = item[page].title,
-                            modifier = Modifier
-                                .size(206.dp, 260.dp)
-                                .fillMaxWidth()
-                        )
-                    }
-                }
+                Image(
+                    painter = painterResource(id = item[pagerState.currentPage].image),
+                    contentDescription = item[pagerState.currentPage].title,
+                    modifier = Modifier
+                        .size(206.dp, 260.dp)
+                        .fillMaxWidth()
+                        .fillMaxSize()
+                        .align(Alignment.CenterHorizontally)
+                )
 
                 Spacer(modifier = Modifier.height(16.dp))
                 Card(
-                    modifier = Modifier
-                        .background(Color.Transparent)
-                        .fillMaxSize(),
                     elevation = CardDefaults.cardElevation(
                         defaultElevation = 0.dp
                     ),
@@ -108,72 +109,97 @@ fun OnBoardingPager(
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
-                            .size(500.dp, 270.dp)
+                            .height(270.dp)
+                            .fillMaxWidth()
                             .background(Color.White)
                     ) {
                         PagerIndicator(items = item, currentPage = pagerState.currentPage)
                         Spacer(modifier = Modifier.height(30.dp))
-                        Text(
-                            text = item[pagerState.currentPage].title,
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            color = item[pagerState.currentPage].mainColor,
-                            fontFamily = Poppins,
-                            textAlign = TextAlign.Center,
-                            fontSize = 24.sp,
-                            fontWeight = FontWeight.Bold
-                        )
+                        HorizontalPager(state = pagerState) { page ->
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = item[page].title,
+                                    modifier = Modifier
+                                        .fillMaxWidth(),
+                                    color = item[page].mainColor,
+                                    fontFamily = Poppins,
+                                    textAlign = TextAlign.Center,
+                                    fontSize = 24.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
 
-                        Text(
-                            text = item[pagerState.currentPage].subtitle,
-                            modifier = Modifier.padding(
-                                top = 20.dp,
-                                start = 30.dp,
-                                end = 30.dp
-                            ),
-                            color = (MobileGray),
-                            fontFamily = Poppins,
-                            fontSize = 13.sp,
-                            textAlign = TextAlign.Center,
-                            fontWeight = FontWeight.Bold
-                        )
+                                Text(
+                                    text = item[page].subtitle,
+                                    modifier = Modifier.padding(
+                                        top = 20.dp,
+                                        start = 30.dp,
+                                        end = 30.dp
+                                    ),
+                                    color = (Gray),
+                                    fontFamily = Poppins,
+                                    fontSize = 13.sp,
+                                    textAlign = TextAlign.Center,
+                                    fontWeight = FontWeight.Bold
+                                )
 
-                        Text(
-                            text = item[pagerState.currentPage].desc,
-                            modifier = Modifier.padding(top = 5.dp, start = 30.dp, end = 30.dp),
-                            color = (MobileGray),
-                            fontFamily = Poppins,
-                            fontSize = 13.sp,
-                            textAlign = TextAlign.Center,
-                            fontWeight = FontWeight.Normal
-                        )
+                                Text(
+                                    text = item[page].desc,
+                                    modifier = Modifier.padding(top = 5.dp, start = 30.dp, end = 30.dp),
+                                    color = (Gray),
+                                    fontFamily = Poppins,
+                                    fontSize = 13.sp,
+                                    textAlign = TextAlign.Center,
+                                    fontWeight = FontWeight.Normal
+                                )
+                            }
+                        }
                     }
+                }
 
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .background(Color.White)
+                        .weight(1f)
+                ) {
+                    Text(
+                        text = item[pagerState.currentPage].note,
                         modifier = Modifier
-                            .fillMaxSize()
-                            .background(Color.White)
-                    ){
+                            .padding(top = 15.dp, start = 30.dp, end = 30.dp)
+                            .fillMaxWidth(),
+                        color = DarkGreen,
+                        fontFamily = Poppins,
+                        fontSize = 13.sp,
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold,
+                        fontStyle = FontStyle.Italic
+                    )
+                    
+                    AnimatedVisibility(visible = pagerState.currentPage == 2) {
                         Button(
                             onClick = {
-                                navController.navigate(Screen.SignUp.route)
+                                PreferenceManager.getDefaultSharedPreferences(context).edit()
+                                    .putBoolean("IS_FIRST_LAUNCHED", false)
+                                    .apply()
+                                navController.navigate(Screen.SignUp.route) {
+                                    popUpTo(Screen.OnBoarding.route) {
+                                        inclusive = true
+                                    }
+                                }
                             },
                             shape = RoundedCornerShape(10.dp),
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(top = 30.dp, start = 30.dp, end = 30.dp)
+                                .padding(top = 10.dp, start = 30.dp, end = 30.dp, bottom = 10.dp)
                                 .height(50.dp)
                         ) {
                             Text(
-                                text = stringResource(R.string.create_account),
+                                text = "Next",
                                 fontSize = 13.sp
                             )
                         }
-
-                        SignUpFooter(
-                            navController = navController
-                        )
                     }
                 }
             }

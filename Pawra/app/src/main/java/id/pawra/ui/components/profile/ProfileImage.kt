@@ -12,15 +12,20 @@ import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 import id.pawra.R
 import id.pawra.ui.theme.PawraTheme
 
 @Composable
-fun ProfileImage () {
-
+fun ProfileImage (
+    image: String
+) {
+    val painter = rememberAsyncImagePainter(image.ifEmpty { R.drawable.ic_user }
+    )
     Column(
         modifier = Modifier
             .padding(8.dp)
@@ -42,11 +47,12 @@ fun ProfileImage () {
                     .size(130.dp)
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.ic_user),
+                    painter = painter,
                     contentDescription = null,
                     modifier = Modifier
                         .wrapContentSize()
-                        .size(130.dp)
+                        .size(130.dp),
+                    contentScale = ContentScale.Crop
                 )
             }
         }
@@ -57,6 +63,8 @@ fun ProfileImage () {
 @Preview(showBackground = true)
 fun ProfileImagePreview() {
     PawraTheme {
-        ProfileImage()
+        ProfileImage(
+            image = ""
+        )
     }
 }

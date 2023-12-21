@@ -1,4 +1,5 @@
 package id.pawra.ui.common
+
 sealed class UiState<out T: Any?> {
     data object None : UiState<Nothing>()
     data object Loading : UiState<Nothing>()

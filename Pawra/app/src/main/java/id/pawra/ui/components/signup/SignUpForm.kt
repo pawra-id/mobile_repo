@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
@@ -24,7 +25,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.ExperimentalTextApi
@@ -35,7 +35,6 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,10 +43,14 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import id.pawra.R
 import id.pawra.data.ViewModelFactory
-import id.pawra.di.Injection
 import id.pawra.ui.screen.auth.AuthViewModel
+import id.pawra.ui.screen.auth.SignUpFormEvent
+import id.pawra.ui.screen.auth.SignUpFormState
+import id.pawra.ui.theme.DarkGreen
+import id.pawra.ui.theme.Gray
 import id.pawra.ui.theme.PawraTheme
 import id.pawra.ui.theme.Poppins
+import id.pawra.ui.theme.Red
 
 @Composable
 fun SignUpForm(
@@ -62,21 +65,18 @@ fun SignUpForm(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        var name by remember { mutableStateOf(TextFieldValue()) }
-        var email by remember { mutableStateOf(TextFieldValue()) }
-        var password by remember { mutableStateOf(TextFieldValue()) }
-        var confirmPassword by remember { mutableStateOf(TextFieldValue()) }
+        val state = viewModel.stateSignUp
 
         Text(
-            text = stringResource(R.string.name),
-            color = colorResource(id = R.color.gray),
+            text = stringResource(R.string.username),
+            color = Gray,
             fontSize = 14.sp,
             modifier = modifier
                 .fillMaxWidth())
         OutlinedTextField(
-            value = name,
+            value = state.name,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            onValueChange = { name = it },
+            onValueChange = { viewModel.onEventSignUp(SignUpFormEvent.NameChanged(it)) },
             singleLine = true,
             shape = RoundedCornerShape(10.dp),
             modifier = modifier
@@ -84,21 +84,31 @@ fun SignUpForm(
                 .padding(bottom = 15.dp),
             textStyle = TextStyle.Default.copy(
                 fontSize = 16.sp,
-                color = colorResource(id = R.color.gray),
+                color = Gray,
                 fontFamily = Poppins
-            )
+            ),
+            supportingText = {
+                if (state.nameError != null) {
+                    Text(
+                        text = state.nameError,
+                        color = Red,
+                        modifier = Modifier.align(Alignment.End)
+                    )
+                }
+            },
+            isError = state.nameError != null
         )
 
         Text(
             text = stringResource(R.string.email),
-            color = colorResource(id = R.color.gray),
+            color = Gray,
             fontSize = 14.sp,
             modifier = modifier
                 .fillMaxWidth())
         OutlinedTextField(
-            value = email,
+            value = state.email,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-            onValueChange = { email = it },
+            onValueChange = { viewModel.onEventSignUp(SignUpFormEvent.EmailChanged(it)) },
             singleLine = true,
             shape = RoundedCornerShape(10.dp),
             modifier = modifier
@@ -106,20 +116,30 @@ fun SignUpForm(
                 .padding(bottom = 15.dp),
             textStyle = TextStyle.Default.copy(
                 fontSize = 16.sp,
-                color = colorResource(id = R.color.gray),
+                color = Gray,
                 fontFamily = Poppins
-            )
+            ),
+            supportingText = {
+                if (state.emailError != null) {
+                    Text(
+                        text = state.emailError,
+                        color = Red,
+                        modifier = Modifier.align(Alignment.End)
+                    )
+                }
+            },
+            isError = state.emailError != null
         )
         Text(
             text = stringResource(R.string.password),
-            color = colorResource(id = R.color.gray),
+            color = Gray,
             fontSize = 14.sp,
             modifier = modifier
                 .fillMaxWidth())
 
         var showPassword by remember { mutableStateOf(false) }
         OutlinedTextField(
-            value = password,
+            value = state.password,
             visualTransformation = if (showPassword) {
                 VisualTransformation.None
             } else {
@@ -136,7 +156,7 @@ fun SignUpForm(
                 }
             },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            onValueChange = { password = it },
+            onValueChange = { viewModel.onEventSignUp(SignUpFormEvent.PasswordChanged(it)) },
             singleLine = true,
             shape = RoundedCornerShape(10.dp),
             modifier = modifier
@@ -144,21 +164,31 @@ fun SignUpForm(
                 .padding(bottom = 15.dp),
             textStyle = TextStyle.Default.copy(
                 fontSize = 16.sp,
-                color = colorResource(id = R.color.gray),
+                color = Gray,
                 fontFamily = Poppins
-            )
+            ),
+            supportingText = {
+                if (state.passwordError != null) {
+                    Text(
+                        text = state.passwordError,
+                        color = Red,
+                        modifier = Modifier.align(Alignment.End)
+                    )
+                }
+            },
+            isError = state.passwordError != null
         )
 
         Text(
             text = stringResource(R.string.confirm_password),
-            color = colorResource(id = R.color.gray),
+            color = Gray,
             fontSize = 14.sp,
             modifier = modifier
                 .fillMaxWidth())
 
         var showConfirmPassword by remember { mutableStateOf(false) }
         OutlinedTextField(
-            value = confirmPassword,
+            value = state.repeatedPassword,
             visualTransformation = if (showConfirmPassword) {
                 VisualTransformation.None
             } else {
@@ -175,7 +205,7 @@ fun SignUpForm(
                 }
             },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            onValueChange = { confirmPassword = it },
+            onValueChange = { viewModel.onEventSignUp(SignUpFormEvent.RepeatedPasswordChanged(it)) },
             singleLine = true,
             shape = RoundedCornerShape(10.dp),
             modifier = modifier
@@ -183,21 +213,30 @@ fun SignUpForm(
                 .padding(bottom = 15.dp),
             textStyle = TextStyle.Default.copy(
                 fontSize = 16.sp,
-                color = colorResource(id = R.color.gray),
+                color = Gray,
                 fontFamily = Poppins
-            )
+            ),
+            supportingText = {
+                if (state.repeatedPasswordError != null) {
+                    Text(
+                        text = state.repeatedPasswordError,
+                        color = Red,
+                        modifier = Modifier.align(Alignment.End)
+                    )
+                }
+            },
+            isError = state.repeatedPasswordError != null
         )
 
-        TermAndServiceText()
+        TermAndServiceText(
+            state = state,
+            viewModel = viewModel
+        )
 
         Button(
             onClick = {
-                viewModel.signUp(
-                    name.text,
-                    email.text,
-                    password.text
-                )
-                showDialog(true) },
+                viewModel.onEventSignUp(SignUpFormEvent.Submit)
+                showDialog(viewModel.showDialog)},
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
                 .fillMaxWidth()
@@ -212,7 +251,9 @@ fun SignUpForm(
 @OptIn(ExperimentalTextApi::class)
 @Composable
 fun TermAndServiceText(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    state: SignUpFormState,
+    viewModel: AuthViewModel
 ) {
     val str = stringResource(R.string.accept_terms_services)
     val startAcceptIndex = str.indexOf("Accept")
@@ -227,23 +268,23 @@ fun TermAndServiceText(
     val annotatedString = buildAnnotatedString {
         append(str)
         addStyle(
-            style = SpanStyle(color = colorResource(id = R.color.gray)
+            style = SpanStyle(color = Gray
             ), start = startAcceptIndex, end = endAcceptIndex
         )
         addStyle(
             style = SpanStyle(
-                color = colorResource(id = R.color.dark_green),
+                color = DarkGreen,
                 fontWeight = FontWeight.SemiBold,
                 textDecoration = TextDecoration.Underline
             ), start = startTermsIndex, end = endTermsIndex
         )
         addStyle(
-            style = SpanStyle(color = colorResource(id = R.color.gray)
+            style = SpanStyle(color = Gray
             ), start = startIndex, end = endIndex
         )
         addStyle(
             style = SpanStyle(
-                color = colorResource(id = R.color.dark_green),
+                color = DarkGreen,
                 fontWeight = FontWeight.SemiBold,
                 textDecoration = TextDecoration.Underline
             ), start = startServicesIndex, end = endServicesIndex
@@ -262,27 +303,33 @@ fun TermAndServiceText(
         )
     }
 
-    val isChecked = remember { mutableStateOf(false) }
+    Column {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start,
+            modifier = modifier.fillMaxWidth().offset(x = (-12).dp)
+        ) {
+            Checkbox(
+                checked = state.acceptedTerms,
+                onCheckedChange = { viewModel.onEventSignUp(SignUpFormEvent.AcceptTerms(it)) })
 
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Start,
-        modifier = modifier.fillMaxWidth()
-    ) {
-        Checkbox(
-            checked = isChecked.value,
-            onCheckedChange = { isChecked.value = it })
-
-        val uriHandler = LocalUriHandler.current
-        ClickableText(text = annotatedString, style = TextStyle(fontFamily = Poppins), onClick = { offset ->
-            annotatedString.getUrlAnnotations(offset, offset)
-                .firstOrNull()?.let { annotation ->
-                    uriHandler.openUri(annotation.item.url)
-                }
+            val uriHandler = LocalUriHandler.current
+            ClickableText(text = annotatedString, style = TextStyle(fontFamily = Poppins), onClick = { offset ->
+                annotatedString.getUrlAnnotations(offset, offset)
+                    .firstOrNull()?.let { annotation ->
+                        uriHandler.openUri(annotation.item.url)
+                    }
             }
-        )
+            )
+        }
+        if (state.termsError != null) {
+            Text(
+                text = state.termsError,
+                color = Red,
+                fontSize = 12.sp
+            )
+        }
     }
-
 }
 
 @Composable
@@ -290,7 +337,7 @@ fun TermAndServiceText(
 fun SignUpFormPreview() {
     PawraTheme {
         SignUpForm(viewModel = viewModel(
-            factory = ViewModelFactory(Injection.provideAuthRepository(LocalContext.current))),
+            factory = ViewModelFactory(LocalContext.current)),
             showDialog = {  })
     }
 }

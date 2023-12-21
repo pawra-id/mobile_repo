@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.LocalRippleTheme
-import androidx.compose.material.ripple.RippleAlpha
-import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -24,9 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,7 +32,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import id.pawra.R
+import id.pawra.ui.common.NoRippleTheme
+import id.pawra.ui.theme.DisabledGreen
+import id.pawra.ui.theme.LightGreen
 import id.pawra.ui.theme.PawraTheme
+import id.pawra.ui.theme.White
 import kotlinx.coroutines.delay
 
 @Composable
@@ -47,13 +47,13 @@ fun BottomNavigation(
     CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
         NavigationBar(
             modifier = modifier.fillMaxWidth(),
-            containerColor = colorResource(id = R.color.light_green),
+            containerColor = LightGreen,
         ) {
             val navBackStackEntry by navHomeController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry?.destination?.route
 
             if (currentRoute == Screen.Home.route){
-                BackPressSample()
+                DoubleBackPress()
             }
 
             val navigationItems = listOf(
@@ -98,7 +98,7 @@ fun BottomNavigation(
                                 .width(50.dp)
                                 .height(50.dp)
                                 .background(
-                                    colorResource(id = if (selected) R.color.white else R.color.light_green),
+                                    if (selected) White else LightGreen,
                                     RoundedCornerShape(50)
                                 ),
                             contentAlignment = Alignment.Center
@@ -106,12 +106,12 @@ fun BottomNavigation(
                             Icon(
                                 painter = item.icon,
                                 contentDescription = item.title,
-                                tint = colorResource(id = if (selected) R.color.light_green else R.color.disabled_green)
+                                tint = if (selected) LightGreen else DisabledGreen
                             )
                         }
                     },
                     colors = NavigationBarItemDefaults.colors(
-                        indicatorColor = colorResource(id = R.color.light_green)
+                        indicatorColor = LightGreen
                     )
                 )
             }
@@ -120,12 +120,12 @@ fun BottomNavigation(
 }
 
 sealed class BackPress {
-    object Idle : BackPress()
-    object InitialTouch : BackPress()
+    data object Idle : BackPress()
+    data object InitialTouch : BackPress()
 }
 
 @Composable
-private fun BackPressSample() {
+private fun DoubleBackPress() {
     var showToast by remember { mutableStateOf(false) }
 
     var backPressState by remember { mutableStateOf<BackPress>(BackPress.Idle) }
@@ -148,14 +148,6 @@ private fun BackPressSample() {
         backPressState = BackPress.InitialTouch
         showToast = true
     }
-}
-
-private object NoRippleTheme : RippleTheme {
-    @Composable
-    override fun defaultColor() = Color.Unspecified
-
-    @Composable
-    override fun rippleAlpha(): RippleAlpha = RippleAlpha(0.0f,0.0f,0.0f,0.0f)
 }
 
 @Preview(showBackground = true)
